@@ -1,0 +1,97 @@
+#musicPlayerContainer{
+  position: fixed;
+  background-color: @gray-dark;
+  top: 0;
+  bottom: 0; padding-top: @navbar-height;
+  & #albumArt{
+    width: 100%;
+    height: 100%; min-height: 360px;
+//    border: 1px @body-bg-alt solid;
+//    border-radius: 4px;
+  }
+  & > .row {
+//    padding-top: 15px;
+  }
+  & .cur-track-wrapper {
+    position: absolute;
+    bottom: 0; left: 0; top: 0; right: 0;
+    padding-left: 0 !important;
+    .albumArtGradient();
+    & .cur-track-innerwrapper {
+      position: absolute; bottom: 0; width: 100%;
+      margin-left: 0 !important; margin-right: 0 !important;
+    }
+  }
+  & .cur-track-artist {
+    font-size: 1.5em;
+    color: @gray-lighter;
+    text-align: center !important;
+  }
+  & .cur-track-title {
+    font-size: 1.3em;
+    color: @gray-light;
+    font-style: italic;
+    text-align: center !important;
+  }
+  & .player-icon, .player-icon-bg{
+    font-size: 24px;
+    color: @gray-lighter;
+    text-align: left;
+    padding: 0 10px;
+  }
+  .player-icon-bg {
+       font-size: 32px;
+    padding: 0 16px;
+  }
+
+  & .player-controls {
+    position: relative; left: 0%;
+    text-align: center;
+    margin-bottom: 3%;
+  }
+  & .playlistEntriesList {
+    overflow-y: scroll;
+    height: 270px;
+  }
+  & .playlistEntry {
+    text-align: left;
+    background-color: transparent;
+    color: @gray-lighter;
+    border-color: @gray;
+    & > a {
+      color: @gray-lighter;
+    }
+  }
+  & .playlistEntrySelected {
+    background-color: @brand-primary !important;
+  }
+}
+#musicPlayerColumn{
+  bottom: 0; top: 0;
+}
+@media screen and (max-width: @screen-xs-max) {
+  #musicPlayerContainer {
+    position: static;
+    height: 720px;
+    & .cur-track-info {
+    }
+    & .cur-track-innerwrapper {
+      // bottom: 15px !important;
+    }
+  }
+  #musicPlayerColumn {
+    display: none;
+  }
+
+}
+
+
+.albumArtGradient () {
+  background: -moz-linear-gradient(top,  rgba(38,38,38,0) 0%, rgba(38,38,38,0) 41%, rgba(38,38,38,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(38,38,38,0)), color-stop(41%,rgba(38,38,38,0)), color-stop(100%,rgba(38,38,38,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(38,38,38,0) 0%,rgba(38,38,38,0) 41%,rgba(38,38,38,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(38,38,38,0) 0%,rgba(38,38,38,0) 41%,rgba(38,38,38,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(38,38,38,0) 0%,rgba(38,38,38,0) 41%,rgba(38,38,38,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(38,38,38,0) 0%,rgba(38,38,38,0) 41%,rgba(38,38,38,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00262626', endColorstr='#262626',GradientType=0 ); /* IE6-9 */
+}

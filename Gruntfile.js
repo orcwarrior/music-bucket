@@ -1,4 +1,4 @@
-// Generated on 2014-10-18 using generator-angular-fullstack 2.0.13
+// Generated on 2014-10-20 using generator-angular-fullstack 2.0.13
 'use strict';
 
 module.exports = function (grunt) {
@@ -541,6 +541,16 @@ module.exports = function (grunt) {
         }
       }
     },
+    browserify: {
+      files: [
+        '/client/**/*.js',
+        '!/client/**/*.spec.js',
+        '!/client/main.js',
+        '!/client/spec.js'
+      ],
+      tasks: ['browserify:app'],
+      options: { livereload: true }
+    }
   });
 
   // Used for delaying livereload until after server has restarted
@@ -568,7 +578,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:less', 
+        'injector:less',
         'concurrent:server',
         'injector',
         'wiredep',
@@ -580,7 +590,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'env:all',
-      'injector:less', 
+      'injector:less',
       'concurrent:server',
       'injector',
       'wiredep',
@@ -610,7 +620,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'injector:less', 
+        'injector:less',
         'concurrent:test',
         'injector',
         'autoprefixer',
@@ -623,7 +633,7 @@ module.exports = function (grunt) {
         'clean:server',
         'env:all',
         'env:test',
-        'injector:less', 
+        'injector:less',
         'concurrent:test',
         'injector',
         'wiredep',
@@ -641,7 +651,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'injector:less', 
+    'injector:less',
     'concurrent:dist',
     'injector',
     'wiredep',
@@ -663,4 +673,6 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.loadNpmTasks('grunt-browserify');
 };

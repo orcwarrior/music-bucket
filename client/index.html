@@ -52,9 +52,11 @@
       <script src="bower_components/angular-cookies/angular-cookies.js"></script>
       <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
       <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
       <script src="bower_components/lodash/dist/lodash.compat.js"></script>
       <script src="bower_components/angular-socket-io/socket.js"></script>
-      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/underscore/underscore.js"></script>
+      <script src="bower_components/angular-soundmanager2/dist/angular-soundmanager2.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -68,12 +70,34 @@
           <script src="app/account/signup/signup.controller.js"></script>
           <script src="app/admin/admin.controller.js"></script>
           <script src="app/admin/admin.js"></script>
+          <script src="app/app-logic/musicBucketEngine.js"></script>
+          <script src="app/app-logic/playlist/playlist.js"></script>
+          <script src="app/app-logic/playlist/playlistEntry/songzaStation.js"></script>
+          <script src="app/app-logic/playlist/playlistSequencer/defaultPlaylistSequencer.js"></script>
+          <script src="app/app-logic/playlist/playlistSequencer/playlistSequencers.js"></script>
+          <script src="app/app-logic/song/song.js"></script>
+          <script src="app/app-logic/song/songCommons.js"></script>
+          <script src="app/app-logic/song/songLocal.js"></script>
+          <script src="app/app-logic/song/songSongza.js"></script>
+          <script src="app/commons/directives/dragAndDrop.js"></script>
+          <script src="app/local/local.controller.js"></script>
+          <script src="app/local/local.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="app/playerProgressbar/playerProgressbar.directive.js"></script>
+          <script src="app/songza/search/search.controller.js"></script>
+          <script src="app/songza/search/search.js"></script>
+          <script src="app/songza/songza-api-browserified.js"></script>
+          <script src="app/songza/songza-api-raw.js"></script>
+          <script src="app/songza/songza.controller.js"></script>
+          <script src="app/songza/songza.js"></script>
+          <script src="app/songza/station/station.controller.js"></script>
+          <script src="app/songza/station/station.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>
           <script src="components/modal/modal.service.js"></script>
           <script src="components/mongoose-error/mongoose-error.directive.js"></script>
+          <script src="components/music-player/music-player.controller.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
           <script src="components/socket/socket.service.js"></script>
           <!-- endinjector -->

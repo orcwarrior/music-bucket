@@ -1,0 +1,30 @@
+@player-prog-bar-height: 12px;
+.player-prog-bar-wrapper{
+ position: relative;
+  padding-top: @player-prog-bar-height;
+  top: -@player-prog-bar-height/2;
+  cursor: pointer;
+}
+.player-prog-bar-base {
+  position: absolute; z-index: 2;
+  width: 100%;
+  height: @player-prog-bar-height/2;
+  background-color: transparent;
+  border-bottom: 4px @gray solid;//@gray-darker solid;
+}
+.player-prog-bar-buffered {
+  z-index: 22;
+  position: absolute; left: 0;
+//  width: 70%;
+  height: @player-prog-bar-height/2;
+  border-bottom: 4px @gray-light solid;//@gray-darker solid;
+
+}
+.player-prog-bar-current {
+  z-index: 22;
+  position: absolute; left: 0;
+//  width: 40%;
+  height: @player-prog-bar-height/2;
+  border-bottom: 4px @brand-primary solid;//@gray-darker solid;
+
+}

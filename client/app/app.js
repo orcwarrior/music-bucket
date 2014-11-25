@@ -5,14 +5,15 @@ angular.module('musicBucketApp', [
   'ngResource',
   'ngSanitize',
   'btford.socket-io',
-  'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'angularSoundManager',
+  'musicBucketEngine',
+  'ui.router'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
-    $urlRouterProvider
-      .otherwise('/');
+  .config(function ($locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
+            $urlRouterProvider.otherwise("/");
 
-    $locationProvider.html5Mode(true);
+     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
 
@@ -42,13 +43,17 @@ angular.module('musicBucketApp', [
     };
   })
 
-  .run(function ($rootScope, $location, Auth) {
+  .run(function ($rootScope, $location, Auth, angularPlayer) {
     // Redirect to login if route requires auth and you're not logged in
-    $rootScope.$on('$stateChangeStart', function (event, next) {
+    $rootScope.$on('$routeChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
           $location.path('/login');
         }
       });
+      // TMP: initialize songza api:
+      $rootScope.songza = new songzaInit({userAgent: 'Some browser'});
+
     });
+         angularPlayer.init();
   });
