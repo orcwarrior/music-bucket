@@ -1,39 +1,40 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12">
-      <h1>Wyszukiwanie playlist Songza</h1>
-    </div>
-    <div class="col-sm-12">
-      <div class="input-group">
-        <input type="text" class="form-control" ng-model="searchQuery">
+<div class="row" style="overflow: hidden">
+  <div class="col-sm-12">
+    <h1>Wyszukiwanie playlist Songza</h1>
+  </div>
+  <div class="col-sm-12">
+    <div class="input-group">
+      <input type="text" class="form-control" ng-model="searchQuery">
         <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" ng-click="searchStations(searchQuery)"><span class="glyphicon glyphicon-search"></span></button>
+        <button type="submit" class="btn btn-primary" ng-click="searchStations(searchQuery)"><span
+          class="glyphicon glyphicon-search"></span></button>
       </span>
-      </div>
-      <!-- loading spinner -->
-      <div class="center-block" ng-show="foundedStations == null" style="width: 50px; margin-top: 1em" >
-        <span class="loader "><span class="loader-inner"></span></span>
-      </div>
-      <!-- Search results -->
-        <div class="media station-result" ng-repeat="station in foundedStations">
-          <a class="media-left" ng-href="/songza/station/{{station.id}}">
-            <img ng-src="{{station.cover_url}}" alt="art">
-          </a>
-          <div class="media-body">
-            <h4 class="media-heading">
-              {{station.name}}
-              <span class="badge">{{station.song_count}}</span>
-            </h4>
-            <p>
-            {{station.description}}
-            </p>
-            <span class="label label-primary" ng-repeat="artist in station.featured_artists" style="margin: 0em 0.2em">{{artist.name}}</span>
-          </div>
-        </div>
-
     </div>
+    <!-- loading spinner -->
+    <div class="center-block" ng-show="searchInProgress" style="width: 50px; margin-top: 1em">
+      <span class="loader "><span class="loader-inner"></span></span>
+    </div>
+    <!-- Search results -->
+    <div class="media station-result col-sm-12 col-md-6 col-lg-6" ng-repeat="station in foundedStations">
+      <a class="media-left" ui-sref="^.station({ id: station.id })">
+        <img ng-src="{{station.cover_url}}" alt="art">
+      </a>
+
+      <div class="media-body" style="width: 100%; padding-right: 10px;">
+        <h4 class="media-heading">
+          {{station.name}}
+          <span class="badge">{{station.song_count}}</span>
+        </h4>
+
+        <p>
+          {{station.description}}
+        </p>
+        <span class="label label-default" ng-repeat="artist in player.station.featured_artists" style="margin: 0em 0.2em">{{artist.name}}</span>
+        <br/><br/>
+        <button type="submit" class="btn btn-primary btn-sm pull-left" ng-click="addToPlaylist(station)">Add to playlist</button>
+
+      </div>
+    </div>
+
   </div>
 </div>
-<hr>

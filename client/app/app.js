@@ -8,6 +8,7 @@ angular.module('musicBucketApp', [
   'ui.bootstrap',
   'angularSoundManager',
   'musicBucketEngine',
+  'musicBucketAuth',
   'ui.router'
 ])
   .config(function ($locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
@@ -51,9 +52,10 @@ angular.module('musicBucketApp', [
           $location.path('/login');
         }
       });
-      // TMP: initialize songza api:
-      $rootScope.songza = new songzaInit({userAgent: 'Some browser'});
 
     });
+
+         // TMP: initialize songza api:
+         $rootScope.songza = new songzaInit({userAgent: 'Some browser'});
          angularPlayer.init();
   });

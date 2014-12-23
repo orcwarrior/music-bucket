@@ -1,0 +1,41 @@
+/**
+ * Created by orcwarrior on 2014-12-21.
+ */
+{
+  "clean": fapse,
+  "appName": "music-bucket",
+  "globalModel":
+  {
+    "name": "String",
+    "creation_datetime": "Date"
+  },
+  "entities": [
+    {
+      "name": "reservation",
+      "model": {
+        "headcount": "Number",
+        "reservation_datetime": "Date",
+        "guest_id": "ManualReference"
+      }
+    },
+    {
+      "name": "table",
+      "model": {
+        "capacity": "Number"
+      }
+    },
+    {
+      "name": "server",
+      "model": {
+        "name": "String",
+        "table": "MongooseReference:Table"
+      }
+    },
+    {
+      "name": "guest",
+      "model": {
+        "favorite_meal": "String"
+      }
+    }
+  ]
+}

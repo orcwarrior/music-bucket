@@ -3,5 +3,6 @@
  */
 
 (function(){
-  angular.module('musicBucketEngine', []);
+  angular.module('musicBucketEngine',
+                 ['ngResource', 'musicBucketAuth']);
 })();

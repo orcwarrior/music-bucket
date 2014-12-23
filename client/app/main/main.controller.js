@@ -1,10 +1,9 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .controller('MainCtrl', function ($scope, $http, socket) {
-                $scope.awesomeThings = [];
+  .controller('MainCtrl', function ($rootScope, $scope, $http, socket, angularPlayer, songCommons) {
                 /* TMP Player mock*/
-                $scope.player = {
+                /*$scope.player = {
                   isPlaying : true,
                   togglePlay : null,
                   progress: {current: "33%", buffered: "79%"},
@@ -34,7 +33,23 @@ angular.module('musicBucketApp')
                 $scope.player.togglePlay = _.bind(function() {
                   console.log("playing: "+this.isPlaying);
                   this.isPlaying = !this.isPlaying;}, $scope.player);
+                */
 
+                $rootScope.player = angularPlayer;
+
+                $rootScope.player.playerProgressClickEvent = function(event) {
+                  var SMSound = soundManager.getSoundById($scope.player.getCurrentTrack().id);
+                  var newProgress = event.offsetX / event.currentTarget.firstChild.clientWidth;
+
+                  $scope.player.progress.current = Math.round(newProgress * 100) + "%";
+                  soundManager.setPosition(SMSound.id, SMSound.duration * newProgress);
+                  //$scope.$apply();
+                };
+
+                $scope.getNextSongDescription = function(song) {
+                  if (_.isNull(song)) return '';
+                  return song.shared.getSongDescription();
+                }
                 $http.get('/api/things').success(function (awesomeThings) {
                   $scope.awesomeThings = awesomeThings;
                   socket.syncUpdates('thing', $scope.awesomeThings);
@@ -56,4 +71,26 @@ angular.module('musicBucketApp')
                 $scope.$on('$destroy', function () {
                   socket.unsyncUpdates('thing');
                 });
+
+                $scope.$on('player:playlist', function(event, data) {
+                  if(!$scope.$$phase) {
+                    $scope.$apply(function() {
+                      $scope.playlist = $scope.player.getPlaylist();
+                    });
+                  }
+                });
+                // Progress update:
+                $scope.player.progress = { current : "25%", buffered : "50%" };
+                $scope.$on('track:progress', function(event, data) {
+                  var progress = (data === null) ? "0%" : Math.round(data)+"%"
+                  $scope.player.progress.current = progress;
+                  $scope.$broadcast('playerProgressbar:update', $scope.player.progress);
+
+                });
+                $scope.$on('currentTrack:bytesLoaded', function(event, data) {
+                  var progress = (data.loaded === null) ? "0%" : Math.round(data.loaded*100)+"%"
+                  $scope.player.progress.buffered = progress;
+                  $scope.$broadcast('playerProgressbar:update', $scope.player.progress);
+                });
+
               });

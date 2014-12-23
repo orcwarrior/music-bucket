@@ -1,41 +1,92 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="container-fluid">
   <div class="row">
-    <div ng-include="'components/music-player/music-player.html'" class="nopadding"></div>
-
-    <div class="col-lg-9 col-md-8 col-sm-7 col-xs-12 content-column">
+    <!-- MUSIC PLAYER -->
+    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12" id="musicPlayerContainer">
       <div class="row">
-        <h1 class="page-header">Features:</h1>
-        <ul class="nav nav-tabs nav-stacked col-md-6 col-sm-6 col-lg-4 col-xs-12" ng-repeat="thing in awesomeThings">
-          <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}
-            <button type="button" class="close" ng-click="deleteThing(thing)">&times;</button>
-          </a></li>
-        </ul>
-      </div>
-      <div class="row">
-        <form class="thing-form">
-          <label>Syncs in realtime across clients</label>
-
-          <p class="input-group">
-            <input type="text" class="form-control" style="display: inline-block; width: 50%"
-                   placeholder="Add a new thing here." ng-model="newThing"/>
-            <input type="text" class="form-control" style="display: inline-block; width: 50%"
-                   placeholder="New thing tip."
-                   ng-model="newThingTip"/>
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" ng-click="addThing()">Add New</button>
-      </span>
-          </p>
-        </form>
-        <footer class="footer">
-          <div class="container">
-            <p>Angular Fullstack v2.0.13 |
-              <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
-              <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a></p>
+        <div class="col-lg-12 nopadding">
+          <div class="player-toolbar">
+            <div class="player-toolbar-left">
+              <!-- naming playlist -->
+              <div class="input-group" ng-show="player.playlist.settingPlaylistName">
+                <input ng-model="player.playlist.name" type="text" class="form-control" placeholder="Playlist name">
+                <a class="glyphicon glyphicon-floppy-disk input-group-addon" ng-disabled="!player.playlist.name"
+                   ng-click="player.playlist.savePlaylist()"></a>
+              </div>
+              <!-- simple store button-->
+              <a class="glyphicon glyphicon-floppy-disk" ng-show="!player.playlist.settingPlaylistName && player.playlist.isAltered"
+                 ng-click="player.playlist.savePlaylist()"></a>
+            </div>
+            <div class="player-toolbar-right">
+              <a class="{{player.playlist.playlistSequencer.iconClass}}"
+                 ng-click="player.playlist.nextPlaylistSequencer()"></a>
+            </div>
           </div>
-        </footer>
+          <img src="{{player.getCurrentTrack().albumArt}}" id="albumArt"/>
+
+          <div class="cur-track-wrapper">
+            <div class="row cur-track-innerwrapper row-centered">
+              <div class="col-centered cur-track-info col-lg-9 col-md-10 col-sm-10 col-xs-10">
+                <h4 class="cur-track-artist">
+                  {{player.getCurrentTrack().artist}}
+                </h4>
+
+                <p class="cur-track-title">{{player.getCurrentTrack().title}}</p>
+              </div>
+              <div class="row-centered player-controls">
+                <a
+                  class="glyphicon glyphicon-backward player-icon" aria-hidden="true"></a>
+
+                <a ng-show="!player.isPlaying" ng-click="player.togglePlay()"
+                   class="glyphicon glyphicon-play player-icon-bg" aria-hidden="true"></a>
+                <a ng-show="player.isPlaying" ng-click="player.togglePlay()"
+                   class="glyphicon glyphicon-pause player-icon-bg" aria-hidden="true"></a>
+                <!-- NEXT SONG LOADED-->
+                <a
+                  class="glyphicon glyphicon-forward player-icon" aria-hidden="true"
+                  tooltip="{{getNextSongDescription(player.queue.peekNextSong())}}" ng-click="player.nextTrack()"
+                  ng-show="player.queue.peekNextSong() != null"></a>
+                <a
+                  class="glyphicon glyphicon-forward player-icon-shaded" aria-hidden="true"
+                  ng-click="player.nextTrack()" ng-show="player.queue.peekNextSong() == null"></a>
+              </div>
+              <player-progressbar buffered="player.progress.buffered" current="player.progress.current"
+                                  ng-click="player.playerProgressClickEvent($event)"></player-progressbar>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row row-centered">
+        <div class="list-group playlistEntriesList">
+          <div class="list-group-item playlistEntry" ng-repeat="playlistEntry in player.playlist.entries"><a href="#">{{playlistEntry.shortDescription}}</a>
+
+            <div class="btn-group" dropdown is-open="status" style="position: absolute; right: 1em;">
+              <span class="icon-menu2 dropdown-toggle"></span>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a href="#" class="dropdown-menu-item"><span class="icon-play2"/>Play</a></li>
+                <li><a href="#" class="dropdown-menu-item"><span class="icon-redo2"/>Play next</a></li>
+                <li><a href="#" class="dropdown-menu-item"><span class="icon-clock"/>Add to Queue</a></li>
+                <li class="divider"></li>
+                <li><a href="#" class="dropdown-menu-item"
+                       ng-click="player.playlist.removeEntry(playlistEntry.id)"><span class="icon-remove2"/>Remove</a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+        </div>
       </div>
     </div>
-    <!-- end of main column-->
   </div>
+</div>
+
+<div class="col-lg-3 col-md-4 col-sm-5 col-xs-12" id="musicPlayerColumn"></div>
+<!-- MUSIC PLAYER -->
+
+<div class="col-lg-9 col-md-8 col-sm-7 col-xs-12 content-column">
+  <ui-view/>
+</div> <!-- ui-view -->
+
+</div>
 </div>

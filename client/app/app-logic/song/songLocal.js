@@ -8,13 +8,13 @@
                  constructor: function (file) {
                    var fileUrl = URL.createObjectURL(file);
                    var shared = {
-                     id : songCommons.generateGUID(),
+                     id : fileUrl, //songCommons.generateGUID(),
                      url   : fileUrl,
                      artist: '',
                      title : file.name.substr(0,file.name.lastIndexOf('.')),
                      album : '',
                      genere: '',
-                     type : file.type// mime type
+                     type : file.type, // mime type
                    };
                    return new song.constructor({file : file, blob : fileUrl}, songCommons.songType.local, shared);
                  }

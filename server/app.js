@@ -46,7 +46,7 @@ http.createServer(function(req, res) {
  // console.log('Proxy-server listening on %d, in %s mode', config.port, app.get('env'));
   var proxyHost, pattern;
 
-   //console.log(req.url);
+   console.log(req.url);
   // #1 songza-api (straight-forward to songza.com)
   pattern = /^\/songza-api\/(.*)/;
   if (pattern.exec(req.url)) {
@@ -66,11 +66,27 @@ http.createServer(function(req, res) {
   pattern = /\/songza-api-proxy\/(.*)/;
   if (pattern.exec(req.url)) {
     proxyHost = 'http://transparent-proxy.herokuapp.com/proxy.php?' /*+ req.url.match(pattern)[2] + '&*/ + '__dest_url=/' + req.url.match(pattern)[1];
+
+    res.setHeader('Access-Control-Allow-Origin', req.headers['origin']);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+
     var options = {
       host: 'transparent-proxy.herokuapp.com',
-      path: '/proxy.php?' + '__dest_url=/' + req.url.match(pattern)[1],
+      path: '/proxy.php?' + '__dest_url=/' + req.url.match(pattern)[1]
+      ,headers : { host: req.host,
+        connection: 'keep-alive',
+        pragma: 'no-cache',
+        'cache-control': 'no-cache',
+        accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'user-agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
+        'accept-encoding': 'gzip, deflate, sdch',
+        'accept-language': 'pl-PL,pl;q=0.8,en-US;q=0.6,en;q=0.4',
+        cookie: req.headers.cookie,
+        'Access-Control-Allow-Origin': req.headers['origin'],
+        'Access-Control-Allow-Credentials': 'true'
+      }
     };
-
+    console.log(req.headers);
     var callback = function(response) {
       var str = '';
       //another chunk of data has been recieved, so append it to `str`
@@ -80,7 +96,8 @@ http.createServer(function(req, res) {
       //the whole response has been recieved, so we just print it out here
       response.on('end', function () {
         console.log(str);
-        res.write(str);
+        res.writeHead(200);
+        res.end(str);
       });
       };
     http.request(options, callback).end();

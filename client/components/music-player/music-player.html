@@ -20,7 +20,7 @@
               <a ng-show="!player.isPlaying" ng-click="player.togglePlay()"
                  class="glyphicon glyphicon-pause player-icon-bg" aria-hidden="true"></a>
               <a
-                class="glyphicon glyphicon-forward player-icon" aria-hidden="true" tooltip="{{player.nextTrack.shortDescription}}"></a>
+                class="glyphicon glyphicon-forward player-icon" aria-hidden="true" ng-click="player.nextTrack()"></a>
           </div>
           <player-progressbar buffered="player.progress.buffered" current="player.progress.current" ng-click="player.playerProgressClickEvent($event)"></player-progressbar>
         </div>

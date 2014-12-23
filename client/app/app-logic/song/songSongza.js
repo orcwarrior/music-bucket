@@ -13,9 +13,8 @@
                        artist: src.song.artist.name,
                        title : src.song.title,
                        album : src.song.album,
+                       albumArt : src.song.cover_url.replace('a.jpeg', 'g.jpeg'),
                        genere: src.song.genre,
-                       // TODO: FIX!
-                       albumArt : src.song.albumArt
                      };
                      return new song.constructor(src, songCommons.songType.songza, shared);
                    }

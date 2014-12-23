@@ -29,29 +29,75 @@
   }
   & .cur-track-title {
     font-size: 1.3em;
-    color: @gray-light;
+    color: @gray-lighter;
     font-style: italic;
     text-align: center !important;
   }
-  & .player-icon, .player-icon-bg{
+  & .player-icon, .player-icon-bg, .player-icon-shaded{
     font-size: 24px;
     color: @gray-lighter;
     text-align: left;
     padding: 0 10px;
   }
-  .player-icon-bg {
+  & .player-icon-shaded {
+    color: mix(@gray-lighter, @gray-light, 50%) !important;
+  }
+// tooltip fine-tunning
+  & .player-icon + div.tooltip {
+   // margin-left: -25px;
+  }
+  & .player-icon-bg {
        font-size: 32px;
     padding: 0 16px;
   }
-
+  & .player-toolbar {
+    padding: 16px;
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    & .input-group {
+      outline:  none;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    & * { display: inline-block; }
+    &  a {
+      // TODO: Some color global
+      font-size: 20px;
+      color: #fff !important;
+      background: -moz-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* FF3.6+ */
+      background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(0, 0, 0, 0.45)), color-stop(100%, rgba(0, 0, 0, 0))); /* Chrome,Safari4+ */
+      background: -webkit-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* Opera 12+ */
+      background: -ms-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* IE10+ */
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#73000000', endColorstr='#00000000', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+    }
+    & .player-toolbar-left {
+    //  float: left;
+      & > input {
+        width: auto;
+      }
+      & > a {
+        position: relative;
+        top: 4px; left: 4px;
+      }
+      &  > a:disabled {
+        color: @gray;
+      }
+    }
+      & .player-toolbar-right {
+        float: right;
+      }
+  }
   & .player-controls {
     position: relative; left: 0%;
     text-align: center;
     margin-bottom: 3%;
   }
   & .playlistEntriesList {
-    overflow-y: scroll;
-    height: 270px;
+    //overflow-y: auto;
+    height: 100%;
   }
   & .playlistEntry {
     text-align: left;
@@ -60,6 +106,18 @@
     border-color: @gray;
     & > a {
       color: @gray-lighter;
+    }
+    &  .dropdown-menu-item {
+      padding: 3px 10px;
+      & > span {
+        padding-right: 10px;
+      }
+    }
+  }
+  & .playlist-entry-actions {
+    float: right;
+    & > a {
+      font-size: 20px;
     }
   }
   & .playlistEntrySelected {

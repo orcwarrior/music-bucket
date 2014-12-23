@@ -4,12 +4,12 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('song', function () {
+    .factory('song', function (songCommons) {
                return {
                  constructor : function(base, baseType, shared) {
                    this.base = base;
                    this.baseType = baseType;
-                   this.shared = shared;
+                   this.shared =  _.extend(shared, songCommons.sharedProto);
                  }
                };
              });

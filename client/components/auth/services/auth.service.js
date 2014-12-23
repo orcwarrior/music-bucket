@@ -1,7 +1,8 @@
 'use strict';
 
-angular.module('musicBucketApp')
-  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q) {
+angular.module('musicBucketAuth')
+  .factory('Auth', function Auth($rootScope, $http, User, $cookieStore, $q) {
+             console.log("Auth factory instanitated: "); console.log(this);
     var currentUser = {};
     if($cookieStore.get('token')) {
       currentUser = User.get();

@@ -24697,11 +24697,16 @@ exports.get = function(userSettings) {
 		throw new Error('You must specify a userAgent');
 	}
 
+  var currentLocation = window.location.origin;
+  var baseUrl = currentLocation.replace(':9000',':9001')+'/songza-api';
+    var baseProxyUrl = currentLocation.replace(':9000',':9001')+'/songza-api';
+  console.log(baseUrl);
+  console.log(baseProxyUrl);
 	var defaultSettings = {
 		site: 'music-bucket',
 		device: 'web',
-		base: 'http://localhost:802/songza-api',
-    baseProxy: 'http://localhost:802/songza-api-proxy',
+		base: currentLocation.replace(':9000',':9001')+'/songza-api',
+    baseProxy: currentLocation.replace(':9000',':9001')+'/songza-api-proxy',
     withCredentials: true
   };
 
