@@ -18,8 +18,9 @@
                    return result;
                  };
                return {
+                 name : 'random',
                  iconClass : 'icon-shuffle',
-                 getNext : function (playlistEntries, entriesCount) {
+                 getNext : function (playlistEntries, entriesCount, playlistCallback) {
                    // random next entry (balanced):
                    var entriesRanges = fillEntriesRanges(playlistEntries);
                    var rndEntry = _.last(entriesRanges) * Math.random();
@@ -29,13 +30,13 @@
                        // get next entry:
                        hlp.lastPlayedIdx = idx+1;
                        hlp.lastPlayedEntry = playlistEntries[hlp.lastPlayedIdx];
-                       return hlp.lastPlayedEntry.getNext()
-                         .then( function(song) {
-                                  return song;
-                                });
-
+                       return hlp.lastPlayedEntry.getNext(playlistCallback);
                      }
                    }
+                   // no index? it should be 0 then
+                   hlp.lastPlayedIdx = 0;
+                   hlp.lastPlayedEntry = playlistEntries[hlp.lastPlayedIdx];
+                   return hlp.lastPlayedEntry.getNext(playlistCallback);
                  }
 
                };

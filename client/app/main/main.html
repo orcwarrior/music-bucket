@@ -7,15 +7,18 @@
         <div class="col-lg-12 nopadding">
           <div class="player-toolbar">
             <div class="player-toolbar-left">
-              <!-- naming playlist -->
-              <div class="input-group" ng-show="player.playlist.settingPlaylistName">
-                <input ng-model="player.playlist.name" type="text" class="form-control" placeholder="Playlist name">
-                <a class="glyphicon glyphicon-floppy-disk input-group-addon" ng-disabled="!player.playlist.name"
-                   ng-click="player.playlist.savePlaylist()"></a>
+              <div class="player-playlist-save">
+                <input ng-model="player.playlist.name" type="text" class="form-control"
+                       ng-show="player.playlist.settingPlaylistName && player.playlist.isAltered"
+                       placeholder="Playlist name">
+                <!-- DK: When user is not logged in show tooltip -->
+                <a class="glyphicon glyphicon-floppy-disk disabled" ng-show="player.playlist.isAltered && !userLoggedIn()"
+                   tooltip="You need to be logged in!" tooltip-placement="right"></a>
+                <!-- Normal save diskiette -->
+                <a class="glyphicon glyphicon-floppy-disk" ng-show="player.playlist.isAltered && userLoggedIn()"
+                   ng-class="{ 'disabled' : player.playlist.name == '' && player.playlist.settingPlaylistName || !userLoggedIn()}"
+                   ng-click="savePlaylist()"></a>
               </div>
-              <!-- simple store button-->
-              <a class="glyphicon glyphicon-floppy-disk" ng-show="!player.playlist.settingPlaylistName && player.playlist.isAltered"
-                 ng-click="player.playlist.savePlaylist()"></a>
             </div>
             <div class="player-toolbar-right">
               <a class="{{player.playlist.playlistSequencer.iconClass}}"
@@ -58,16 +61,17 @@
       </div>
       <div class="row row-centered">
         <div class="list-group playlistEntriesList">
-          <div class="list-group-item playlistEntry" ng-repeat="playlistEntry in player.playlist.entries"><a href="#">{{playlistEntry.shortDescription}}</a>
+          <div class="list-group-item playlistEntry" ng-repeat="playlistEntry in player.playlist.entries"><span>{{playlistEntry.getPlaylistDescription()}}</span>
 
-            <div class="btn-group" dropdown is-open="status" style="position: absolute; right: 1em;">
-              <span class="icon-menu2 dropdown-toggle"></span>
-              <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a href="#" class="dropdown-menu-item"><span class="icon-play2"/>Play</a></li>
-                <li><a href="#" class="dropdown-menu-item"><span class="icon-redo2"/>Play next</a></li>
-                <li><a href="#" class="dropdown-menu-item"><span class="icon-clock"/>Add to Queue</a></li>
+            <div class="btn-group" dropdown is-open="playlistItemDropdown"
+                 style="position: absolute; right: 1em; top: 0.5em; z-index: 1">
+              <span class="icon-menu2 dropdown-toggle" dropdown-toggle style="z-index: 0"></span>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu" style="z-index: 2">
+                <li><a class="dropdown-menu-item"><span class="icon-play2"/>Play</a></li>
+                <li><a class="dropdown-menu-item"><span class="icon-redo2"/>Play next</a></li>
+                <li><a class="dropdown-menu-item"><span class="icon-clock"/>Add to Queue</a></li>
                 <li class="divider"></li>
-                <li><a href="#" class="dropdown-menu-item"
+                <li><a class="dropdown-menu-item"
                        ng-click="player.playlist.removeEntry(playlistEntry.id)"><span class="icon-remove2"/>Remove</a>
                 </li>
               </ul>

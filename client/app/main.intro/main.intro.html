@@ -7,5 +7,18 @@
   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" ui-sref="main.local">
     <img class="img-in-col" src="http://icons.iconarchive.com/icons/graphicloads/100-flat/256/folder-icon.png"/>
   </div>
-  Location: {{windLoc}}
 </div>
+  <div class="col-md-12">
+    CHANGELOG: <br/>
+    * 01.18 - Error/Exception handling po stronie backendu i frontendu, ponawianie prób wysyłania requestów do songzy.<br/>
+    * 01.17 - Refaktoring konwerterów do DB, wyszczególnienie zapisu wpisów playlisty wg. typu, usunięta re-inicjacja wpisów songzy w odczytywanych playlistach.<br/>
+    * 01.12 - Pełny CRUD dla playlist, wykrycie warunku edycji gotowej playlisty/utworzenia nowej, autentykacja przy edycji playlist po stronie backendu.<br/>
+    * 01.02 - Serwer proxy w bloku try-catch (do testów: czy nie wyrzuca błędów).<br/>
+    * 01.01 - Poprawki na widoku zapisanych playlist.<br/>
+    * 12.27 - Dyrektywa wyświetlająca zapisane playlisty.<br/>
+    * 12.26 - Funkcjonalne wczytywanie playlist z bazy (dla songzy), poprawka backendowego proxy dla songzy którego dziwną przypadłościa jest nie działanie bez chociaż pustego GETa ('?' na koncu)
+    * 12.25 - Poprawki zapisu playlist do bazy, zapis wpisów songzy, refaktoring kodu odp. za to, stylizacja widoku playlist (animacje on-hover) <br/>
+    * 12.24 - Dodano zapis playlist do bazy, dropdown kontekstowy el. playlisty działa ponownie, widoki Playlist, pomysłów. <br/>
+    * 12.23 - Wstepne pracę nad zapisem do playlist, utworzony model, backendowe api.<br/>
+    * 12.22 - Przycisk zapisywania playlist, logika odp. za wyświetlenie inputa gdy playlista nie ma jeszcze nazwy.
+  </div>

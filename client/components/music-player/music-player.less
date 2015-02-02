@@ -22,6 +22,9 @@
       margin-left: 0 !important; margin-right: 0 !important;
     }
   }
+  & .cur-track-info {
+    width: 100%;
+  }
   & .cur-track-artist {
     font-size: 1.5em;
     color: @gray-lighter;
@@ -63,27 +66,32 @@
     & * { display: inline-block; }
     &  a {
       // TODO: Some color global
+      @gradientStop: 70%;
+      padding: 6px;
       font-size: 20px;
       color: #fff !important;
-      background: -moz-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* FF3.6+ */
-      background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(0, 0, 0, 0.45)), color-stop(100%, rgba(0, 0, 0, 0))); /* Chrome,Safari4+ */
-      background: -webkit-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* Chrome10+,Safari5.1+ */
-      background: -o-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* Opera 12+ */
-      background: -ms-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* IE10+ */
-      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%); /* W3C */
+      background: -moz-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* FF3.6+ */
+      background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(@gradientStop, rgba(0, 0, 0, 0))); /* Chrome,Safari4+ */
+      background: -webkit-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* Chrome10+,Safari5.1+ */
+      background: -o-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* Opera 12+ */
+      background: -ms-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* IE10+ */
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* W3C */
       filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#73000000', endColorstr='#00000000', GradientType=1); /* IE6-9 fallback on horizontal gradient */
     }
     & .player-toolbar-left {
     //  float: left;
-      & > input {
+      &  input {
         width: auto;
       }
-      & > a {
+      &  a {
         position: relative;
         top: 4px; left: 4px;
       }
-      &  > a:disabled {
-        color: @gray;
+      &   a.disabled {
+        color: @gray !important;
+      }
+      & a + .tooltip {
+        z-index: 20;
       }
     }
       & .player-toolbar-right {
@@ -124,14 +132,18 @@
     background-color: @brand-primary !important;
   }
 }
-#musicPlayerColumn{
-  bottom: 0; top: 0;
+#musicPlayerColumn {
+
+  bottom: 0;
+  top: 0;
 }
+/* PHONE SCREEN */
 @media screen and (max-width: @screen-xs-max) {
   #musicPlayerContainer {
     position: static;
     height: 720px;
     & .cur-track-info {
+      width: 100% !important;
     }
     & .cur-track-innerwrapper {
       // bottom: 15px !important;

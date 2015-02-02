@@ -30,7 +30,9 @@ Thing.find({}).remove(function() {
   });
 });
 
+/*
 User.find({}).remove(function() {
+
   User.create({
     provider: 'local',
     name: 'Test User',
@@ -47,3 +49,4 @@ User.find({}).remove(function() {
     }
   );
 });
+  */

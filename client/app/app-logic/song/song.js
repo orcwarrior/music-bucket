@@ -10,6 +10,30 @@
                    this.base = base;
                    this.baseType = baseType;
                    this.shared =  _.extend(shared, songCommons.sharedProto);
+
+                   this.toDBModel = function() {
+                     var songDB = { shared : {
+                                //id3 : {
+                                //  artist : this.shared.id3.artist,
+                                //  title  : this.shared.id3.title,
+                                //  album  : this.shared.id3.album,
+                                //  genere : this.shared.id3.genere
+                                //},
+                                artist : this.shared.artist,
+                                title  : this.shared.title,
+                                album  : this.shared.album,
+                                genere : this.shared.genere
+                              },
+                              baseType : this.baseType,
+                              base : this.base
+                     };
+
+                     // Copy album art only if it's an URL.
+                     if(!this.shared.albumArtAttached ) {
+                       songDB.shared.albumArt = this.shared.albumArt;
+                     }
+                     return songDB;
+                   }
                  }
                };
              });

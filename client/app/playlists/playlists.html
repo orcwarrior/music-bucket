@@ -1,3 +1,30 @@
-<div class="col-md-12">
-This is the playlists view.
+<div class="row row-centered">
+  <div class="playlist-tile col-lg-3 col-md-4 col-sm-6 col-xs-6 col-centered" ng-repeat="playlist in playlists">
+    <div class="playlist-wrapper">
+      <!-- Context menu -->
+      <div dropdown is-open="playlistDropdown" class="playlist-context-icon">
+        <a class="icon-menu2 dropdown-toggle" dropdown-toggle></a>
+        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+          <li><a class="dropdown-menu-item"><span class=" icon-plus"/>Add to playlist</a></li>
+          <!--<li class="divider"></li>-->
+          <li><a class="dropdown-menu-item" ng-show="isPlaylistOwner(playlist)"
+                 ng-click="deletePlaylist(playlist)"><span class="icon-remove2"/> Remove playlist</a>
+          </li>
+        </ul>
+      </div>
+      <mb-picture-mosaic src="playlist.sampleSongs" speed="5000"></mb-picture-mosaic>
+      <!-- Play overlay -->
+      <div class="playlist-play-wrapper" ng-click="loadPlaylist(playlist)">
+        <span class="icon-music" aria-hidden="true"></span> Play!
+      </div>
+      <div class="playlist-wrapper2">
+        <div class="playlist-infos">
+          <p class="playlist-name">{{playlist.name}}</p>
+
+          <p class="playlist-author">{{playlist.authorName}}</p>
+        </div>
+      </div>
+      <div class="playlist-dim"></div>
+    </div>
+  </div>
 </div>

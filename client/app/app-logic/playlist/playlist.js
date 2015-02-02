@@ -3,21 +3,26 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('playlist', function (playlistSequencers, playlistService) {
+    .factory('playlist', function (playlistLocalStorage, playlistSequencers, playlistCookieFactory, Auth) {
+
                  function rewriteBase(base) {
                    if (!_.isUndefined(base)) {
                      this.entries = base.entries;
                      this.songsCount = base.entriesCount;
-
                    }
+                 }
+                 function putSongToSampler(playlist, song) {
+                      if(song.shared.albumArt && !song.shared.albumArtAttached && playlist.sampleSongs.length < 5) {
+                        playlist.sampleSongs.push({src: song.shared.albumArt, description: song.shared.getSongDescription()});
+                      };
                  }
                return {
                  constructor: function (base) {
                    var self = this;
+
                    this.name = '';
                    this.entries = [];
                    this.songsCount = 0; // count of all songs
-                   rewriteBase(base);
 
                    this.playlistSequencer = playlistSequencers['default'];
                    this.nextPlaylistSequencer = function() {
@@ -27,12 +32,21 @@
                      this.playlistSequencer = playlistSequencersArr[nextIdx];
                    }
 
+                   this.sampleSongs = [];
+                   this.isAltered = false;
+
+                   _.extend(this, playlistLocalStorage);
+                   _.extend(this, base);
+
                    // methods:
                    this.getNext = function () {
-                     return this.playlistSequencer.getNext(this.entries, this.songsCount); /* an promise*/
+                     return this.playlistSequencer.getNext(this.entries, this.songsCount, this.getNextCallback); /* an promise*/
+                   }
+                   this.getNextCallback = function(song){
+                     putSongToSampler(self, song);
                    }
                    this.addEntry = function (entry) {
-                     this.isAltered = true;
+                     this.alter();
                      if (_.isUndefined(entry.songsCount))
                        this.songsCount++;
                      else
@@ -40,31 +54,34 @@
                      this.entries.push(entry);
                    }
                    this.removeEntry = function (entryId) {
-                     this.isAltered = true;
+                     this.alter();
                      this.entries =  _.reject(this.entries, function(entry){
                        return entry.id == entryId;
                      });
                    }
 
-                   this.isAltered = false;
-                   this.savePlaylist = function() {
-                     if (this.name === '') this.settingPlaylistName = true;
+                   this.alter = function() {
+                     this.isAltered = true;
+                     this.storeInLocalstorage();
+                   }
+                   this.toCookieModel = function() {
+                     var result = {
+                       name : this.name,
+                       songsCount : this.songsCount,
+                       entries : _.map(this.entries, function(entry) { return entry.toCookieModel();}),
+                       sampleSongs : this.sampleSongs,
+                       playlistSequencer : this.playlistSequencer
+                     }
 
-                      if (this.settingPlaylistName) {
-                        if (this.name === '') return;
-                        else
-                          this.settingPlaylistName = false;
-                      }
-
-                     playlistService.save(this)
-                       .then(function(response){
-                         this.id = response.id;
-                         this.isAltered = false;
-                       }).bind(this);
+                     return result;
                    }
                    return this;
-                 }
+                 } //eof constructor
                };
-             });
+             })
+    .factory('playlistFuncs', function() {
+
+
+               });
 }
 )();

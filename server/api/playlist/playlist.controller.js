@@ -34,6 +34,12 @@ exports.update = function(req, res) {
   Playlist.findById(req.params.id, function (err, playlist) {
     if (err) { return handleError(res, err); }
     if(!playlist) { return res.send(404); }
+
+    // DK: Check if current user is author of an playlist:
+    if (playlist.author.toString() !== req.user.id) {
+      return res.send(401);
+    }
+
     var updated = _.merge(playlist, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
@@ -47,6 +53,11 @@ exports.destroy = function(req, res) {
   Playlist.findById(req.params.id, function (err, playlist) {
     if(err) { return handleError(res, err); }
     if(!playlist) { return res.send(404); }
+
+    // DK: Check if current user is author of an playlist:
+    if (playlist.author.toString() !== req.user.id) {
+      return res.send(401);
+    }
     playlist.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);

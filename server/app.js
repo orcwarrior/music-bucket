@@ -19,6 +19,12 @@ if(config.seedDB) { require('./config/seed'); }
 
 // Setup server
 var app = express();
+
+app.on('error', function(err){console.log(err);});
+
+app.clientError = function (exception, socket) {
+  console.log("Client error: "+exception);
+}
 var http = require('http');
 var server = http.createServer(app);
 var socketio = require('socket.io')(server, {
@@ -31,8 +37,14 @@ require('./routes')(app);
 
 // Start server
 server.listen(config.port, config.ip, function () {
-  console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+  try {
+    console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
+  } catch (err) {
+    console.warn("Error chatched: " + err);
+  }
 });
+
+
 
 // DK: Proxy servers:
 var httpProxy = require('http-proxy');
@@ -51,15 +63,22 @@ http.createServer(function(req, res) {
   pattern = /^\/songza-api\/(.*)/;
   if (pattern.exec(req.url)) {
     proxyHost = 'http://songza.com/api/1/' + req.url.match(pattern)[1];
-    //console.log("9001 proxy server requested, proxyHost: " + proxyHost);
+    // BUGFIX: request url haven't '?' character, add it it resolves some strange proxy error :/
+    if (req.url.match(pattern)[1].indexOf('?') === -1)
+      proxyHost += '?';
+    console.log("9001 proxy server requested, proxyHost: " + proxyHost);
 
     // req.headers['Access-Control-Allow-Origin'] = req.headers['origin'];
     // req.headers['Access-Control-Allow-Credentials'] = "true";
     res.setHeader('Access-Control-Allow-Origin', req.headers['origin']);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    // console.log(req.headers);
-    proxy.web(req, res, { target: proxyHost });
+    try {
+      proxy.web(req, res, { target: proxyHost });
+    }
+    catch (error) {
+      console.log(error.message);
+    }
   }
 
   // #2 songza-api-proxy (throught the heroku transparent proxy server located in USA :) )
@@ -100,7 +119,12 @@ http.createServer(function(req, res) {
         res.end(str);
       });
       };
-    http.request(options, callback).end();
+    try {
+      http.request(options, callback).end();
+    }
+    catch (error) {
+      console.log(error.message);
+    }
     //console.log("9001 transparent-proxy server requested, proxytargetHost: " + proxyHost);
 //
     //res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9001');
@@ -115,37 +139,6 @@ http.createServer(function(req, res) {
 proxy.on('proxyRes', function (proxyRes, req, res) {
   console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
 });
-// httpProxy.createServer(function (req, res, proxy) {
-//   var proxyHost;
-//   var pattern = /^\/songza-api\/(.*)/g;
-//   debugger;
-//   console.log(req.url);
-//   if (pattern.exec(req.url)) {
-//     proxyHost = 'http://songza.com/api/1/' + req.url.match(pattern)[0];
-//     console.log("9001 proxy server requested, proxyHost: ");
-//     console.log(proxyHost);
-//     //req.headers["X-CUSTOM-API-KEY"] = 'my-api-key';
-//     proxy.proxyRequest(req, res, {
-//       target : proxyHost
-//     });
-//   }
-// }).listen(9001);
-
-console.log("PROXY LISTENING ON 9001");
-
-/*
-httpProxy.createProxyServer({target:'http://songza.com/api/1'}).listen(8000);
-
-app.all("/songza-api/*", function(req, res) {
-  console.log("old request url " + req.url)
-  req.url = '/' + req.url.split('/').slice(2).join('/'); // remove the '/api' part
-  console.log("new request url " + req.url)
-  httpProxy.proxyRequest(req, res, {
-    host: "other_domain.com",
-    port: 3000
-  });
-});
-*/
 
 // Expose app
 exports = module.exports = app;

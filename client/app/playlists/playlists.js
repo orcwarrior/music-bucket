@@ -3,7 +3,8 @@
 angular.module('musicBucketApp')
   .config(function ($stateProvider) {
       $stateProvider
-        .state('main.playlists', {
+        .state('main.playlists',{
+                 url : '/playlists',
                  templateUrl: 'app/playlists/playlists.html',
                  controller : 'PlaylistsCtrl'
                });

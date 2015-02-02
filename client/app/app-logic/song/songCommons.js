@@ -15,7 +15,7 @@
                }
                )();
                return {
-                 songType    : {songza: 0, local: 1, spotify: 2},
+                 songType    : {songza: 0, local: 1, spotify: 2, youtube: 3},
                  generateGUID: function () {
                    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
                      s4() + '-' + s4() + s4() + s4();
@@ -35,6 +35,7 @@
                      if (!_.isUndefined(this.id3.picture)) {
 
                        var image = this.id3.picture;
+                       this.albumArtAttached = true;
                        this.albumArt = (function() {
                          var base64String = "";
                          for (var i = 0; i < image.data.length; i++) {
