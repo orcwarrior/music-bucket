@@ -22,14 +22,11 @@
                  return {
                    restoreFromLocalstorage : function () {
                      var lsPlaylist = restoreFromLocalstorage();
-                     console.log("RESTORED FROM LS");
-                     console.log(lsPlaylist);
                      return lsPlaylist;
                    },
                    storeInLocalstorage : function () {
                      storeInLocalstorage(this);
-                     console.log('STORED IN LS:');
-                     console.log(playlistCookieFactory.convertTo(this));
+                     storeInLocalstorage(this);
                    }
                 }
                })

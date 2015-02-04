@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songDBFactory', function (playlist, entryDBHelper, localEntry, songzaStation) {
+    .factory('songDBFactory', function (playlist, localEntry, songzaStation) {
 
                var songLocal_fromDBModel = function (db) {
                }

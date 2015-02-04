@@ -60,7 +60,6 @@
                  self.getPlaylistDescription = function () {
                    return this.shortDescription + " (" + this.playedCount + "/" + this.songsCount + ")";
                  }
-                 self.toDBModel = entryCommons.toDBModel;
                }
 
                return {

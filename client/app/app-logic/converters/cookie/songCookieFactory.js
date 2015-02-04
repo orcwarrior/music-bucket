@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songCookieFactory', function ( entryDBHelper, localEntry, songzaStation) {
+    .factory('songCookieFactory', function ( localEntry, songzaStation) {
 
                var songLocal_fromCookieModel = function (db) {
                }
