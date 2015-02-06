@@ -36,7 +36,8 @@
                              self.updateShortDescription();
                              var song = new songSongza.constructor(response);
                              songzaPromise.resolve(song);
-                             playlistCallback(song);
+                             if (!_.isUndefined(playlistCallback))
+                              playlistCallback(song);
                              return true;
                      },
                      /*error callback*/function (error) {
