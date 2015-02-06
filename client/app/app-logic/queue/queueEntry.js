@@ -12,7 +12,8 @@
                    this.SMSound = SMSound; // instance of soundmanager sound
 
                    this.buffer = function () {
-                     $log.info('queueEntry: buffer on: ' + this.song.shared.id + ' - ' + this.song.shared.getSongDescription() + ' called.');
+                     if (!_.isUndefined(this.song))
+                      $log.info('queueEntry: buffer on: ' + this.song.shared.id + ' - ' + this.song.shared.getSongDescription() + ' called.');
                      //if (this.buffered == true) return;
 
                      if (this.SMSound != null) {

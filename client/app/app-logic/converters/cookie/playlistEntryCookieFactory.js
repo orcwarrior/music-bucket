@@ -7,7 +7,7 @@
 
                var localEntry_fromCookieModel = function (cookie) {
                  var locEntry = new localEntry.constructor_();
-                 locEntry.entries     = cookie.entries;
+                 locEntry.entries     = _.map(cookie.entries, function(song) { return songCookieFactory.convertFrom(song); });
                  locEntry.id          = cookie.id;
                  locEntry.songsCount  = cookie.songsCount;
                  locEntry.playedCount = cookie.playedCount;

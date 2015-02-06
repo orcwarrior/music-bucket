@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songCookieFactory', function ( localEntry, songzaStation) {
+    .factory('songCookieFactory', function (song, localEntry, songzaStation) {
 
                var songLocal_fromCookieModel = function (db) {
                }
@@ -13,19 +13,17 @@
 
                return {
                  convertFrom: function (songCookie) {
-                   var song = {
-                     shared  : {
-                       id : songCookie.shared.id,
+                   var sharedCookie  = {
+                     id : songCookie.shared.id,
                        url : songCookie.shared.url,
                        artist: songCookie.shared.artist,
                        title : songCookie.shared.title,
                        album : songCookie.shared.album,
                        genere: songCookie.shared.genere,
                        albumArt : songCookie.shared.albumArt
-                     },
-                     baseType: songCookie.baseType,
-                     base    : _.clone(songCookie.base)
                    };
+                   var result = new song.constructor(songCookie.base, songCookie.baseType, sharedCookie);
+                   return result;
                  },
                  convertTo  : function (song) {
                    var songDB = {
