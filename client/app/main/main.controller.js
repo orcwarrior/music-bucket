@@ -6,10 +6,10 @@ angular.module('musicBucketApp')
                 // Loading playlist from cookies:
                 // TODO: Next song played, store playlist state in localstorage
                 // TODO#2: Playlist should be FULLY recreated by LSProvider
+                // TODO#3: Having this mechanics here is fuckedup
                 var lsPlaylist = playlistLocalStorage.restoreFromLocalstorage();
                 if (!_.isNull(lsPlaylist)) {
                   angularPlayer.setPlaylist(playlist.constructor(lsPlaylist));
-                  console.log(angularPlayer.playlist);
                 }
 
                 $scope.savePlaylist = function () {
