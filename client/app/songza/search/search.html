@@ -3,12 +3,14 @@
     <h1>Wyszukiwanie playlist Songza</h1>
   </div>
   <div class="col-sm-12">
+    <form>
     <div class="input-group">
       <input type="text" class="form-control" ng-model="searchQuery">
         <span class="input-group-btn">
         <button type="submit" class="btn btn-primary" ng-click="searchStations(searchQuery)"><span
           class="glyphicon glyphicon-search"></span></button>
       </span>
+    </form>
     </div>
     <!-- loading spinner -->
     <div class="center-block" ng-show="searchInProgress" style="width: 50px; margin-top: 1em">
