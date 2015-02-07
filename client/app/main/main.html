@@ -25,7 +25,7 @@
                  ng-click="player.playlist.nextPlaylistSequencer()"></a>
             </div>
           </div>
-          <img src="{{player.getCurrentTrack().albumArt}}" id="albumArt"/>
+          <div ng-style="{'background-image':'url(' +player.getCurrentTrack().albumArt + ')' }" id="albumArt"/>
 
           <div class="cur-track-wrapper">
             <div class="row cur-track-innerwrapper row-centered">
@@ -59,27 +59,8 @@
           </div>
         </div>
       </div>
-      <div class="row row-centered">
-        <div class="list-group playlistEntriesList">
-          <div class="list-group-item playlistEntry" ng-repeat="playlistEntry in player.playlist.entries"><span>{{playlistEntry.getPlaylistDescription()}}</span>
-
-            <div class="btn-group" dropdown is-open="playlistItemDropdown"
-                 style="position: absolute; right: 1em; top: 0.5em; z-index: 1">
-              <span class="icon-menu2 dropdown-toggle" dropdown-toggle style="z-index: 0"></span>
-              <ul class="dropdown-menu dropdown-menu-right" role="menu" style="z-index: 2">
-                <li><a class="dropdown-menu-item"><span class="icon-play2"/>Play</a></li>
-                <li><a class="dropdown-menu-item"><span class="icon-redo2"/>Play next</a></li>
-                <li><a class="dropdown-menu-item"><span class="icon-clock"/>Add to Queue</a></li>
-                <li class="divider"></li>
-                <li><a class="dropdown-menu-item"
-                       ng-click="player.playlist.removeEntry(playlistEntry.id)"><span class="icon-remove2"/>Remove</a>
-                </li>
-              </ul>
-            </div>
-
-          </div>
-
-        </div>
+      <div class="row row-centered playlistElementContainer">
+          <mb-player-playlist playlist="player.getPlaylist()"> </mb-player-playlist>
       </div>
     </div>
   </div>
