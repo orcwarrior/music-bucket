@@ -70,7 +70,7 @@ http.createServer(function(req, res) {
 
     // req.headers['Access-Control-Allow-Origin'] = req.headers['origin'];
     // req.headers['Access-Control-Allow-Credentials'] = "true";
-    res.setHeader('Access-Control-Allow-Origin', req.headers['origin']);
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9000');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     try {
@@ -137,6 +137,7 @@ http.createServer(function(req, res) {
 }).listen(9001, config.ip);
 
 proxy.on('proxyRes', function (proxyRes, req, res) {
+  proxyRes.headers["access-control-allow-origin"] = req.headers['origin'];
   console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
 });
 
