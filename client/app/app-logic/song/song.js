@@ -10,6 +10,12 @@
                    this.base = base;
                    this.baseType = baseType;
                    this.shared =  _.extend(shared, songCommons.sharedProto);
+                   this.getSongTypeName = function() {
+                     var typeObj = _.pick(songCommons.songType, function(value, key, object) {
+                       return value == baseType;
+                     });
+                     return _.keys(typeObj)[0];
+                   }
                  }
                };
              });
