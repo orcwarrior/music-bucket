@@ -1,9 +1,10 @@
-@player-prog-bar-height: 12px;
+@player-prog-bar-height: 14px;
 .player-prog-bar-wrapper{
  position: relative;
   padding-top: @player-prog-bar-height;
-  top: -@player-prog-bar-height/2;
+  top: -(@player-prog-bar-height + 4);
   cursor: pointer;
+  margin-bottom: -@player-prog-bar-height/5 * 4;
 }
 .player-prog-bar-base {
   position: absolute; z-index: 2;
@@ -21,7 +22,7 @@
 
 }
 .player-prog-bar-current {
-  z-index: 22;
+  z-index: 24;
   position: absolute; left: 0;
 //  width: 40%;
   height: @player-prog-bar-height/2;
