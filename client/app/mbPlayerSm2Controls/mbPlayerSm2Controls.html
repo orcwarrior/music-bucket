@@ -1,0 +1,30 @@
+<div ng-style="{'background-image':'url(' +player.getCurrentTrack().albumArt + ')' }" id="albumArt"/>
+
+<div class="cur-track-wrapper">
+  <div class="row cur-track-innerwrapper row-centered">
+    <div class="col-centered cur-track-info col-lg-9 col-md-10 col-sm-10 col-xs-10">
+      <h4 class="cur-track-artist">
+        {{player.getCurrentTrack().artist}}
+      </h4>
+
+      <p class="cur-track-title">{{player.getCurrentTrack().title}}</p>
+    </div>
+    <div class="row-centered player-controls">
+      <a
+        class="glyphicon glyphicon-backward player-icon" aria-hidden="true"></a>
+
+      <a ng-show="!player.isPlaying" ng-click="player.togglePlay()"
+         class="glyphicon glyphicon-play player-icon-bg" aria-hidden="true"></a>
+      <a ng-show="player.isPlaying" ng-click="player.togglePlay()"
+         class="glyphicon glyphicon-pause player-icon-bg" aria-hidden="true"></a>
+      <!-- NEXT SONG LOADED-->
+      <a
+        class="glyphicon glyphicon-forward player-icon" aria-hidden="true"
+        tooltip="{{getNextSongDescription(player.queue.peekNextSong())}}" ng-click="player.nextTrack()"
+        ng-show="player.queue.peekNextSong() != null"></a>
+      <a
+        class="glyphicon glyphicon-forward player-icon-shaded" aria-hidden="true"
+        ng-click="player.nextTrack()" ng-show="player.queue.peekNextSong() == null"></a>
+    </div>
+  </div>
+</div>
