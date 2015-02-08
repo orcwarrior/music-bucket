@@ -1,0 +1,29 @@
+.playlistEntry {
+  text-align: left;
+  background-color: transparent;
+  color: @gray-lighter;
+  border-color: @gray;
+  & > .entryDescription {
+    display: inline-block;
+    color: @gray-lighter;
+    width: 90%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  &  .dropdown-menu-item {
+    padding: 3px 10px;
+    & > span {
+      padding-right: 10px;
+    }
+  }
+}
+.playlist-entry-actions {
+  float: right;
+  & > a {
+    font-size: 20px;
+  }
+}
+.playlistEntrySelected {
+  background-color: @brand-primary !important;
+}
