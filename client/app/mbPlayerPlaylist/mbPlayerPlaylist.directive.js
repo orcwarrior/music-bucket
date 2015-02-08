@@ -19,20 +19,20 @@ angular.module('musicBucketApp')
 
         // Recalculate element height on window resize (responsiveness)
         angular.element($window).bind('resize', function() {
-          recalculateHeight(event);
+          recalculateHeight();
           scope.$apply();
         });
         // Recalculate on init too:
-        recalculateHeight(event);
+        recalculateHeight();
 
         function recalculateHeight() {
           var wnd = getWindowDimensions();
           if (wnd.width <= 760) {
             /* mobile */
-            element.css({height: wnd.height - ( TOOLBAR_HEIGHT + NAVBAR_HEIGHT + 100) + 'px'});
+            element.css({'max-height': wnd.height - ( TOOLBAR_HEIGHT + NAVBAR_HEIGHT + 100) + 'px', height: 'initial'});
           } else {
             /* desktop */
-            element.css({height: wnd.height - (MAINCONTROLL_HEIGHT + NAVBAR_HEIGHT + TOOLBAR_HEIGHT) + 'px'});
+            element.css({'max-height': 'initial', height: wnd.height - (MAINCONTROLL_HEIGHT + NAVBAR_HEIGHT + TOOLBAR_HEIGHT) + 'px'});
           }
 
         }
