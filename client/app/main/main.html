@@ -2,43 +2,9 @@
 <div class="container-fluid">
   <div class="row">
     <!-- MUSIC PLAYER -->
-    <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12" id="musicPlayerContainer">
-      <div class="row">
-        <div class="col-lg-12 nopadding">
-          <div class="player-toolbar">
-            <div class="player-toolbar-left">
-              <div class="player-playlist-save">
-                <input ng-model="player.playlist.name" type="text" class="form-control"
-                       ng-show="player.playlist.settingPlaylistName && player.playlist.isAltered"
-                       placeholder="Playlist name">
-                <!-- DK: When user is not logged in show tooltip -->
-                <a class="glyphicon glyphicon-floppy-disk disabled" ng-show="player.playlist.isAltered && !userLoggedIn()"
-                   tooltip="You need to be logged in!" tooltip-placement="right"></a>
-                <!-- Normal save diskiette -->
-                <a class="glyphicon glyphicon-floppy-disk" ng-show="player.playlist.isAltered && userLoggedIn()"
-                   ng-class="{ 'disabled' : player.playlist.name == '' && player.playlist.settingPlaylistName || !userLoggedIn()}"
-                   ng-click="savePlaylist()"></a>
-              </div>
-            </div>
-            <div class="player-toolbar-right">
-              <a class="{{player.playlist.playlistSequencer.iconClass}}"
-                 ng-click="player.playlist.nextPlaylistSequencer()"></a>
-            </div>
-          </div>
-            <mb-player-main-controls></mb-player-main-controls>
-        </div>
-      </div>
-    <div class="row">
-      <player-progressbar buffered="player.progress.buffered" current="player.progress.current"
-                                  ng-click="player.playerProgressClickEvent($event)"></player-progressbar>
-    </div>
-
-      <div class="row row-centered playlistElementContainer">
-          <mb-player-playlist playlist="player.getPlaylist()"> </mb-player-playlist>
-      </div>
+    <mb-player></mb-player>
     </div>
   </div>
-</div>
 
 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12" id="musicPlayerColumn"></div>
 <!-- MUSIC PLAYER -->

@@ -5,7 +5,7 @@
   angular.module('musicBucketEngine')
     .factory('songYoutube', function (songCommons, song) {
                return {
-                 constructor: function (ytSearchItem, baseEntry) {
+                 constructorFromLocal: function (ytSearchItem, baseEntry) {
 
                    var shared = {
                      id : ytSearchItem.id.videoId,
@@ -25,6 +25,18 @@
                      shared.genere = baseEntry.shared.genere;
                    }
                    return new song.constructor({ytData: ytSearchItem}, songCommons.songType.youtube, shared);
+                 },
+                 constructor : function (youtubeId) {
+                   var shared = {
+                     id : youtubeId,
+                     url   : "http://www.youtube.com/embed/" + youtubeId,
+                     artist: '',
+                     title : '',
+                     album : '',
+                     genere: '',
+                     type  : '' // mime type
+                   };
+                   return new song.constructor({id: youtubeId}, songCommons.songType.youtube, shared);
                  }
                }
              });

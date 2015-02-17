@@ -81,9 +81,13 @@
                    return $http.get(url);
                  }
                };
+                 var youtubeApiGetById = function(id) {
+
+                 }
                return {
                  search                : youtubeApiSearch,
-                 searchExtractBestMatch: pickClosestFromList
+                 searchExtractBestMatch: pickClosestFromList,
+                 getById               : youtubeApiGetById
                };
              })
 }
