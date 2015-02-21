@@ -115,7 +115,14 @@ module.exports = function (grunt) {
           livereload: true,
           nospawn: true //Without this option specified express won't be reloaded
         }
-      }
+      },
+      forever: {
+        server1: {
+          options: {
+            index: 'index.js',
+            logDir: 'logs'
+          }
+        },
     },
 
     // Make sure code styles are up to par and there are no obvious mistakes
@@ -431,13 +438,6 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js',
         singleRun: true
       }
-    },
-
-    mochaTest: {
-      options: {
-        reporter: 'spec'
-      },
-      src: ['server/**/*.spec.js']
     },
 
     protractor: {
