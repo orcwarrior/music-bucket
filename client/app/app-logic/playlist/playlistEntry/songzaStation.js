@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songzaStation', function ($rootScope, $q, songSongza, entryCommons) {
+    .factory('songzaStation', function ($rootScope, $q, songSongza, entryCommons, $http) {
                function commonInit(self) {
                  self.type = entryCommons.entryType.songzaStation;
                  self.entries = [];
@@ -11,21 +11,23 @@
                  self.playedIDs = [];
 
                  self.init = function (stationId) {
-                   $rootScope.songza.station.get(stationId)
+                   //$rootScope.songza.station.get(stationId)
+                   $http.get('/songza-api/station/'+stationId)
                      .then(function (response) {
                              console.log('songza station inited');
-                             console.log(response);
-                             self.station = response;
-                             self.songsCount = response.song_count;
-                             self.stationName = response.name;
+                             console.log(response.data);
+                             self.station = response.data;
+                             self.songsCount = response.data.song_count;
+                             self.stationName = response.data.name;
                              self.updateShortDescription();
-                             $rootScope.$broadcast('player:playlist', response);
                            });
                  }
                  // Returns promise of songSongza (based on base song object)
                  function tryGetNewSong(songzaPromise, playlistCallback) {
-                   $rootScope.songza.station.nextSong(self.id)
+                   //$rootScope.songza.station.nextSong(self.id)
+                   $http.get('/songza-api/station/'+self.id+'/next')
                      .then(function (response) {
+                       response = response.data; // TEMPORARY!!!
                              if (_.some(self.playedIDs, function (pID) { return pID == response.song.id;})) {
                                console.log("Song:", response, "already played!");
                                tryGetNewSong(songzaPromise);

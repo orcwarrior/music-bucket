@@ -56,6 +56,6 @@ angular.module('musicBucketApp', [
     });
 
          // TMP: initialize songza api:
-         $rootScope.songza = new songzaInit({userAgent: 'Some browser'});
+         // $rootScope.songza = new songzaInit({userAgent: 'Some browser'});
          angularPlayer.init();
   });

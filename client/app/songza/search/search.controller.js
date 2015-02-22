@@ -2,7 +2,7 @@
 
 angular.module('musicBucketApp')
   .controller('SongzaSearchCtrl',
-              function ($scope, $rootScope, $location, $stateParams, $state, angularPlayer, songzaStation) {
+              function ($scope, $rootScope, $location, $stateParams, $state, angularPlayer, songzaStation, $http) {
 
                 $scope.searchQuery = $location.search().query;
                 $scope.searchInProgress = false;
@@ -11,13 +11,15 @@ angular.module('musicBucketApp')
                   $scope.foundedStations = null;
                   $location.search('query', query);
                   $location.replace();
-                  $rootScope.songza.search.station(query, 50)
+                  //$rootScope.songza.search.station(query, 50)
+                  $http.get('/songza-api/search/station?query='+query+'&limit=50')
                     .then(function (response) {
-                            $scope.$apply(function () {
+                      response = response.data; // TMP!!!
+                            //$scope.$apply(function () {
                                             $scope.foundedStations = response;
                                             $scope.searchInProgress = false;
-                                          }
-                            );
+                            //              }
+                            //);
                           })
                 }
 
