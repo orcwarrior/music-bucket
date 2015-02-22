@@ -51,8 +51,6 @@
                      station              : songzaStat.station,
                      songsCount           : songzaStat.songsCount,
                      shortDescription     : songzaStat.shortDescription,
-                     station              : songzaStat.station,
-                     songsCount           : songzaStat.songsCount,
                      stationName          : songzaStat.stationName,
                      type                 : songzaStat.type,
                      playedIDs            : songzaStat.playedIDs,

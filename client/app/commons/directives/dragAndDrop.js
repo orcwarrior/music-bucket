@@ -1,7 +1,6 @@
 /**
  * Created by orcwarrior on 2014-11-11.
  */
-(function() {
   angular.module('musicBucketApp').
     directive('dragAndDrop', function () {
                 return {
@@ -39,4 +38,3 @@
                   }
                 };
               });
-})();

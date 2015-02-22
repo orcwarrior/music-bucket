@@ -5,7 +5,7 @@ angular.module('musicBucketApp')
     // AngularJS will instantiate a singleton by calling "new" on this function
 
              /* http://www.youtube.com/apiplayer?enablejsapi=1&version=3 */
-             var ytPlayerConfig : {
+             var ytPlayerConfig = {
                controls: 0, /* control elements hidden */
                modestbranding: 0, /* disables yt logo */
                disablekb: 1, /* disables keyboard shortcuts */
@@ -17,7 +17,7 @@ angular.module('musicBucketApp')
 
              }
 
-             var youtubePlayer = {}
+             var youtubePlayer = {
                player : undefined,
              };
 

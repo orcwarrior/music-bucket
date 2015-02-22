@@ -2,7 +2,7 @@
  * Created by orcwarrior on 2015-02-03.
  */
 angular.module('musicBucketApp')
-  .config(['$provide', function ($provide) {
+  .config(function ($provide) {
             function getCurrentTime(msg) {
               var date = new Date();
               var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
@@ -12,7 +12,7 @@ angular.module('musicBucketApp')
               return new Error().stack.split("\n")[3];
             }
 
-            $provide.decorator('$log', ['$delegate', function ($delegate) {
+            $provide.decorator('$log', function ($delegate) {
               /*
                * LOG
                */
@@ -71,5 +71,5 @@ angular.module('musicBucketApp')
               };
 
               return $delegate;
-            }]);
-          }])
+            });
+          })

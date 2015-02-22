@@ -8,14 +8,25 @@ angular.module('musicBucketApp')
       playlist : null,
       queue    : null,
       /* ... */
-      playSong :    function()    {},
-      play :        function()    {},
-      pause :       function()    {},
-      stop :        function()    {},
-      nextTrack :   function()    {},
-      prevTrack :   function()    {},
-      mute :        function()    {},
-      setVolume :   function()    {},
-      setPosition : function()    {},
+      /* basic controlls */
+      playSong :            function(song)    {},
+      play :                function()        {},
+      pause :               function()        {},
+      stop :                function()        {},
+      nextTrack :           function()        {},
+      prevTrack :           function()        {},
+      mute :                function()        {},
+      setVolume :           function(vol)     {},
+      setPosition :         function(pos)     {},
+      /* playlist */
+      setPlaylist :         function(playlist){},
+      getPlaylist :         function()        {},
+      addToPlaylist :       function(entry)   {},
+      /* queue */
+      pushNextSongToQueue : function(onLoadCb){},
+      /* track/song */
+      /* events */
+      onSongBufferUpdate :  function(part)    {},
+      onSongEnd :           function()        {},
     };
   });
