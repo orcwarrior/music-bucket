@@ -49,10 +49,7 @@ server.listen(config.port, config.ip, function () {
 // DK: Proxy servers:
 var httpProxy = require('http-proxy');
 
-var proxy = httpProxy.createProxyServer({xfwd : true, changeOrigin: true }),
-  url = require('url');
 
-var proxy2 = httpProxy.createProxyServer({xfwd : true, changeOrigin: true });
 // start proxy server:
 http.createServer(function(req, res) {
  // console.log('Proxy-server listening on %d, in %s mode', config.port, app.get('env'));
@@ -86,13 +83,13 @@ http.createServer(function(req, res) {
   if (pattern.exec(req.url)) {
     proxyHost = 'http://transparent-proxy.herokuapp.com/proxy.php?' /*+ req.url.match(pattern)[2] + '&*/ + '__dest_url=/' + req.url.match(pattern)[1];
 
-    res.setHeader('Access-Control-Allow-Origin', req.headers['origin']);
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     var options = {
       host: 'transparent-proxy.herokuapp.com',
-      path: '/proxy.php?' + '__dest_url=/' + req.url.match(pattern)[1]
-      ,headers : { host: req.host,
+      path: '/proxy.php?' + '__dest_url=/' + req.url.match(pattern)[1],
+      headers : { host: req.host,
         connection: 'keep-alive',
         pragma: 'no-cache',
         'cache-control': 'no-cache',
@@ -136,10 +133,6 @@ http.createServer(function(req, res) {
 
 }).listen(9001, config.ip);
 
-proxy.on('proxyRes', function (proxyRes, req, res) {
-  proxyRes.headers["access-control-allow-origin"] = req.headers['origin'];
-  console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
-});
 
 // Expose app
 exports = module.exports = app;

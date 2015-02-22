@@ -15,6 +15,11 @@ module.exports = function(app) {
 
   app.use('/auth', require('./auth'));
 
+  // DK: For heroku deployment proxies moved to regular url:
+
+  app.all('/songza-api/*', require('./proxy/songza-api'));
+  app.all('/songza-api-proxy/*', require('./proxy/songza-api-proxy'));
+
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
    .get(errors[404]);
