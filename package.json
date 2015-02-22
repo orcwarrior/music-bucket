@@ -10,6 +10,8 @@
     "serve-favicon": "~2.0.1",
     "cookie-parser": "~1.0.1",
     "express-session": "~1.0.2",
+    "grunt": "~0.4.4",
+    "grunt-cli": "*",
     "errorhandler": "~1.0.0",
     "compression": "~1.0.1",
     "lodash": "~2.4.1",
@@ -23,7 +25,8 @@
     "connect-mongo": "^0.4.1",
     "socket.io": "^1.0.6",
     "socket.io-client": "^1.0.6",
-    "socketio-jwt": "^2.0.2"
+    "socketio-jwt": "^2.0.2",
+    "http-proxy" : "*"
   },
   "devDependencies": {
     "coffeeify": "^0.7.0",
