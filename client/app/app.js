@@ -9,7 +9,8 @@ angular.module('musicBucketApp', [
   'angularSoundManager',
   'musicBucketEngine',
   'musicBucketAuth',
-  'ui.router'
+  'ui.router',
+  'cfp.hotkeys'
 ])
   .config(function ($locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
             $urlRouterProvider.otherwise("/");

@@ -2,7 +2,7 @@
 
 angular.module('musicBucketApp')
   .controller('MainCtrl',
-              function ($rootScope, $scope, $http, socket, Auth, angularPlayer, playlistLocalStorage, songCommons, playlistService, playlist) {
+              function ($rootScope, $scope, $http, socket, Auth, angularPlayer, playlistLocalStorage, songCommons, playlistService, playlist, hotkeys) {
                 // Loading playlist from cookies:
                 // TODO: Next song played, store playlist state in localstorage
                 // TODO#2: Playlist should be FULLY recreated by LSProvider
@@ -81,5 +81,25 @@ angular.module('musicBucketApp')
                 $scope.$on('track:id', function (event, data) {
                   angularPlayer.playlist.storeInLocalstorage();
                 });
+
+                // Initialize hotkeys:
+                hotkeys.bindTo($rootScope)
+                  .add({
+                    combo: ['space', 'stop-playing'],
+                    description: 'Toggle playing',
+                    callback: _.bind(angularPlayer.togglePlay, angularPlayer)
+                  })
+                  .add({
+                    combo: ['mod+up','next-track'],
+                    description: 'Play next track',
+                    action: 'keydown',
+                    callback: _.bind(angularPlayer.nextTrack, angularPlayer)
+                  })
+                  .add({
+                    combo: ['mod+down','prev-track'],
+                    description: 'Rewind to previous track',
+                    action: 'keydown',
+                    callback: _.bind(angularPlayer.prevTrack, angularPlayer)
+                  })
 
               });

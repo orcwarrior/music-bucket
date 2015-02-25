@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth) {
+  .controller('NavbarCtrl', function ($scope, $location, Auth, hotkeys) {
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
@@ -27,4 +27,7 @@ angular.module('musicBucketApp')
                 $scope.isJulek = function() {
                   return navigator.userAgent.indexOf('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/600.2.5 (KHTML, like Gecko)') !== -1;
                 };
+    $scope.showCheatSheet = function() {
+      hotkeys.toggleCheatSheet()
+    }
   });
