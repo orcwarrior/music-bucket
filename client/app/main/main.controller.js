@@ -43,7 +43,7 @@ angular.module('musicBucketApp')
 
                 $rootScope.player.playerProgressClickEvent = function (event) {
                   var SMSound = soundManager.getSoundById($scope.player.getCurrentTrack().id);
-                  var newProgress = event.offsetX / event.currentTarget.firstChild.clientWidth;
+                  var newProgress = event.clientX / event.currentTarget.firstChild.clientWidth;
 
                   $scope.player.progress.current = Math.round(newProgress * 100) + "%";
                   soundManager.setPosition(SMSound.id, SMSound.duration * newProgress);
