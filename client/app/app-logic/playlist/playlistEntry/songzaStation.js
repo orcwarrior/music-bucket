@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songzaStation', function ($rootScope, $q, songSongza, entryCommons, $http) {
+    .factory('songzaStation', function ($rootScope, $q, songSongza, entryCommons, songzaApi, $http) {
                function commonInit(self) {
                  self.type = entryCommons.entryType.songzaStation;
                  self.entries = [];
@@ -11,11 +11,10 @@
                  self.playedIDs = [];
 
                  self.init = function (stationId) {
-                   //$rootScope.songza.station.get(stationId)
-                   $http.get('/songza-api/station/'+stationId)
+                   // $rootScope.songza.station.get(stationId)
+                   // $http.get('/songza-api/station/'+stationId)
+                   songzaApi.station.get(stationId)
                      .then(function (response) {
-                             console.log('songza station inited');
-                             console.log(response.data);
                              self.station = response.data;
                              self.songsCount = response.data.song_count;
                              self.stationName = response.data.name;
@@ -25,7 +24,8 @@
                  // Returns promise of songSongza (based on base song object)
                  function tryGetNewSong(songzaPromise, playlistCallback) {
                    //$rootScope.songza.station.nextSong(self.id)
-                   $http.get('/songza-api/station/'+self.id+'/next')
+                   //$http.get('/songza-api/station/'+self.id+'/next')
+                   songzaApi.station.next(self.id)
                      .then(function (response) {
                        response = response.data; // TEMPORARY!!!
                              if (_.some(self.playedIDs, function (pID) { return pID == response.song.id;})) {

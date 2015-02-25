@@ -2,7 +2,7 @@
 
 angular.module('musicBucketApp')
   .controller('SongzaSearchCtrl',
-              function ($scope, $rootScope, $location, $stateParams, $state, angularPlayer, songzaStation, $http) {
+              function ($scope, $location, $state, angularPlayer, songzaStation, songzaApi) {
 
                 $scope.searchQuery = $location.search().query;
                 $scope.searchInProgress = false;
@@ -11,8 +11,7 @@ angular.module('musicBucketApp')
                   $scope.foundedStations = null;
                   $location.search('query', query);
                   $location.replace();
-                  //$rootScope.songza.search.station(query, 50)
-                  $http.get('/songza-api/search/station?query='+query+'&limit=50')
+                  songzaApi.search.station(query)
                     .then(function (response) {
                       response = response.data; // TMP!!!
                             //$scope.$apply(function () {
@@ -32,15 +31,8 @@ angular.module('musicBucketApp')
                   $scope.searchStations($scope.searchQuery);
                 }
 
-                $scope.player = angularPlayer;
                 $scope.addToPlaylist = function (station) {
                   var stationEntry = new songzaStation.constructor(station);
                   angularPlayer.addToPlaylist(stationEntry);
                 }
-                $scope.$on('Songza:Station-Update', function (event, data) {
-                 // $scope.$apply(function () {
-                 //   $scope.station = data;
-
-                 // });
-                });
               });
