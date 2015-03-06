@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('localEntry', function ($rootScope, $q, entryCommons, songYoutube, SMSoundConverter, youtubeApiHelper) {
+    .factory('localEntry', function ($rootScope, $q, entryCommons) {
       function commonInit(self) {
         self.type = entryCommons.entryType.localEntry;
         self.songsCount = 1;

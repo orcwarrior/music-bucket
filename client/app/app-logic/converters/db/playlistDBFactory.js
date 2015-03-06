@@ -27,7 +27,7 @@
 
                return {
                  convertFrom: function (dbModel) {
-                   var _playlist = playlist.constructor();
+                   var _playlist = new playlist();
                    fromDBModel(_playlist, dbModel);
                    return _playlist;
                  },

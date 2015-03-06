@@ -14,7 +14,7 @@ angular.module('musicBucketApp')
     $scope.loadPlaylist = function (playlist) {
       var loadedPlaylist = playlistDBFactory.convertFrom(playlist);
       loadedPlaylist.storeInLocalstorage();
-      angularPlayer.setPlaylist(playlistDBFactory.convertFrom(playlist));
+      angularPlayer.setPlaylist(loadedPlaylist);
     };
     $scope.isPlaylistOwner = function (playlist) {
       var curId = Auth.getCurrentUser()._id;
