@@ -3,50 +3,31 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songDBFactory', function (playlist, localEntry, songzaStation) {
+    .factory('songDBFactory', function () {
 
-               var songLocal_fromDBModel = function (db) {
-               }
-               var songSongza_fromDBModel = function (db) {
-               }
+      // IT's unused !!!
+      return {
+        convertFrom: function (songDb) {
+        },
+        convertTo: function (song) {
+          var songDB = {
+            metainfos: {
+              id: song.metainfos.id,
+              url: song.metainfos.url,
+              artist: song.metainfos.artist,
+              title: song.metainfos.title,
+              album: song.metainfos.album,
+              genere: song.metainfos.genere
+            },
+            type: song.type
+          };
 
-
-               return {
-                 convertFrom: function (songDb) {
-                   var song = {
-                     shared  : {
-                       id : songDb.shared.id,
-                       url : songDb.shared.url,
-                       artist: songDb.shared.artist,
-                       title : songDb.shared.title,
-                       album : songDb.shared.album,
-                       genere: songDb.shared.genere,
-                       albumArt : songDb.shared.albumArt
-                     },
-                     baseType: songDb.baseType,
-                     base    : songDb.base
-                   };
-                 },
-                 convertTo  : function (song) {
-                   var songDB = {
-                     shared  : {
-                       id : song.shared.id,
-                       url : song.shared.url,
-                       artist: song.shared.artist,
-                       title : song.shared.title,
-                       album : song.shared.album,
-                       genere: song.shared.genere
-                     },
-                     baseType: song.baseType,
-                     base    : song.base
-                   };
-
-                   // Copy album art only if it's an URL.
-                   if (!song.shared.albumArtAttached) {
-                     songDB.shared.albumArt = song.shared.albumArt;
-                   }
-                   return songDB;
-                 }
-               }
-             });
-      })();
+          // Copy album art only if it's an URL.
+          if (!song.metainfos.albumArtAttached) {
+            songDB.metainfos.albumArt = song.metainfos.albumArt;
+          }
+          return songDB;
+        }
+      };
+    });
+})();

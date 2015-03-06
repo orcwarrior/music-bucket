@@ -14,7 +14,8 @@
                      title : '',
                      album : '',
                      genere: '',
-                     type  : '' // mime type
+                     type  : '', // mime type
+                     requestUrl : undefined
                    };
 
                    if (!_.isUndefined(baseEntry))
