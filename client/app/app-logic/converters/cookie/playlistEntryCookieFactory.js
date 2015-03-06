@@ -3,10 +3,10 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('playlistEntryCookieFactory', function (songCookieFactory, localEntry, songzaStation, entryCommons) {
+    .factory('playlistEntryCookieFactory', function (songCookieFactory, localEntry, songzaStationEntry, entryCommons) {
 
                var localEntry_fromCookieModel = function (cookie) {
-                 var locEntry = new localEntry.constructor_();
+                 var locEntry = new localEntry();
                  locEntry.entries     = _.map(cookie.entries, function(song) { return songCookieFactory.convertFrom(song); });
                  locEntry.id          = cookie.id;
                  locEntry.songsCount  = cookie.songsCount;
@@ -15,7 +15,7 @@
                  return locEntry;
                }
                var songzaStation_fromCookieModel = function (cookie) {
-                 var songzaStat = new songzaStation.constructor_();
+                 var songzaStat = new songzaStationEntry();
 
                  songzaStat.id                   = cookie.id;
                  songzaStat.station              = cookie.station;
@@ -34,7 +34,7 @@
                  if (_.isUndefined(songzaStat.station))
                   songzaStat.init(cookie.id); // grab proper station infos.
                  return songzaStat;
-               }
+               };
                var localEntry_toCookieModel = function (localEntr) {
                  return {
                    id              : localEntr.id,
