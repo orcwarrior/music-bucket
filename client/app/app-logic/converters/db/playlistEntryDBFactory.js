@@ -12,7 +12,7 @@
                  return locEntry;
                }
                var songzaStation_fromDBModel = function (db) {
-                 var songzaStat = new songzaStation.constructor_();
+                 var songzaStat = new song();
 
                  songzaStat.id = db.id;
                  songzaStat.station = db.station;

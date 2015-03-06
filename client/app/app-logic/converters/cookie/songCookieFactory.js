@@ -3,10 +3,13 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songCookieFactory', function (song, songCommons) {
+    .factory('songCookieFactory', function (song) {
 
       return {
         convertFrom: function (songCookie) {
+          if (_.isUndefined(songCookie.metainfos)) {
+            return undefined;
+          }
           songCookie.metainfos.metainfosAsResponse = true;
           songCookie.metainfos.getUrl = function () { return this.url;};
           var result = new song(songCookie.metainfos, songCookie.type);

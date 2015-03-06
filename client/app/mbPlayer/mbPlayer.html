@@ -5,7 +5,7 @@
         <div class="player-toolbar-left">
           <div class="player-playlist-save">
             <input ng-model="player.playlist.name" type="text" class="form-control"
-                   ng-show="player.playlist.settingPlaylistName && player.playlist.isAltered"
+                   ng-show="player.playlist.settingPlaylistName && player.playlist.isAltered && userLoggedIn()"
                    placeholder="Playlist name">
             <!-- DK: When user is not logged in show tooltip -->
             <a class="glyphicon glyphicon-floppy-disk disabled" ng-show="player.playlist.isAltered && !userLoggedIn()"
