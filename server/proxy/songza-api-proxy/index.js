@@ -15,7 +15,8 @@ module.exports = function(req, res) {
     var proxyHost = 'http://transparent-proxy.herokuapp.com/proxy.php?' /*+ req.url.match(pattern)[2] + '&*/ + '__dest_url=/' + req.url.match(pattern)[1];
     console.log(proxyHost);
     res.setHeader('Access-Control-Allow-Origin', 'http://songza.com');
-
+    res.setHeader('Access-Control-Request-Headers', 'accept, authorization');
+    req.setHeader('Access-Control-Request-Headers', 'accept, authorization');
 
     // req.headers['Access-Control-Allow-Origin'] = req.headers['origin'];
     // req.headers['Access-Control-Allow-Credentials'] = "true";

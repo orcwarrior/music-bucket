@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 describe('Directive: mbPlayerMainControls', function () {
 
