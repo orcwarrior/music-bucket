@@ -24,8 +24,9 @@ angular.module('musicBucketApp', [
       // Add authorization token to headers
       request: function (config) {
         config.headers = config.headers || {};
-        if ($cookieStore.get('token')) {
-          config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+        /* DK: Hacky way to not adding authorization to proxy requests*/
+        if ($cookieStore.get('token') && config.url.indexOf("/api/") !== -1) {
+          config.headers.authorization = 'Bearer ' + $cookieStore.get('token');
         }
         return config;
       },
