@@ -28,10 +28,10 @@
                    }
                    this.enqueue = function (playlistEntry) {
                      // create queueEntry, add to entries array
-                     this.entries.push(queueEntry.constructor(playlistEntry));
+                     this.entries.push(new queueEntry(playlistEntry));
                    }
                    this.enqueueNext = function (playlistEntry) {
-                     var head = queueEntry.constructor(playlistEntry);
+                     var head = new queueEntry(playlistEntry);
                      if (this.hasNext() && this.entries[0].buffered)
                         head.buffer();
                       this.entries.unshift(head);
@@ -39,7 +39,7 @@
                    this.bufferNext = function () {
                      if (this.hasNext()) {
                        var next = _.first(this.entries);
-                       if (next.buffer()) console.log("Next song in queue buffered!", next.song.shared);
+                       if (next.song.buffer()) console.log("Next song in queue buffered!", next.song.shared);
                      }
                    }
                    this.getLenght = function () { return this.entries.length;}
