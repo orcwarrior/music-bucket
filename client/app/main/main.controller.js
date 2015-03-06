@@ -9,33 +9,11 @@ angular.module('musicBucketApp')
                 // TODO#3: Having this mechanics here is fuckedup
                 var lsPlaylist = playlistLocalStorage.restoreFromLocalstorage();
                 if (!_.isNull(lsPlaylist)) {
-                  angularPlayer.setPlaylist(playlist.constructor(lsPlaylist));
+                  angularPlayer.setPlaylist(new playlist(lsPlaylist));
                 }
 
-                $scope.savePlaylist = function () {
-                  // NOTE: If playlist is based on another author playlist, reset name
-                  // so new user can rename it.
-                  var playlist = angularPlayer.playlist;
-                  if (playlist.author !== Auth.getCurrentUser()._id) {
-                    playlist.id = undefined;
-                    playlist.name = '';
-                    playlist.author = Auth.getCurrentUser()._id;
-                  }
+                $scope.savePlaylist = function () { playlistService.save(angularPlayer.getPlaylist()); };
 
-                  if (playlist.name === '') playlist.settingPlaylistName = true;
-
-                  if (playlist.settingPlaylistName) {
-                    if (playlist.name === '') return;
-                    else
-                      playlist.settingPlaylistName = false;
-                  }
-
-                  playlistService.save(playlist)
-                    .then(function (response) {
-                            playlist.id = response._id;
-                            playlist.isAltered = false;
-                          });
-                }
                 $scope.userLoggedIn = function () {
                   return Auth.isLoggedIn();
                 }
@@ -61,7 +39,7 @@ angular.module('musicBucketApp')
                 $scope.getNextSongDescription = function (song) {
                   if (_.isNull(song)) return '';
                   return song.shared.getSongDescription();
-                }
+                };
                 // Progress update:
                 $scope.player.progress = {current: "25%", buffered: "50%"};
                 $scope.$on('track:progress', function (event, data) {
