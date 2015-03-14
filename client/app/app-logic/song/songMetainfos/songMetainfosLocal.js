@@ -4,51 +4,28 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songMetainfosLocal', function (songMetainfos) {
+    .factory('songMetainfosLocal', function (songMetainfos, ngAudioMetadataParser) {
 
       /* private methods */
-      function loadId3Tags(file, songMetainfos) {
-        ID3.loadTags(file.name, function () {
-          var tags;
-          tags = ID3.getAllTags(file.name);
-          id3ToShared(tags, songMetainfos);
-        }, {dataReader: FileAPIReader(file)});
+      function setupID3Tags(metadata) {
+        this.artist = metadata.artist;
+        this.title = metadata.title;
+        this.album = metadata.album;
+        this.year = metadata.year;
+        // Load albumArt:
+        if (_.isUndefined(metadata.picture)) return;
+        var urlCreator = window.URL || window.webkitURL;
+        this.albumArt = urlCreator.createObjectURL( metadata.picture );
       }
-
-      function id3ToShared(id3, songMetainfos) {
-        if (_.isUndefined(id3)) return;
-
-        if (!_.isUndefined(id3.artist))
-          songMetainfos.artist = id3.artist.toString();
-        if (!_.isUndefined(id3.title))
-          songMetainfos.title = id3.title.toString();
-        if (!_.isUndefined(id3.album))
-          songMetainfos.album = id3.album.toString();
-        if (!_.isUndefined(id3.genere))
-          songMetainfos.genere = id3.genere.toString();
-        if (!_.isUndefined(id3.picture)) {
-          var image = id3.picture;
-          songMetainfos.albumArtAttached = true;
-          songMetainfos.albumArt = (function () {
-            var base64String = "";
-            for (var i = 0; i < image.data.length; i++) {
-              base64String += String.fromCharCode(image.data[i]);
-            }
-            return "data:" + image.format + ";base64," + window.btoa(base64String);
-          })();
-        }
-        ;
-      }
-
 
       var songMetainfosLocal = function songMetainfosLocal(src) {
         this.id = "LF-" + src.name;
         this.title = src.name.substr(0, src.name.lastIndexOf('.'));
         this.url = URL.createObjectURL(src);
         this.type = "audio/" + src.name.substr(src.name.lastIndexOf('.') + 1);
-        this.getUrl = function () { return this.url;};
+        this.getUrl = function () { return this.url; };
 
-        loadId3Tags(src, this);
+        ngAudioMetadataParser(src, _.bind(setupID3Tags, this));
       }
       songMetainfosLocal.prototype = new songMetainfos();
       return songMetainfosLocal;
