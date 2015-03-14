@@ -4,7 +4,7 @@ var express = require('express');
 var config = require('../../config/environment');
 
 var httpProxy = require('http-proxy');
-var proxy = httpProxy.createProxyServer({xfwd : true, changeOrigin: true }),
+var proxy = httpProxy.createProxyServer({xfwd : true, changeOrigin: true}),
   url = require('url');
 
 // Middleware:
@@ -37,4 +37,8 @@ module.exports = function(req, res) {
 proxy.on('proxyRes', function (proxyRes, req, res) {
   // proxyRes.headers["access-control-allow-origin"] = req.headers['origin'];
   console.log('RAW Response from the target', JSON.stringify(proxyRes.headers, true, 2));
+});
+proxy.on('error', function (error) {
+  console.warn('There was an error with proxy: ');
+  console.warn(error);
 });
