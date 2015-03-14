@@ -1,0 +1,23 @@
+<div class="row" style="overflow: hidden">
+  <div class="col-sm-12">
+    <h1>Local Playlist creator</h1>
+  </div>
+  <div class="col-sm-12">
+    <div class="well well-lg" drag-and-drop>Drop files here</div>
+    <output ng-repeat="url in filesURLs">
+      {{url}}<br/>
+    </output>
+
+    <span class="sr-only">{{loadProgress}}%</span>
+    <div class="progress">
+      <div class="progress-bar" role="progressbar" aria-valuenow="{{loadProgress}}" aria-valuemin="0" aria-valuemax="100" ng-style="{ 'width' : loadProgress + '%' }">
+        {{loadProgress}}%
+      </div>
+    </div>
+
+    <player-progressbar current="loadProgress"
+                        </player-progressbar>
+
+  </div>
+  <hr>
+</div>
