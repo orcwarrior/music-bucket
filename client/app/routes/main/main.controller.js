@@ -9,15 +9,20 @@ angular.module('musicBucketApp')
                 // TODO#3: Having this mechanics here is fuckedup
                 var lsPlaylist = playlistLocalStorage.restoreFromLocalstorage();
                 if (!_.isNull(lsPlaylist)) {
+                  console.log("LS Playlist:"); console.log(lsPlaylist);
                   angularPlayer.setPlaylist(new playlist(lsPlaylist));
                 }
 
-                $scope.savePlaylist = function () { playlistService.save(angularPlayer.getPlaylist()); };
+                $scope.savePlaylist = function () {
+                  if (_.isUndefinied(angularPlayer.getPlaylist()))
+                    playlistService.save(angularPlayer.getPlaylist());
+                };
 
                 $scope.userLoggedIn = function () {
                   return Auth.isLoggedIn();
                 }
                 $rootScope.player = angularPlayer;
+                console.log("player: "); console.log(angularPlayer);
 
                 $rootScope.player.playerProgressClickEvent = function (event) {
                   var SMSound = soundManager.getSoundById($scope.player.getCurrentTrack().id);

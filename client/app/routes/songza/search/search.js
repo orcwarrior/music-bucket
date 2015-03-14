@@ -3,9 +3,9 @@
 angular.module('musicBucketApp')
   .config(function ($stateProvider) {
             $stateProvider
-              .state('main.songza.login', {
+              .state('main.songza', {
                        url        : '/songza',
-                       templateUrl: 'app/songza/songza.html',
-                       controller : 'SongzaCtrl'
+                       templateUrl: 'app/routes/songza/search/search.html',
+                       controller : 'SongzaSearchCtrl'
                      });
           });

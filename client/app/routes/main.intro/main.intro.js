@@ -5,7 +5,7 @@ angular.module('musicBucketApp')
             $stateProvider
               .state('main.intro', {
                        url : '/',
-                       templateUrl: 'app/main.intro/main.intro.html',
+                       templateUrl: 'app/routes/main.intro/main.intro.html',
                        controller : 'MainIntroCtrl'
                      });
   });

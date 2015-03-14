@@ -5,7 +5,7 @@ angular.module('musicBucketApp')
             $stateProvider
               .state('main.local', {
                        url        : '/local',
-                       templateUrl: 'app/local/local.html',
+                       templateUrl: 'app/routes/local/local.html',
                        controller : 'LocalCtrl'
                      });
           });

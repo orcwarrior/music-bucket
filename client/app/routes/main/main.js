@@ -5,7 +5,7 @@ angular.module('musicBucketApp')
             $stateProvider
               .state('main', {
                        abstract: true,
-                       templateUrl: 'app/main/main.html',
+                       templateUrl: 'app/routes/main/main.html',
                        controller : 'MainCtrl'
                      })
   });
