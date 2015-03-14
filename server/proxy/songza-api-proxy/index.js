@@ -7,6 +7,8 @@ var express = require('express');
 var config = require('../../config/environment');
 var http = require('http');
 
+var httpProxy = require('http-proxy');
+var proxy = httpProxy.createProxyServer({xfwd : true, changeOrigin: true, hostRewrite: true });
 
 // Middleware:
 module.exports = function(req, res) {
@@ -31,3 +33,8 @@ module.exports = function(req, res) {
     }
   }
 };
+
+proxy.on('error', function (error) {
+  console.warn('There was an error with proxy: ');
+  console.warn(error);
+});
