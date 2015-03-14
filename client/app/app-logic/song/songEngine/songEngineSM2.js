@@ -7,7 +7,7 @@
     .factory('songEngineSM2', function (songControllsInterface, $log) {
 
       /* private methods */
-      function createFromMetainfos(metainfos) {
+      function createFromMetainfos(metainfos, self) {
         //check if mime is playable first: -dk
         if (!soundManager.canPlayMIME(metainfos.type) || _.isUndefined(metainfos.type)) {
           //check if url is playable
@@ -18,14 +18,19 @@
         }
         return soundManager.createSound({
           id: metainfos.id,
-          url: metainfos.getUrl()
+          url: metainfos.getUrl(),
+          /* events cb */
+          onload: _.bind(function (e) {
+            if (_.isFunction(this.onload)) this.onload(e);
+          }, self)
         });
 
       };
 
 
       var songEngineSM2 = function (metainfos) {
-        var sm2SoundVar = this.SM2Sound = createFromMetainfos(metainfos);
+
+        var sm2SoundVar = this.SM2Sound = createFromMetainfos(metainfos, this);
 
         function buildReturn(res) {
           res = {result: res};
@@ -35,7 +40,7 @@
           return res;
         }
 
-        this.isBuffered = function() {
+        this.isBuffered = function () {
           return buildReturn(true);
         };
         this.buffer = function () {
@@ -54,7 +59,7 @@
         this.stop = function stop() {
           if (buildReturn().error) return buildReturn();
 
-          soundManager.setPosition(this.SM2Sound.id, 0);
+          // soundManager.setPosition(this.SM2Sound.id, 0);
           soundManager.stopAll();
           return buildReturn(this.SM2Sound.id);
         };
@@ -89,6 +94,22 @@
           soundManager.setPosition(this.SM2Sound.id, pos);
           return buildReturn(this.SM2Sound.id);
         };
+        this.getDuration = function getDuration() {
+          if (buildReturn().error) return buildReturn();
+
+          return buildReturn(this.SM2Sound.durationEstimate);
+        };
+
+        // Events callbacks:
+        /**
+         *
+         * @param callbackFn passed function to be called back onload.
+         */
+        // this.onload = function (callbackFn) {
+        //   alert("SM2Sound load alert!");
+        //   return buildReturn(this.SM2Sound.id);
+        // }
+
       };
       songEngineSM2.prototype = new songControllsInterface();
       return songEngineSM2;

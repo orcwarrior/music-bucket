@@ -17,13 +17,21 @@
         else
           this.metainfos = new songMetainfosConstructor(response, type);
         this.engine = new songEngineConstructor(this.metainfos, type);
-
+        this.metainfos.getDuration();
         var self = this;
-        new songCatalogueInfos(this.metainfos)
-          .then(function (catalogueInfos) {
-            self.catalogueInfos = catalogueInfos;
-            self.alternatives = new songAlternatives(self.catalogueInfos, alternates);
-          });
+
+        this.engine.onload = function () {
+          if (!_.isUndefined(self.catalogueInfos)) return;
+
+          new songCatalogueInfos(self.metainfos)
+            .then(function (catalogueInfos) {
+              self.catalogueInfos = catalogueInfos;
+              console.log("Catalogue infos:");
+              console.log(catalogueInfos);
+              self.alternatives = new songAlternatives(self.catalogueInfos, alternates);
+            });
+        };
+
 
         /* methods */
         this.getSongTypeName = function () {
@@ -35,6 +43,10 @@
       };
       song.prototype = new songControllsInterface(function controll() {
         var ret, dstMethod = _.last(arguments);
+        /* Calling priority
+         * 1. Actuallly used alternative.
+         * 2. Engine object method.
+         * */
         if (!_.isUndefined(this.usedAlt))
           ret = this.usedAlt[dstMethod](arguments);
         else

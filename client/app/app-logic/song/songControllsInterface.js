@@ -52,7 +52,19 @@
           args[args.length] = "buffer";
           return protoFunction.apply(this, args);
         };
-      }
+        this.getDuration = function getDuration() {
+          var args = rewriteArgs(arguments);
+          args[args.length] = "getDuration";
+          return protoFunction.apply(this, args);
+        };
+        // Events
+        this.onload = function onload() {
+          var args = rewriteArgs(arguments);
+          args[args.length] = "onload";
+          return protoFunction.apply(this, args);
+        };
+      };
+
       function rewriteArgs(args) {
         var res = [];
         for (var i=0; i < args.length; i++) {
