@@ -19,6 +19,8 @@ module.exports = function(app) {
 
   app.all('/songza-api/*', require('./proxy/songza-api'));
   app.all('/songza-api-proxy/*', require('./proxy/songza-api-proxy'));
+  app.all('/musicbrainz-api/*', require('./proxy/musicbrainz-api'));
+  app.all('/coverartarchive-api/*', require('./proxy/coverartarchive-api'));
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
