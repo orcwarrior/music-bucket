@@ -17,7 +17,8 @@
     "font-awesome": ">=4.1.0",
     "lodash": "~2.4.1",
     "angular-socket-io": "~0.6.0",
-    "underscore": "",
+    "underscore": ">=1.8.*",
+    "underscore.string": "",
     "angular-soundmanager2": "",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.5"
   },
