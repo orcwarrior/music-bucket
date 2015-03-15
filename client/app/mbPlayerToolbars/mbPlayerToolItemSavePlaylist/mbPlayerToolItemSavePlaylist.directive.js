@@ -8,8 +8,9 @@ angular.module('musicBucketApp')
         link: function (scope, element, attrs) {
           scope.player = angularPlayer;
         scope.savePlaylist = function () {
-          if (_.isUndefinied(angularPlayer.getPlaylist()))
+          if (!_.isUndefined(angularPlayer.getPlaylist())) {
             playlistService.save(angularPlayer.getPlaylist());
+          }
         };
       }
     };
