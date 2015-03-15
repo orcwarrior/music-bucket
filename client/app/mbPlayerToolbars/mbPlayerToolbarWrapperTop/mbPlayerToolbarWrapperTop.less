@@ -1,0 +1,30 @@
+.toolbar-wrapper-top {
+  display: block;
+  width: 100%;
+  height: 48px;
+  padding: 16px;
+  position: absolute;
+  z-index: 10;
+
+  & > *:nth-child(even)  {
+    float: left;
+  }
+  & > *:nth-child(odd) {
+    float: right;
+  }
+  & > *  a {
+    display: inline-block;
+    padding: 6px;
+    font-size: 20px;
+    // TODO: Some color global
+    @gradientStop: 70%;
+    color: #fff !important;
+    background: -moz-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(@gradientStop, rgba(0, 0, 0, 0))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* IE10+ */
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.30) 0%, rgba(0, 0, 0, 0) @gradientStop); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#73000000', endColorstr='#00000000', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+  }
+}
