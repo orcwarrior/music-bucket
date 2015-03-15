@@ -8,9 +8,9 @@
 
       return function (response, type) {
         switch (type) {
-          case (songCommons.songType.local) :
+          case (songCommons.songType.local):
             return new songMetainfosLocal(response);
-          case (songCommons.songType.songza) :
+          case (songCommons.songType.songza):
             return new songMetainfosSongza(response);
         }
       }

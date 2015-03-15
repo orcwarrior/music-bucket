@@ -19,10 +19,10 @@
           deferred.resolve(this.entries[0]);
           playlistCallback(this.entries[0]);
           return deferred.promise;
-        }
+        };
         self.updateShortDescription = function () {
           this.shortDescription = this.entries[0].metainfos.artist + " - " + this.entries[0].metainfos.title;
-        }
+        };
         self.getPlaylistDescription = function () {
           self.updateShortDescription();
           return this.shortDescription;

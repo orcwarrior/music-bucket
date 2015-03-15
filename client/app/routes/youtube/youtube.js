@@ -5,7 +5,7 @@ angular.module('musicBucketApp')
             $stateProvider
               .state('main.youtube', {
                        url        : '/youtube',
-                       templateUrl: 'app/youtube/youtube.html',
+                       templateUrl: 'app/routes/youtube/youtube.html',
                        controller : 'YoutubeCtrl'
                      });
           });
