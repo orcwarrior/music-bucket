@@ -13,11 +13,6 @@ angular.module('musicBucketApp')
                   angularPlayer.setPlaylist(new playlist(lsPlaylist));
                 }
 
-                $scope.savePlaylist = function () {
-                  if (_.isUndefinied(angularPlayer.getPlaylist()))
-                    playlistService.save(angularPlayer.getPlaylist());
-                };
-
                 $scope.userLoggedIn = function () {
                   return Auth.isLoggedIn();
                 }
@@ -39,11 +34,6 @@ angular.module('musicBucketApp')
                   $event.preventDefault();
                   $event.stopPropagation();
                   $scope.status.isopen = !$scope.status.isopen;
-                };
-
-                $scope.getNextSongDescription = function (song) {
-                  if (_.isNull(song)) return '';
-                  return song.shared.getSongDescription();
                 };
                 // Progress update:
                 $scope.player.progress = {current: "25%", buffered: "50%"};

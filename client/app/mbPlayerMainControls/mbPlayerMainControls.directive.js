@@ -8,6 +8,11 @@ angular.module('musicBucketApp')
       scope : {},
       link: function (scope, element, attrs) {
         scope.player = angularPlayer;
+
+        scope.getNextSongDescription = function (song) {
+          if (_.isNull(song)) return '';
+          return song.metainfos.getSongDescription();
+        };
       }
     };
   });
