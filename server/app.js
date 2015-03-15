@@ -111,9 +111,15 @@ http.createServer(function(req, res) {
       });
       //the whole response has been recieved, so we just print it out here
       response.on('end', function () {
-        console.log(str);
+        // console.log(str);
         res.writeHead(200);
         res.end(str);
+      });
+      response.on('error', function(err) {
+        console.warn(err);
+        res.writeHead(500);
+        res.end("Proxy error:" + err);
+
       });
       };
     try {
@@ -131,7 +137,7 @@ http.createServer(function(req, res) {
   }
   // res.end();
 
-}).listen(9001, config.ip);
+}).listen(9001, config.ip).on("error", function(err){console.warn("There was an error:"); console.warn(err);});
 
 
 // Expose app
