@@ -7,11 +7,12 @@
     .factory('songEngineYoutube', function (songControllsInterface, $log) {
 
       var songEngineYoutube = function (metainfos) {
+        this.name = "songEngineYoutube";
         this.SM2Sound = createFromMetainfos(metainfos);
 
         this.buffer = function() {
           this.SM2Sound.load();
-        }
+        };
         this.play = function play() {
           $log.info('song-engine-sm2: play song id: ' + this.SM2Sound.id );
           soundManager.play(this.SM2Sound.id);

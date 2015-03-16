@@ -29,7 +29,7 @@
 
 
       var songEngineSM2 = function (metainfos) {
-
+        this.name = "songEngineSM2";
         var sm2SoundVar = this.SM2Sound = createFromMetainfos(metainfos, this);
 
         function buildReturn(res) {
