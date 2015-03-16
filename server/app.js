@@ -15,15 +15,17 @@ var config = require('./config/environment');
 mongoose.connect(config.mongo.uri, config.mongo.options);
 
 // Populate DB with sample data
-if(config.seedDB) { require('./config/seed'); }
+if (config.seedDB) {
+  require('./config/seed');
+}
 
 // Setup server
 var app = express();
 
-app.on('error', function(err){console.log(err);});
+app.on('error', function (err) {console.log(err);});
 
 app.clientError = function (exception, socket) {
-  console.log("Client error: "+exception);
+  console.log("Client error: " + exception);
 }
 var http = require('http');
 var server = http.createServer(app);
@@ -45,17 +47,17 @@ server.listen(config.port, config.ip, function () {
 });
 
 
-
 // DK: Proxy servers:
 var httpProxy = require('http-proxy');
 
+var request = require('request');
 
 // start proxy server:
-http.createServer(function(req, res) {
- // console.log('Proxy-server listening on %d, in %s mode', config.port, app.get('env'));
+http.createServer(function (req, res) {
+  // console.log('Proxy-server listening on %d, in %s mode', config.port, app.get('env'));
   var proxyHost, pattern;
 
-   console.log(req.url);
+  console.log(req.url);
   // #1 songza-api (straight-forward to songza.com)
   pattern = /^\/songza-api\/(.*)/;
   if (pattern.exec(req.url)) {
@@ -71,7 +73,7 @@ http.createServer(function(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     try {
-      proxy.web(req, res, { target: proxyHost });
+      proxy.web(req, res, {target: proxyHost});
     }
     catch (error) {
       console.log(error.message);
@@ -87,9 +89,10 @@ http.createServer(function(req, res) {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     var options = {
-      host: 'transparent-proxy.herokuapp.com',
-      path: '/proxy.php?' + '__dest_url=/' + req.url.match(pattern)[1],
-      headers : { host: req.host,
+      url: 'https://transparent-proxy.herokuapp.com/proxy.php?' + '__dest_url=/' + req.url.match(pattern)[1],
+      timeout: 15000,
+      headers: {
+        host: 'transparent-proxy.herokuapp.com',
         connection: 'keep-alive',
         pragma: 'no-cache',
         'cache-control': 'no-cache',
@@ -102,32 +105,18 @@ http.createServer(function(req, res) {
         'Access-Control-Allow-Credentials': 'true'
       }
     };
-    console.log(req.headers);
-    var callback = function(response) {
-      var str = '';
-      //another chunk of data has been recieved, so append it to `str`
-      response.on('data', function (chunk) {
-        str += chunk;
-      });
-      //the whole response has been recieved, so we just print it out here
-      response.on('end', function () {
-        // console.log(str);
-        res.writeHead(200);
-        res.end(str);
-      });
-      response.on('error', function(err) {
-        console.warn(err);
+    console.log(options.url);
+    request(options, function (err, response, body) {
+      if (err) {
         res.writeHead(500);
-        res.end("Proxy error:" + err);
-
-      });
+        res.end(JSON.stringify(err));
+        return;
       };
-    try {
-      http.request(options, callback).end();
-    }
-    catch (error) {
-      console.log(error.message);
-    }
+      console.warn(response.statusCode); // 200
+      console.warn(body);
+      res.writeHead(response.statusCode);
+      res.end(body);
+    });
     //console.log("9001 transparent-proxy server requested, proxytargetHost: " + proxyHost);
 //
     //res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9001');
@@ -137,7 +126,10 @@ http.createServer(function(req, res) {
   }
   // res.end();
 
-}).listen(9001, config.ip).on("error", function(err){console.warn("There was an error:"); console.warn(err);});
+}).listen(9001, config.ip).on("error", function (err) {
+  console.warn("There was an error:");
+  console.warn(err);
+});
 
 
 // Expose app
