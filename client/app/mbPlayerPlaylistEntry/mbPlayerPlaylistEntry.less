@@ -4,14 +4,15 @@
   color: @gray-lighter;
   border: none;
   border-radius: 0 !important;
-  border-bottom: 1px solid @gray-darker !important;
+  border-bottom: 1px solid mix(@gray-dark, @gray-darker, 50%) !important;
   & > .entryDescription {
     display: inline-block;
     color: @gray-lighter;
-    width: 90%;
+    width: 100%;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    padding: 10px 15px;
   }
   &  .dropdown-menu-item {
     padding: 3px 10px;
@@ -21,11 +22,13 @@
   }
 }
 .playlist-entry-actions {
-  float: right;
+  position: absolute;
+  right : 1em;
   & > a {
     font-size: 20px;
   }
 }
-.playlistEntrySelected {
-  background-color: @brand-primary !important;
+.active-playlist-entry {
+  color: @mainThemeText !important;
+  //background-color: mix(@mainThemeColorAlt, rgba(50, 50, 50, 0), 20%);
 }

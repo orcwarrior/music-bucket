@@ -11,7 +11,7 @@ angular.module('musicBucketApp')
       link: function (scope, element, attrs) {
         var NAVBAR_HEIGHT = 50;
         var TOOLBAR_HEIGHT = 0;       // TODO: In toolbarService store some toolbarHeight value
-        var MAINCONTROLL_HEIGHT = 360; // TODO: From where playerMainControlls Height should be taken???
+        var MAINCONTROLL_HEIGHT = 320; // TODO: From where playerMainControlls Height should be taken???
         element.css({
                       display: 'block',
                      'overflow-y': 'auto'

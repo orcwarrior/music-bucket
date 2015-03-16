@@ -9,10 +9,10 @@ angular.module('musicBucketApp')
         entry : '=entry'
       }, // scope will be inherited from parent scope
       link: function (scope, element, attrs) {
-        element.css({
-          padding: '7px 10px'
-                    });
         scope.player = angularPlayer;
+        scope.isEntryActive = function(entry) {
+          return !_.isUndefined(angularPlayer.getCurrentSong()) && entry.id === angularPlayer.getCurrentSong().entryId;
+        };
       }
     };
   });
