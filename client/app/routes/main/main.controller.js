@@ -52,7 +52,7 @@ angular.module('musicBucketApp')
                 });
                 // New track playing: (store playlist in LS)
                 $scope.$on('track:id', function (event, data) {
-                  angularPlayer.playlist.storeInLocalstorage();
+                  angularPlayer.getPlaylist() .storeInLocalstorage();
                 });
 
                 // Initialize hotkeys:
