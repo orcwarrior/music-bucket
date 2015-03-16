@@ -5,13 +5,23 @@
 (function () {
   angular.module('musicBucketEngine')
     .factory('localEntry', function ($rootScope, $q, entryCommons) {
+
+      function s4() {
+        return Math.floor((1 + Math.random()
+        ) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+
       function commonInit(self) {
         self.type = entryCommons.entryType.localEntry;
         self.songsCount = 1;
         self.playedCount = 0;
+        self.id = "LFE-" + (function generateGUID() {
+          return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+        })();
 
-        self.init = function () {
-        }
         self.getNext = function (playlistCallback) {
           var deferred = $q.defer();
           // TODO: Move to player (on-play, store reference to currenty playlist-entry)
@@ -35,10 +45,10 @@
         if (_.isUndefined(localSong)) return;
 
         this.entries = [localSong];
-        this.id = this.entries[0].metainfos.id;
         // Temporary, pre warm-up name:
         this.shortDescription = this.entries[0].metainfos.title;
-        this.init();
+
+        localSong.entryId = this.id;
       };
     });
 })();
