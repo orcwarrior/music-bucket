@@ -21,15 +21,7 @@
         var self = this;
 
         this.engine.onload = function () {
-          if (!_.isUndefined(self.catalogueInfos)) return;
-
-          new songCatalogueInfos(self.metainfos)
-            .then(function (catalogueInfos) {
-              self.catalogueInfos = catalogueInfos;
-              console.log("Catalogue infos:");
-              console.log(catalogueInfos);
-              self.alternatives = new songAlternatives(self.catalogueInfos, alternates);
-            });
+          // Catalouge infos load moved to loading to query
         };
 
 

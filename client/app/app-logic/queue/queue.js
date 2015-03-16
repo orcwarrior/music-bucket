@@ -26,14 +26,14 @@
                      }
                      return null;
                    }
-                   this.enqueue = function (playlistEntry) {
+                   this.enqueue = function (song) {
                      // create queueEntry, add to entries array
-                     this.entries.push(new queueEntry(playlistEntry));
+                     this.entries.push(new queueEntry(song));
                    }
-                   this.enqueueNext = function (playlistEntry) {
-                     var head = new queueEntry(playlistEntry);
+                   this.enqueueNext = function (song) {
+                     var head = new queueEntry(song);
                      if (this.hasNext() && this.entries[0].buffered)
-                        head.buffer();
+                        head.song.buffer();
                       this.entries.unshift(head);
                    }
                    this.bufferNext = function () {
