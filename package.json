@@ -26,7 +26,9 @@
     "socket.io": "^1.0.6",
     "socket.io-client": "^1.0.6",
     "socketio-jwt": "^2.0.2",
-    "http-proxy" : "*"
+    "http-proxy" : "*",
+    "request" : "",
+    "follow-redirects" : ""
   },
   "devDependencies": {
     "coffeeify": "^0.7.0",
