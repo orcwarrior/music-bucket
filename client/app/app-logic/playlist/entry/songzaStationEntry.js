@@ -27,6 +27,11 @@
           //$http.get('/songza-api/station/'+self.id+'/next')
           songzaApi.station.next(self.id)
             .then(function (response) {
+              if (response.status !== 200) {
+                console.warn("Error trying get new songza song: " + response.data);
+                setInterval(tryGetNewSong(songzaPromise, playlistCallback), 1000);
+                return;
+              }
               response = response.data; // TEMPORARY!!!
               if (_.some(self.playedIDs, function (pID) { return pID == response.song.id;})) {
                 console.log("Song:", response, "already played!");
@@ -38,7 +43,7 @@
               self.updateShortDescription();
 
               // TODO: As songUnresolved:
-              var songSongza = new song(response, songCommons.songType.songza, self);
+              var songSongza = new song(response, songCommons.songType.songza, self.id);
               songzaPromise.resolve(songSongza);
               if (!_.isUndefined(playlistCallback))
                 playlistCallback(songSongza);
@@ -46,7 +51,7 @@
             },
             /*error callback*/function (error) {
               console.warn("Error trying get new songza song: " + error);
-              setInterval(tryGetNewSong(songzaPromise), 1000);
+              setInterval(tryGetNewSong(songzaPromise, playlistCallback), 1000);
             });
 
         }

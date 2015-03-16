@@ -16,6 +16,8 @@ angular.module('musicBucketEngine')
         $http[params.method](buildUrl(urlScheme, params))
           .then(function (response) {
             deffered.resolve(response);
+          }, function (error) {
+            deffered.reject(error);
           });
         return deffered.promise;
       }
@@ -28,6 +30,7 @@ angular.module('musicBucketEngine')
         console.log("[songzaApi] Builded url: " + URL);
         return URL;
       }
+
       function buildUrlGetParams() {
         // Add all get params to URL
         var getParams = "";
@@ -36,14 +39,17 @@ angular.module('musicBucketEngine')
             if (!_.isUndefined(value)) {
               getParams += (getParams == "") ? "?" : "&";
               getParams += key + "=" + value;
-            };
+            }
+            ;
           });
         }
         return getParams;
       }
+
       function urlParamInjector(match, p1, offset, string) {
         return _.isUndefined(params[p1]) ? "" : params[p1];
       }
+
       function getBaseUrl() {
         if (params.proxy && window.location.href.indexOf("localhost") != -1)
           return "http://localhost:9001/songza-api-proxy";
@@ -68,10 +74,13 @@ angular.module('musicBucketEngine')
           self.run()
             .then(function (response) {
               deffered.resolve(response);
+            }, function (error) {
+              deffered.reject(error);
             });
           songzaApiRequestQueryTimestamps = _.reject(songzaApiRequestQueryTimestamps, function (timestamp) { return timestamp == params.timestamp;})
         }, waitTime);
       }
+
       _.bind(debounceRequest, this)();
 
     }
@@ -84,7 +93,7 @@ angular.module('musicBucketEngine')
         artist: function (query, limit) {},
         situation: function (query, style) {style = "flat-220"},
         station: function (query, limit) {
-          return new songzaApiRequest("/search/station", { getParams : {'query': query, 'limit' : limit}}).promise;
+          return new songzaApiRequest("/search/station", {getParams: {'query': query, 'limit': limit}}).promise;
         },
         song: function (query, limit) {},
       },
