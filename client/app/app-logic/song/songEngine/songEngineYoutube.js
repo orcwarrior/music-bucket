@@ -8,7 +8,6 @@
 
       var songEngineYoutube = function (metainfos) {
         this.name = "songEngineYoutube";
-        this.SM2Sound = createFromMetainfos(metainfos);
 
         this.buffer = function() {
           this.SM2Sound.load();

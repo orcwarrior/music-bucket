@@ -20,7 +20,7 @@ angular.module('musicBucketEngine')
             deffered.reject(error);
           });
         return deffered.promise;
-      }
+      };
 
       /* Private */
       function buildUrl(urlScheme) {

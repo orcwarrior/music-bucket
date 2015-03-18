@@ -30,6 +30,7 @@
                       e.stopPropagation();
                       e.preventDefault();
                       $scope.droppedFiles = [];
+                      // e.originalEvent.dataTransfer.getData('text/uri-list') // to get dropped data
                       for (var i = 0; i < droppedFiles.length; i++) {
                         $scope.droppedFiles.push(droppedFiles[i]);
                       }
