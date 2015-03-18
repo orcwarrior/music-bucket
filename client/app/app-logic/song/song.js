@@ -20,11 +20,6 @@
         this.metainfos.getDuration();
         var self = this;
 
-        this.engine.onload = function () {
-          // Catalouge infos load moved to loading to query
-        };
-
-
         /* methods */
         this.getSongTypeName = function () {
           var typeObj = _.pick(songCommons.songType, function (value, key, object) {
