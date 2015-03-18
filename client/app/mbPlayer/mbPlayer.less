@@ -2,13 +2,12 @@
   position: fixed;
   background-color: @gray-dark;
   top: 0;
-  width: 380px;
   /*bottom: 0;*/
   padding-top: @navbar-height;
   & #albumArt{min-height: 360px;
     background-size: cover;
     background-position: center;
-    z-index: -1;
+    // z-index: -1;
     position: relative;
     bottom: 0px;
     left: 0px;
@@ -43,33 +42,17 @@
     font-style: italic;
     text-align: center !important;
   }
-  & .player-icon, .player-icon-bg, .player-icon-shaded{
-    font-size: 24px;
-    color: @gray-lighter;
-    text-align: left;
-    padding: 0 10px;
-  }
-  & .player-icon-shaded {
-    color: mix(@gray-lighter, @gray-light, 50%) !important;
-  }
-  // tooltip fine-tunning
-  & .player-icon + div.tooltip {
-    // margin-left: -25px;
-  }
-  & .player-icon-bg {
-    font-size: 32px;
-    padding: 0 16px;
-  }
 
-  & .player-controls {
-    position: relative; left: 0%;
-    text-align: center;
-    margin-bottom: 3%;
-  }
 }
 #musicPlayerColumn {
   bottom: 0;
   top: 0;
+}
+/* NON PHONE SCREEN */
+@media screen and (min-width: @screen-sm-min) {
+  #musicPlayerContainer {
+    width: 380px;
+  }
 }
 /* PHONE SCREEN */
 @media screen and (max-width: @screen-xs-max) {
