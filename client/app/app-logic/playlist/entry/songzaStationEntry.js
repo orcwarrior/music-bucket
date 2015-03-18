@@ -5,7 +5,7 @@
   angular.module('musicBucketEngine')
     .factory('songzaStationEntry', function ($rootScope, $q, song, entryCommons, songCommons, songzaApi) {
       function commonInit(self) {
-        self.type = entryCommons.entryType.songzaStation;
+        self.type = entryCommons.entryType.songza;
         self.entries = [];
         self.playedCount = 0;
         self.playedIDs = [];

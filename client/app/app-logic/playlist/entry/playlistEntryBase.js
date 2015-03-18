@@ -7,7 +7,7 @@
     .factory('playlistEntryBase', function () {
 
       return function playlistEntryBase() {
-        entryType    = {localEntry: "tLocal", songzaStation: "tSongzaStation"};
+        entryType    = {local: "tLocal", songza: "tSongzaStation"};
         getPlaylistDescription = function () {
           return this.shortDescription;
         };

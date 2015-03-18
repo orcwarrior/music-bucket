@@ -14,7 +14,7 @@
       }
 
       function commonInit(self) {
-        self.type = entryCommons.entryType.localEntry;
+        self.type = entryCommons.entryType.local;
         self.songsCount = 1;
         self.playedCount = 0;
         self.id = "LFE-" + (function generateGUID() {

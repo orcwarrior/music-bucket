@@ -62,20 +62,20 @@
                return {
                  convertFrom: function (cookieModel) {
                    switch (cookieModel.type) {
-                     case (entryCommons.entryType.localEntry
+                     case (entryCommons.entryType.local
                      ):
                        return new localEntry_fromCookieModel(cookieModel);
-                     case (entryCommons.entryType.songzaStation
+                     case (entryCommons.entryType.songza
                      ):
                        return new songzaStation_fromCookieModel(cookieModel);
                    }
                  },
                  convertTo: function (playlistEntry) {
                    switch (playlistEntry.type) {
-                     case (entryCommons.entryType.localEntry
+                     case (entryCommons.entryType.local
                      ):
                        return new localEntry_toCookieModel(playlistEntry);
-                     case (entryCommons.entryType.songzaStation
+                     case (entryCommons.entryType.songza
                      ):
                        return new songzaStation_toCookieModel(playlistEntry);
                    }
