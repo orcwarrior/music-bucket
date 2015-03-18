@@ -105,10 +105,16 @@
          *
          * @param callbackFn passed function to be called back onload.
          */
-        // this.onload = function (callbackFn) {
-        //   alert("SM2Sound load alert!");
-        //   return buildReturn(this.SM2Sound.id);
-        // }
+        this.onload = function (loadedOk) {
+          if (!loadedOk) {
+            // Re-load sound again: (after delay)
+            _.delay(_.bind(function reload() {
+              this.buffer();
+            }, this), 500);
+          }
+          console.log("SM2Sound load alert!");
+          return buildReturn(this.SM2Sound.id);
+        }
 
       };
       songEngineSM2.prototype = new songControllsInterface();
