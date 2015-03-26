@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .controller('PlaylistsCtrl', function ($scope, $http, angularPlayer, Auth, playlistDBFactory, playlistService) {
+  .controller('PlaylistsCtrl', function ($scope, $http, mbPlayerEngine, Auth, playlistDBFactory, playlistService) {
 
     function getPlaylists() {
       playlistService.query()
@@ -14,7 +14,7 @@ angular.module('musicBucketApp')
     $scope.loadPlaylist = function (playlist) {
       var loadedPlaylist = playlistDBFactory.convertFrom(playlist);
       loadedPlaylist.storeInLocalstorage();
-      angularPlayer.setPlaylist(loadedPlaylist);
+      mbPlayerEngine.setPlaylist(loadedPlaylist);
     };
     $scope.isPlaylistOwner = function (playlist) {
       var curId = Auth.getCurrentUser()._id;

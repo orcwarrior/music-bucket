@@ -2,7 +2,7 @@
 
 angular.module('musicBucketApp')
   .controller('SongzaSearchCtrl',
-  function ($scope, $location, $state, angularPlayer, songzaStationEntry, songzaApi) {
+  function ($scope, $location, $state, mbPlayerEngine, songzaStationEntry, songzaApi) {
 
     $scope.searchQuery = $location.search().query;
     $scope.searchInProgress = false;
@@ -33,6 +33,6 @@ angular.module('musicBucketApp')
 
     $scope.addToPlaylist = function (station) {
       var stationEntry = new songzaStationEntry(station);
-      angularPlayer.addToPlaylist(stationEntry);
+      mbPlayerEngine.addToPlaylist(stationEntry);
     }
   });
