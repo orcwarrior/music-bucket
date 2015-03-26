@@ -65,19 +65,22 @@
 
       return function (metainfos) {
         var deferred = $q.defer();
-        prepareMBSearch(metainfos)
-          .then(function (response) {
-            // Beginning with very primitive version of selecting proper recording, hopin' musicbrainz know what they do :)
-            var catalogueInfos = response.data.recordings[0];
-            if (!approveSearchResult(catalogueInfos)) {
-              deferred.resolve(null);
-              return;
-            }
+        if (metainfos.artist === "" || metainfos.title === "") deferred.resolve("No sufficent metainfos provided for catalogue lookup! Provide artist and title!");
+        else {
+          prepareMBSearch(metainfos)
+            .then(function (response) {
+              // Beginning with very primitive version of selecting proper recording, hopin' musicbrainz know what they do :)
+              var catalogueInfos = response.data.recordings[0];
+              if (!approveSearchResult(catalogueInfos)) {
+                deferred.resolve(null);
+                return;
+              }
 
-            catalogueInfos._apiUrl = response.config.url;
-            updateMetainfos(catalogueInfos, metainfos);
-            deferred.resolve(catalogueInfos);
-          });
+              catalogueInfos._apiUrl = response.config.url;
+              updateMetainfos(catalogueInfos, metainfos);
+              deferred.resolve(catalogueInfos);
+            });
+        }
         return deferred.promise;
       };
 
