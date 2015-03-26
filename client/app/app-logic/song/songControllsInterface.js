@@ -44,7 +44,7 @@
         };
         this.isBuffered = function isBuffered() {
           var args = rewriteArgs(arguments);
-          args[args.length] = "buffer";
+          args[args.length] = "isBuffered";
           return protoFunction.apply(this, args);
         };
         this.buffer = function buffer() {
@@ -55,6 +55,16 @@
         this.getDuration = function getDuration() {
           var args = rewriteArgs(arguments);
           args[args.length] = "getDuration";
+          return protoFunction.apply(this, args);
+        };
+        this.getLoadedProgress = function getLoadedProgress() {
+          var args = rewriteArgs(arguments);
+          args[args.length] = "getLoadedProgress";
+          return protoFunction.apply(this, args);
+        };
+        this.getCurrentPosition = function getCurrentPosition() {
+          var args = rewriteArgs(arguments);
+          args[args.length] = "getCurrentPosition";
           return protoFunction.apply(this, args);
         };
         // Events
