@@ -1,5 +1,5 @@
-<mb-player-sm2-controls ng-show="false"></mb-player-sm2-controls>
-<mb-player-youtube-controls ng-show="true"></mb-player-youtube-controls>
+<mb-player-sm2-controls ng-show="player.getCurrentSong().engine.name !== 'songEngineYoutube'"></mb-player-sm2-controls>
+<mb-player-youtube-controls ng-show="player.getCurrentSong().engine.name === 'songEngineYoutube'"></mb-player-youtube-controls>
 
 <div class="row-centered player-controls">
   <a ng-show="player.tracksHistory.canRestoreSong()" tooltip="{{getLastSongDescription()}}"
