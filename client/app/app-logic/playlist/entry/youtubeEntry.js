@@ -4,31 +4,40 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('youtubeEntry', function (entryCommons, song, songCommons) {
+    .factory('youtubeEntry', function (entryCommons, song, songCommons, youtubeApiHelper, $q) {
 
-      var playlistRegex = /[?&]list=(\w.*?)($|[?&])/g;
-      var videoRegex = /[?&]v=(\w.*?)($|[?&])/g;
+      // NOTE: Strange bug, regex instances cannot be again matched:
+      //var playlistRegex = /[?&]list=([\S?&]+)($|[?&])/g;
+      //var videoRegex = /[?&]v=([\S?&]+)($|[?&])/g;
+      function playlistRegex() {
+        return /[?&]list=([\S?&#]+?)($|[?&#])/g;
+      }
+
+      function videoRegex() {
+        return /[?&]v=([\S?&#]+?)($|[?&#])/g;
+      }
 
       function extractIdFromUrl(url) {
-        var match = playlistRegex.exec(url);
+        match = playlistRegex().exec(url);
         if (_.isNull(match)) {
-          match = videoRegex.exec(url);
+          var match = videoRegex().exec(url);
           if (_.isNull(match)) throw new Error("Wrong YT url!");
           return match[1];
         } else {
           return match[1];
         }
       }
-      function createPlaylistEntries(entry) {
-
+      function getShortDescription (plEntry) {
+        return youtubeApiHelper.getPlaylist(plEntry.id);
       }
+
       function isYoutubePlaylist(entry) {
         if (!_.isUndefined(entry.type)) {
           if (entry.type === entryCommons.entryType.youtubePlaylist) return true;
           else if (entry.type === entryCommons.entryType.youtubeVideo) return false;
           else throw new Error("isYoutubePlaylist function called on non-yt entry!");
         }
-        return entry.url.match(playlistRegex) !== null; // no playlist string, so it's single video
+        return entry.url.match(playlistRegex()) !== null; // no playlist string, so it's single video
       }
 
       return function youtubeEntry(url) {
@@ -37,21 +46,48 @@
         this.id = extractIdFromUrl(url);
         this.type = isYoutubePlaylist(this) ? entryCommons.entryType.youtubePlaylist : entryCommons.entryType.youtubeVideo;
         this.songsCount = 1; // TODO: Playlist case.
+        this.playedIDs = [];
+        this.playedCount = 0;
 
         if (isYoutubePlaylist(this)) {
-          createPlaylistEntries(this)
-            .then(function(entries) {
-            this.entries = entries;
-          });
+          youtubeApiHelper.getPlaylistEntries(this.id)
+            .then(function (entries) {
+              self.entries = _.map(entries, function (entry) { return new song(entry.snippet.resourceId.videoId, songCommons.songType.youtube); });
+              self.songsCount = entries.length;
+            });
+          getShortDescription(this)
+            .then(function (response){
+              self.shortDescription = response.data.items[0].snippet.title;
+            });
         } else {
-          this.entries = [new song(this.id, songCommons.songType.youtube)];
+          this.entries = [new song(this.id, songCommons.songType.youtube, this.id)];
         }
-        this.shortDescription = "???";
+
+        this.shortDescription = "Playlista youtube: " + this.id;
         _.map(this.entries, function (song) {
           song.entryId = self.id;
         });
 
-
+        this.getPlaylistDescription = function () {
+          if (isYoutubePlaylist(this)) return this.shortDescription + "("+this.playedCount+"/"+this.songsCount+")";
+          else return this.entries[0].metainfos.getSongDescription();
+        }
+        this.getNext = function (playlistCb) {
+          var ytPromise = $q.defer();
+          var selectedEntry;
+          // Resolve after metainfos gathered???
+          if (isYoutubePlaylist(this)) {
+            var idx = Math.round(Math.random() * this.entries.length);
+            selectedEntry = this.entries[idx];
+          } else {
+            selectedEntry = this.entries[0];
+          }
+          this.playedIDs.push(selectedEntry.id);
+          this.playedCount = self.playedIDs.length;
+          ytPromise.resolve(selectedEntry);
+          playlistCb(selectedEntry);
+          return ytPromise.promise;
+        };
       }
     }
   )
