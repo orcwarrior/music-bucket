@@ -7,6 +7,7 @@
     .factory('songEngineSM2', function (songControllsInterface, $log) {
 
       /* private methods */
+      /* Note: Methods with "_" prefix are unwraped ones. */
       function createFromMetainfos(metainfos, self) {
         //check if mime is playable first: -dk
         if (!soundManager.canPlayMIME(metainfos.type) || _.isUndefined(metainfos.type)) {
@@ -41,64 +42,68 @@
         }
 
         this.isBuffered = function () {
-          return buildReturn(true);
+          // TODO: Implement
+          return true;
         };
         this.buffer = function () {
-          if (buildReturn().error) return buildReturn();
-
           this.SM2Sound.load();
-          return buildReturn(this.SM2Sound.id);
         };
         this.play = function play() {
-          if (buildReturn().error) return buildReturn();
-
           $log.info('song-engine-sm2: play song id: ' + this.SM2Sound.id);
           soundManager.play(this.SM2Sound.id);
-          return buildReturn(this.SM2Sound.id);
         };
         this.stop = function stop() {
-          if (buildReturn().error) return buildReturn();
-
-          // soundManager.setPosition(this.SM2Sound.id, 0);
+          soundManager.setPosition(this.SM2Sound.id, 0);
           soundManager.stopAll();
-          return buildReturn(this.SM2Sound.id);
         };
         this.pause = function pause() {
-          if (buildReturn().error) return buildReturn();
-
           soundManager.pause(this.SM2Sound.id);
-          return buildReturn(this.SM2Sound.id);
         };
         this.mute = function mute() {
-          if (buildReturn().error) return buildReturn();
-
           if (soundManager.muted === true) {
             soundManager.unmute();
           } else {
             soundManager.mute();
           }
-          return buildReturn(this.SM2Sound.id);
         };
         this.setVolume = function setVolume(vol) {
-          if (buildReturn().error) return buildReturn();
-
           for (var i = 0; i < soundManager.soundIDs.length; i++) {
             var mySound = soundManager.getSoundById(soundManager.soundIDs[i]);
             mySound.setVolume(vol);
           }
-          return buildReturn(this.SM2Sound.id);
         };
         this.seek = function seek(pos) {
-          if (buildReturn().error) return buildReturn();
-
           soundManager.setPosition(this.SM2Sound.id, pos);
-          return buildReturn(this.SM2Sound.id);
         };
         this.getDuration = function getDuration() {
-          if (buildReturn().error) return buildReturn();
-
-          return buildReturn(this.SM2Sound.durationEstimate);
+          return this.SM2Sound.durationEstimate;
         };
+        this.getLoadedProgress = function getLoadedProgress() {
+          return [this.SM2Sound.bytesLoaded / this.SM2Sound.bytesTotal, this.SM2Sound.bytesLoaded, this.SM2Sound.bytesTotal];
+        };
+        this.getCurrentPosition = function getCurrentPosition() {
+          return [this.SM2Sound.position / this._getDuration(), this.SM2Sound.position, this.getDuration()];
+        };
+
+        // Wrap methods with function error-checking function:
+        function wrapMethodsInErrHander(engine) {
+          _.each(engine, function (val, key) {
+            if (_.isFunction(val)) {
+              engine["_"+key] = engine[key]; // <- do copy of unwarped method.
+              engine[key] = _.wrap(engine[key],
+              function (func, args) {
+                  if (buildReturn().error)
+                    return buildReturn();
+                  else if (_.isUndefined(args) || _.isNull(args))
+                    return buildReturn(_.bind(func, engine)());
+                  else
+                    return buildReturn(_.bind(func, engine, args[0], args[1], args[2], args[3], args[4])());
+                });
+            }
+          });
+        }
+        wrapMethodsInErrHander(this);
+
 
         // Events callbacks:
         /**
@@ -117,6 +122,7 @@
         }
 
       };
+
       songEngineSM2.prototype = new songControllsInterface();
       return songEngineSM2;
     });
