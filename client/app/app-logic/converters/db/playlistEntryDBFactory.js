@@ -24,6 +24,9 @@
           songzaStat.init(db.id); // grab proper station infos.
         return songzaStat;
       }
+      var youtubeEntry_fromDBModel = function (cookie) {
+        return new youtubeEntry(cookie.url);
+      };
       var localEntry_toDBModel = function (localEntr) {
         return {
           songsCount: localEntr.songsCount,
@@ -43,6 +46,12 @@
           station: {name: songzaStat.station.name}
         };
       }
+      var youtubeEntry_toDBModel = function (youtube) {
+        return {
+          url: youtube.url, // nothing else is needed :)
+          type: youtube.type
+        };
+      };
 
       return {
         convertFrom: function (dbModel) {
@@ -55,6 +64,10 @@
             case (1):
               return new songzaStation_fromDBModel(dbModel);
               break;
+            case (entryCommons.entryType.youtubePlaylist):
+            case (entryCommons.entryType.youtubeVideo):
+              return new youtubeEntry_fromDBModel(dbModel);
+              break;
           }
         },
         convertTo: function (playlistEntry) {
@@ -65,6 +78,10 @@
             case (entryCommons.entryType.songza
             ):
               return new songzaStation_toDBModel(playlistEntry);
+            case (entryCommons.entryType.youtubeVideo) :
+            case (entryCommons.entryType.youtubePlaylist) :
+              return new youtubeEntry_toDBModel(playlistEntry);
+              break;
           }
         }
       };
