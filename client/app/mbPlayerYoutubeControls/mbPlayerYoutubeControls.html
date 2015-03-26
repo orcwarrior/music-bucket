@@ -1,3 +1,11 @@
-    <iframe id="ytplayer1" type="text/html" width="380" height="325"
-            src="https://www.youtube.com/embed/s-FLcJ4ASvU?controls=0&disablekb=1&enablejsapi=1&modestbranding=1&rel=0&autohide=0&color=white&iv_load_policy=3"
-            frameborder="0" allowfullscreen>
+<!--<iframe ng-if="ytApiReady()" id="ytplayer1" type="text/html" width="380" height="325"-->
+<!--src="https://www.youtube.com/embed/s-FLcJ4ASvU?enablejsapi=1&controls=0&disablekb=1&modestbranding=1&rel=0&autohide=0&color=white&iv_load_policy=3&showinfo=0&autohide=1&playerapiid=ytplayer1"-->
+<!--frameborder="0" allowfullscreen>-->
+<div class="wrapper" ng-show="isCurrentlyPlaying('ytplayer1')">
+  <div id="ytplayer1">NOPE NOPE NOPE</div>
+</div>
+<div class="wrapper" ng-show="isCurrentlyPlaying('ytplayer2')">
+  <div id="ytplayer2">NOPE NOPE NOPE</div>
+</div>
+<!-- Load YT Api then -->
+<script src="https://www.youtube.com/iframe_api"></script>
