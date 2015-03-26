@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songMetainfosConstructor', function (songCommons, songMetainfosSongza, songMetainfosLocal) {
+    .factory('songMetainfosConstructor', function (songCommons, songMetainfosSongza, songMetainfosYoutube, songMetainfosLocal) {
 
       return function (response, type) {
         switch (type) {
@@ -12,6 +12,8 @@
             return new songMetainfosLocal(response);
           case (songCommons.songType.songza):
             return new songMetainfosSongza(response);
+          case (songCommons.songType.youtube):
+            return new songMetainfosYoutube(response);
         }
       }
 
