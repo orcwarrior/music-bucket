@@ -16,19 +16,20 @@
 </div>
   <div class="col-md-12">
     <hr>
-    CHANGELOG: <br/>
-    * ALL NEW CHANGES IN: <a href="https://github.com/orcwarrior/music-bucket/commits/master">GitHub Repository Commits</a> </br>
-    * 02.03 - Ukończenie log dekoratora, debugowanie angular-playera.<br/>
-    * 02.02 - Dodanie log dekoratora.<br/>
-    * 01.18 - Error/Exception handling po stronie backendu i frontendu, ponawianie prób wysyłania requestów do songzy.<br/>
-    * 01.17 - Refaktoring konwerterów do DB, wyszczególnienie zapisu wpisów playlisty wg. typu, usunięta re-inicjacja wpisów songzy w odczytywanych playlistach.<br/>
-    * 01.12 - Pełny CRUD dla playlist, wykrycie warunku edycji gotowej playlisty/utworzenia nowej, autentykacja przy edycji playlist po stronie backendu.<br/>
-    * 01.02 - Serwer proxy w bloku try-catch (do testów: czy nie wyrzuca błędów).<br/>
-    * 01.01 - Poprawki na widoku zapisanych playlist.<br/>
-    * 12.27 - Dyrektywa wyświetlająca zapisane playlisty.<br/>
-    * 12.26 - Funkcjonalne wczytywanie playlist z bazy (dla songzy), poprawka backendowego proxy dla songzy którego dziwną przypadłościa jest nie działanie bez chociaż pustego GETa ('?' na koncu)
-    * 12.25 - Poprawki zapisu playlist do bazy, zapis wpisów songzy, refaktoring kodu odp. za to, stylizacja widoku playlist (animacje on-hover) <br/>
-    * 12.24 - Dodano zapis playlist do bazy, dropdown kontekstowy el. playlisty działa ponownie, widoki Playlist, pomysłów. <br/>
-    * 12.23 - Wstepne pracę nad zapisem do playlist, utworzony model, backendowe api.<br/>
-    * 12.22 - Przycisk zapisywania playlist, logika odp. za wyświetlenie inputa gdy playlista nie ma jeszcze nazwy.
+    Najnowsze poprawki: <br/>
+    * W pełnie funkcjonujące odtwarzanie, dodawanie (pojedyńczych filmów, jak i playlist) z youtube'a. <br/>
+    * Obsługa błędów odtwarzania plików, co przekłada się na dużo bardziej stabilne działanie aplikacji. <br/>
+    * Poprawa pobierania informacji o lokalnych plikach muzycznych (ich tagach) <br/>
+    * Pobieranie danych katalogowych z musicbrainz.org <br/>
+    * Skróty klawiaturowe do aplikacji <br/>
+    <hr/>
+    Nastepne poprawki: <br/>
+    * Obsługa menu wpisów playlist: doprowadzenie przycisków "Play", "Play Next", "Queue" do używalności. <br/>
+    * Przejscie na generowanie songUnresolved (czyli takich które znane dopiero po wysłaniu zapytania (resolve'owaniu) w odpowiedni sposób) <br/>
+    * Wyszukiwanie i powiazanie alternatywy do dodanych utworów, tak aby gdy jedno źrodło dla utworu nie zadziała, można było odtworzyć je z innych źródeł:
+    np. odtwarzanie z lokalnego pliku nie powiodło się znaleziono ten sam utwór na youtube, zostanie od odtworzony w zamian <br/>
+    * Dodanie obsługi SoundCloud API. <br/>
+    <hr/>
+    Poprawki w nieprzyjaznej użytkownikowi formie :)
+    <br/> <a href="https://github.com/orcwarrior/music-bucket/commits/master">GitHub Repository Commits</a> </br>
   </div>
