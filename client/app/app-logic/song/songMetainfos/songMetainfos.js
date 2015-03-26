@@ -14,6 +14,8 @@
         this.genere = "";
         this.getSrc = function () { throw new Error("Base method should be overriden!"); };
         this.getSongDescription = function () {
+            if (this.title === '')
+              return this.id;
             if (this.artist === '')
               return this.title;
             else return this.artist + ' - ' + this.title;
