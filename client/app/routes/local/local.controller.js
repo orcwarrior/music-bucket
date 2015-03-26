@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .controller('LocalCtrl', function ($scope, $rootScope, song, songCommons, localEntry, angularPlayer) {
+  .controller('LocalCtrl', function ($scope, $rootScope, song, songCommons, localEntry, mbPlayerEngine) {
     $scope.loadProgress = 0;
     $scope.loadingFiles = false;
 
@@ -13,7 +13,7 @@ angular.module('musicBucketApp')
         for (var i = 0; i < $scope.droppedFiles.length; i++) {
           songs[i] = new song($scope.droppedFiles[i], songCommons.songType.local);
           localSongEntries[i] = new localEntry(songs[i]);
-          angularPlayer.addToPlaylist(localSongEntries[i]);
+          mbPlayerEngine.addToPlaylist(localSongEntries[i]);
 
           if (i%5 === 0)
             $scope.$apply( function() {

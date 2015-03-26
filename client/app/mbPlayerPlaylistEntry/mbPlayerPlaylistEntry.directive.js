@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .directive('mbPlayerPlaylistEntry', function (angularPlayer) {
+  .directive('mbPlayerPlaylistEntry', function (mbPlayerEngine) {
     return {
       templateUrl: 'app/mbPlayerPlaylistEntry/mbPlayerPlaylistEntry.html',
       restrict: 'EA',
@@ -9,9 +9,9 @@ angular.module('musicBucketApp')
         entry : '=entry'
       }, // scope will be inherited from parent scope
       link: function (scope, element, attrs) {
-        scope.player = angularPlayer;
+        scope.player = mbPlayerEngine;
         scope.isEntryActive = function(entry) {
-          return !_.isUndefined(angularPlayer.getCurrentSong()) && entry.id === angularPlayer.getCurrentSong().entryId;
+          return !_.isUndefined(mbPlayerEngine.getCurrentSong()) && entry.id === mbPlayerEngine.getCurrentSong().entryId;
         };
       }
     };

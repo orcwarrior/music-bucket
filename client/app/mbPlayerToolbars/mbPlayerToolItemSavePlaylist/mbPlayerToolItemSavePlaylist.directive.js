@@ -1,15 +1,15 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .directive('mbPlayerToolItemSavePlaylist', function (angularPlayer, playlistService) {
+  .directive('mbPlayerToolItemSavePlaylist', function (mbPlayerEngine, playlistService) {
     return {
       templateUrl: 'app/mbPlayerToolbars/mbPlayerToolItemSavePlaylist/mbPlayerToolItemSavePlaylist.html',
       restrict: 'EA',
         link: function (scope, element, attrs) {
-          scope.player = angularPlayer;
+          scope.player = mbPlayerEngine;
         scope.savePlaylist = function () {
-          if (!_.isUndefined(angularPlayer.getPlaylist())) {
-            playlistService.save(angularPlayer.getPlaylist());
+          if (!_.isUndefined(mbPlayerEngine.getPlaylist())) {
+            playlistService.save(mbPlayerEngine.getPlaylist());
           }
         };
       }
