@@ -46,7 +46,7 @@ angular.module('musicBucketApp', [
     };
   })
 
-  .run(function ($rootScope, $location, $http, Auth, angularPlayer) {
+  .run(function ($rootScope, $location, $http, Auth, mbPlayerEngine) {
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$routeChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
@@ -59,5 +59,5 @@ angular.module('musicBucketApp', [
     $http.defaults.useXDomain = true;
          // TMP: initialize songza api:
          // $rootScope.songza = new songzaInit({userAgent: 'Some browser'});
-         angularPlayer.init();
+    mbPlayerEngine.init();
   });
