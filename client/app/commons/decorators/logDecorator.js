@@ -9,6 +9,9 @@ angular.module('musicBucketApp')
               return time;
             };
             function getSrcFileAndLine() {
+              var err = new Error();
+              if (_.isUndefined(err.stack)) return "";
+
               return new Error().stack.split("\n")[3];
             }
 
