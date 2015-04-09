@@ -36,7 +36,10 @@
         return songzaStat;
       };
       var youtubeEntry_fromCookieModel = function (cookie) {
-        return new youtubeEntry(cookie.url);
+        var entry = new youtubeEntry(cookie.url);
+        entry.playedCount = cookie.playedCount;
+        entry.playedIDs = cookie.playedIDs;
+        return entry;
       };
       var localEntry_toCookieModel = function (localEntr) {
         return {
@@ -64,7 +67,9 @@
       var youtubeEntry_toCookieModel = function (youtube) {
         return {
           url: youtube.url, // nothing else is needed :)
-          type: youtube.type
+          type: youtube.type,
+          playedCount : youtube.playedCount,
+          playedIDs : youtube.playedIDs
         };
       };
 
