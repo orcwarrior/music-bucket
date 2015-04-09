@@ -1,7 +1,34 @@
 /**
  * Created by orcwarrior on 2015-01-27.
  */
-@mainThemeColor: #663399;
-@mainThemeColorAlt: #674172;
+@mainThemeColor: @deep-purple-600;
+@mainThemeColorAlt: @amber-A700;
 @mainThemeText: #BE90D4;
 @brand-primary:   @mainThemeColor;
+@primary: @mainThemeColor;
+@inverse: @mainThemeColor; // material main color
+@soundcloud-primary: #FF6D00;
+@songza-primary: #2962FF;
+@transcluent-black: rgba(0,0,0,0.40);
+@text-color:            @lightbg-text;
+@nav-text-color:        @darkbg-text;
+@navbar-height: 60px;
+.center-grid {
+  margin-left: auto; margin-right: auto;
+  text-align: center;
+  & * {
+    text-align: initial;
+  }
+}
+
+.top-search {
+  padding-top: 20px;
+  background-color:  @grey-300;
+  margin-top: 0.5em;
+  & * {
+    font-size: 24px;
+  }
+}
+.navbar-default * {
+  color: @nav-text-color;
+}

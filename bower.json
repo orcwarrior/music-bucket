@@ -6,7 +6,6 @@
     "json3": "~3.3.1",
     "es5-shim": "~3.0.1",
     "jquery": "~1.11.0",
-    "bootstrap": "~3.3.0",
     "angular-resource": "1.2.*",
     "angular-cookies": "1.2.*",
     "angular-sanitize": "1.2.*",
@@ -20,7 +19,8 @@
     "underscore": ">=1.8.*",
     "underscore.string": "",
     "angular-soundmanager2": "",
-    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.5"
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.5",
+    "bootstrap-material-design" : ""
   },
   "devDependencies": {
     "angular-mocks": "1.2.*",

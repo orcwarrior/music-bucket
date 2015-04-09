@@ -47,6 +47,9 @@ angular.module('musicBucketApp', [
   })
 
   .run(function ($rootScope, $location, $http, Auth, mbPlayerEngine) {
+    // Init Bootstrap material design:
+    $.material.init();
+
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$routeChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {

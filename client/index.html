@@ -14,6 +14,8 @@
     <!-- build:css(client) app/vendor.css -->
       <!-- bower:css -->
       <link rel="stylesheet" href="bower_components/angular-hotkeys/build/hotkeys.min.css" />
+      <link rel="stylesheet" href="bower_components/bootstrap-material-design/dist/css/material.css" />
+      <link rel="stylesheet" href="bower_components/bootstrap-material-design/dist/css/ripples.css" />
       <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
@@ -63,6 +65,8 @@
       <script src="bower_components/underscore.string/dist/underscore.string.js"></script>
       <script src="bower_components/angular-soundmanager2/dist/angular-soundmanager2.js"></script>
       <script src="bower_components/angular-hotkeys/build/hotkeys.js"></script>
+      <script src="bower_components/bootstrap-material-design/dist/js/material.js"></script>
+      <script src="bower_components/bootstrap-material-design/dist/js/ripples.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -83,6 +87,7 @@
           <script src="app/app-logic/converters/db/songDBFactory.js"></script>
           <script src="app/app-logic/error/playbackError.js"></script>
           <script src="app/app-logic/helpers/angular-audio-metadata-parser/angular-audio-metadata-parser.js"></script>
+          <script src="app/app-logic/helpers/observable.js"></script>
           <script src="app/app-logic/helpers/youtubeApiHelper.js"></script>
           <script src="app/app-logic/playlist/entry/entryCommons.js"></script>
           <script src="app/app-logic/playlist/entry/localEntry.js"></script>
@@ -157,9 +162,14 @@
           <script src="app/routes/songza/login/songza.js"></script>
           <script src="app/routes/songza/search/search.controller.js"></script>
           <script src="app/routes/songza/search/search.js"></script>
+          <script src="app/routes/soundcloud/soundcloud.controller.js"></script>
+          <script src="app/routes/soundcloud/soundcloud.js"></script>
           <script src="app/routes/youtube/youtube.controller.js"></script>
           <script src="app/routes/youtube/youtube.js"></script>
           <script src="app/songzaApi/songzaApi.service.js"></script>
+          <script src="app/soundcloudApi/soundcloudApi.js"></script>
+          <script src="app/trackViews/songzaStation/songzaStation.directive.js"></script>
+          <script src="app/trackViews/soundcloudTrack/soundcloudTrack.directive.js"></script>
           <script src="components/auth/musicBucket.auth.js"></script>
           <script src="components/auth/services/auth.service.js"></script>
           <script src="components/auth/services/user.service.js"></script>
