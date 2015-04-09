@@ -8,6 +8,13 @@ angular.module('musicBucketApp')
       link: function (scope, element, attrs) {
 
 
+        scope.$on('player:working', function(event, data) {
+          _.delay( function() {
+            scope.$apply(function () {
+              scope.isPlayerWorking = data;
+            });
+          }, 50);
+        });
         scope.playerProgressClickEvent = function (event) {
           var newProgress = event.clientX / event.currentTarget.firstChild.clientWidth;
           scope.playerProgress.current = Math.round(newProgress * 100) + "%";
