@@ -77,15 +77,34 @@
           var selectedEntry;
           // Resolve after metainfos gathered???
           if (isYoutubePlaylist(this)) {
+            if (_.isUndefined(this.entries)) { // still not instanitated - recurency save'us
+              _.delay(function() {
+                self.getNext()
+                  .then(function (next) {
+                    ytPromise.resolve(next);
+                  });
+              }, 500); return ytPromise.promise;
+            }
+
             var idx = Math.round(Math.random() * this.entries.length);
             selectedEntry = this.entries[idx];
           } else {
             selectedEntry = this.entries[0];
           }
+          // Already played?
+          if (_.some(this.playedIDs, function (pID) { return pID == selectedEntry.metainfos.id; }))
+          {
+            console.log("Video:", selectedEntry.metainfos.id, "already played!");
+            if (this.playedIDs.length >= this.songsCount)
+              ytPromise.reject();
+            else
+              return this.getNext(playlistCb);
+          }
           this.playedIDs.push(selectedEntry.id);
           this.playedCount = self.playedIDs.length;
           ytPromise.resolve(selectedEntry);
-          playlistCb(selectedEntry);
+          if (_.isFunction(playlistCb))
+            playlistCb(selectedEntry);
           return ytPromise.promise;
         };
       }
