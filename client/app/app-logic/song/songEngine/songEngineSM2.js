@@ -41,9 +41,10 @@
           return res;
         }
 
+        this.__isBuffered = false;
         this.isBuffered = function () {
           // TODO: Implement
-          return true;
+          return this.__isBuffered;
         };
         this.buffer = function () {
           this.SM2Sound.load();
@@ -116,6 +117,10 @@
             _.delay(_.bind(function reload() {
               this.buffer();
             }, this), 500);
+          }
+          if (!this._isBuffered()) {
+            this.fireEvent("onsongready", loadedOk);
+            this.__isBuffered = true;
           }
           console.log("SM2Sound load alert!");
           return buildReturn(this.SM2Sound.id);
