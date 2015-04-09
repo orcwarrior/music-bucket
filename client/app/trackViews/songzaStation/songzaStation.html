@@ -1,0 +1,17 @@
+<div class="songza-station-wrapper">
+  <div class="songza-station-station">
+    <div class="songza-station-add-to-playlist" on-click="addToPlaylist(station)">
+      <p
+        class="glyphicon glyphicon-plus"></p>
+    </div>
+    <div class="songza-station-art"
+         ng-style="{'background-image':'url('+ station.cover_url + '?size=230)' }"></div>
+    <div class="songza-station-metainfos">
+      <p>{{station.name}}</p>
+
+      <div class="songza-station-minorinfos">
+        <span class="glyphicon glyphicon-play-circle"></span> {{ station.song_count }}
+      </div>
+    </div>
+  </div>
+</div>

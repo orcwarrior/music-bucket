@@ -1,0 +1,76 @@
+.songza-station-wrapper {
+  display: inline-block;
+  /* ugly as hell */
+  margin-right: -4px;
+  margin-bottom: -5px;
+}
+.songza-station-station {
+  position: relative;
+  padding: 0px; margin: 0px;
+  cursor: pointer;
+  display: table;
+
+  width: 230px; height: 298px;
+  overflow: hidden;
+
+  & .songza-station-add-to-playlist {
+    display: table;
+    position: absolute;
+    z-index: 2;
+    background-color: rgba(0,0,0,0.3);
+    width: 100%;
+    height: 100%;
+    color: @gray-lighter;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease-out;
+    & > p {
+      margin-top: -34px; // bottombar/2
+      font-size: 40px;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+    }
+  }
+  & .songza-station-art {
+    position: absolute;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 230px;
+    background-size: contain;
+    // margin-bottom: 68px;
+  }
+  & .songza-station-metainfos {
+    position: absolute; bottom: 0;
+    background-color: @brand-primary;
+    background-position: center;
+    display: block;
+    padding: 0.5em;
+    width: 100%;
+    height: 68px;
+    z-index: 2;
+    color: #FFF;
+    font-size: 16px;
+    & > p {
+      height: 2em; overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    & .songza-station-minorinfos {
+      position: absolute; bottom: 1.5em;
+      display: table-cell;
+      vertical-align: text-bottom;
+      font-size: 10px;
+      text-align: left;
+    }
+  }
+}
+.songza-station-track:hover .songza-station-add-to-playlist {
+  pointer-events: all !important;
+  opacity: 1 !important;
+  transition: opacity 0.25s ease-out!important;
+}
