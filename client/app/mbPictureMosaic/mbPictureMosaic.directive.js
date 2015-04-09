@@ -22,18 +22,22 @@ angular.module('musicBucketApp')
                      return el;
                    }
 
+                   function checkElement(el) {
+                     return (!_.isUndefined(el) && !_.isNull(el));
+                   }
+
                    function clearElement(el) {
-                     if (!_.isNull(el))
+                     if (checkElement(el))
                        el.className = "mb-picture-mosaic-picture";
                    }
 
                    function hideElement(el) {
-                     if (!_.isNull(el))
+                     if (checkElement(el))
                        el.className = "mb-picture-mosaic-picture hidden-pic";
                    }
 
                    function showElement(el) {
-                     if (!_.isNull(el))
+                     if (checkElement(el))
                        el.className = "mb-picture-mosaic-picture shown";
                    }
 
@@ -41,13 +45,13 @@ angular.module('musicBucketApp')
                      var next = selectNext();
                      var last = scope.lastElement;
                      scope.lastElement = next;
-                     if (_.isNull(last)) {
+                     if (checkElement(last)) {
                        changePictures();
                        return; // there is no last? wait till there is
                      }
                      hideElement(last);
                      showElement(next);
-                     if (!_.isNull(scope.elementToClear)
+                     if (checkElement(scope.elementToClear)
                      && scope.elementToClear !== last
                      && scope.elementToClear !== next)
                        clearElement(scope.elementToClear);
