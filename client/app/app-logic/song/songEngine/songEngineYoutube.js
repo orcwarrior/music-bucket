@@ -7,15 +7,21 @@
     .factory('songEngineYoutube', function (songControllsInterface, mbYoutubePlayer, $log) {
 
       var songEngineYoutube = function (metainfos) {
+        var self = this;
         this.name = "songEngineYoutube";
         var videoId = this.videoId = metainfos.id;
         function buildReturn(res) {
           res = {result: res};
+          if (!mbYoutubePlayer.isReady()) {;
+            res.youtubePlayerNotReady = true;
+          }
           return res;
         }
         function updateMetainfosOnBuffered(event) {
           var videoInfos = mbYoutubePlayer.getInfos(videoId);
           metainfos.title = videoInfos.title || videoInfos;
+          self.fireEvent("onsongready");
+          self._setVolume(1); // BUGFIX
         };
         this.isBuffered = function () {
           return mbYoutubePlayer.isBuffered(this.videoId);
@@ -24,7 +30,7 @@
           return mbYoutubePlayer.buffer(this.videoId, updateMetainfosOnBuffered);
         };
         this.play = function play() {
-          return mbYoutubePlayer.play(this.videoId);
+          return mbYoutubePlayer.play(this.videoId, updateMetainfosOnBuffered);
         };
         this.stop = function stop() {
           return mbYoutubePlayer.stop(this.videoId);
@@ -42,6 +48,7 @@
           return mbYoutubePlayer.seek(this.videoId, pos);
         };
         this.getDuration = function getDuration() {
+          if (!this._isBuffered()) return 0;
           return mbYoutubePlayer.getDuration(this.videoId);
         };
         this.getLoadedProgress = function getLoadedProgress() {
@@ -57,8 +64,10 @@
             if (_.isFunction(val)) {
               engine["_" + key] = engine[key]; // <- do copy of unwarped method.
               engine[key] = _.wrap(engine[key],
-                function (func, args) {
-                  if (buildReturn().error)
+                function engineProxy(func, args) {
+                  // if (!mbYoutubePlayer.isReady())
+                  //   return _.delay(_.bind(engineProxy, this, arguments), 1000);
+                  if (buildReturn().error || !mbYoutubePlayer.isReady())
                     return buildReturn();
                   else if (_.isUndefined(args) || _.isNull(args))
                     return buildReturn(_.bind(func, engine)());
