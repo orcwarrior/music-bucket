@@ -38,6 +38,12 @@ angular.module('musicBucketApp')
       var bufferingNextSongAlreadyCalled = false;
       var songsRegistry = {}; // song registy, key: $songId, val: songObj
       this.isPlaying = false;
+      this.isWorking = false; // for graphical information that somethings happen with a player :)
+      this.setIsWorking = function(working) {
+        // $log.debug('mbPlayerEngine: isWorking: ' + working);
+        this.isWorking = working;
+        $rootScope.$broadcast('player:working', working);
+      }
 
       this.playlist = _playlist;
       this.queue = _queue;
@@ -116,6 +122,9 @@ angular.module('musicBucketApp')
           var queueEntry = _player.queue.dequeue();
           if (queueEntry !== null) _player.playSong(queueEntry.song, saveToHistory);
         }
+
+        // store playlist cookie:
+        this.playlist.storeInLocalstorage();
       };
       /*
        * prevTrack
@@ -176,6 +185,7 @@ angular.module('musicBucketApp')
       this.pushNextSongToQueue = function (onLoadCallback) {
         $log.info('mbPlayerEngine: pushing new song to queue...');
         var _player = this;
+        this.setIsWorking(true);
         this.getPlaylist().getNext()
           .then(function (nextTrack) {
             songsRegistry[nextTrack.metainfos.id] = nextTrack;
@@ -183,12 +193,17 @@ angular.module('musicBucketApp')
             $log.info(nextTrack);
             _player.queue.enqueue(nextTrack);
             onLoadCallback(nextTrack);
+            nextTrack.engine.listen("onsongready", function(observable, eventType, data) {
+              _player.setIsWorking(false);
+            });
             // Store song in registry:
           })
           .catch(function (response) {
-            $log.warn('mbPlayerEngine: ..Queueing error!');
+            $log.warn('mbPlayerEngine: ..Queueing error! (try queue another)');
             $log.warn(response);
-            _player.nextTrack(); // try to get next song
+            // retry:
+            _.delay(_.bind(_player.pushNextSongToQueue, _player, onLoadCallback), 250);
+            _player.setIsWorking(false);
           });
       },
 
@@ -252,7 +267,8 @@ angular.module('musicBucketApp')
           this.nextTrack(false); // don't save corrupted song to history.
         } else {
           this.queue.removeBySongId(songId);
-        };
+        }
+        ;
       };
     };
 
@@ -261,7 +277,10 @@ angular.module('musicBucketApp')
       preBufferFirstSong: function () {
         _.delay(function () {
           mbPlayerEngineInstance.pushNextSongToQueue(function (song) {
-            _queue.bufferNext();
+            // song.engine.listen("onsongready", function(observable) {
+            //   mbPlayerEngineInstance.playSong(song, false);
+            // })
+             _queue.bufferNext();
           });
         }, 50);
       },
@@ -274,6 +293,43 @@ angular.module('musicBucketApp')
           if (!_.isUndefined(engine.init))
             engine.init(mbPlayerEngineInstance);
         });
+      },
+
+      // Entry based controlls:
+      entryPlay: function (entry) {
+        mbPlayerEngineInstance.setIsWorking(true);
+        if (_.isFunction(entry.getNext)) {
+          entry.getNext()
+            .then(function (song) {
+              mbPlayerEngineInstance.playSong(song, true);
+              mbPlayerEngineInstance.playlist.storeInLocalstorage();
+              song.engine.listen("onsongready", function(observable, eventType, data) {
+                mbPlayerEngineInstance.setIsWorking(false);
+              });
+            });
+        }
+      },
+      entryPlayNext: function (entry) {
+        mbPlayerEngineInstance.setIsWorking(true);
+        if (_.isFunction(entry.getNext)) {
+          entry.getNext()
+            .then(function (song) {
+              mbPlayerEngineInstance.queue.enqueueNext(song);
+              mbPlayerEngineInstance.playlist.storeInLocalstorage();
+                mbPlayerEngineInstance.setIsWorking(false);
+            });
+        }
+      },
+      entryEnqueue: function (entry) {
+        mbPlayerEngineInstance.setIsWorking(true);
+        if (_.isFunction(entry.getNext)) {
+          entry.getNext()
+            .then(function (song) {
+              mbPlayerEngineInstance.queue.enqueue(song);
+              mbPlayerEngineInstance.playlist.storeInLocalstorage();
+                mbPlayerEngineInstance.setIsWorking(false);
+            });
+        }
       },
       /* events
        * (called by child player engines)
