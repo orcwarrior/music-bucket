@@ -4,9 +4,11 @@ angular.module('musicBucketEngine')
   .factory('mbYoutubePlayer', function ($log, playbackError, playbackErrorTypes) {
 
     function mbYoutubePlayer() {
+      var self = this;
       var mbPlayerEngine;
       var inFullscreenMode = false;
       var players = [];
+      var playersReady = {};
       var PLAYER_STATES = {
         "UNSTARTED": -1,
         "ENDED": 0,
@@ -15,6 +17,15 @@ angular.module('musicBucketEngine')
         "BUFFERING": 3,
         "VIDEO_CUED": 5
       };
+      function stateIdToName(id) {
+        var key;
+        _.each(_.keys(PLAYER_STATES), function (k) {
+          if (PLAYER_STATES[k] === id)
+            key = k;
+        });
+        return key;
+      }
+
       var ERROR_STATUSES = {
         "WRONG_PARAMETER": 2,
         "FILM_NOT_FOUND": 100,
@@ -24,15 +35,16 @@ angular.module('musicBucketEngine')
       /* privates */
       function bufferingListener(event) {
         if (event.data === PLAYER_STATES.PLAYING) {
-          $log.info("YTPlayer: " + getPlayerVideoId(event.target) + " pre-buffering finalized, calling callback, seek and stuff :)");
+          var vidId = getPlayerVideoId(event.target);
+          $log.info(buildLogMsg(event.target, "pre-buffering finalized, calling callback, seek and stuff :)"));
           // Ok, so vid just starts to play, stop it right now, and remove this listener:
 
           if (!event.target.__ytEngineUtils.callPlayAfterPrebuffering)
-            event.target.pauseVideo(); // play already called so play video right now!
-          event.target.unMute();
-          event.target.seekTo(0);
+            self.pause(vidId); // play already called so play video right now!
+          self.unmute(vidId);
+          self.seek(vidId, 0);
           event.target.__ytEngineUtils.additionalOnStateChangeCallback = _.noop;
-          event.target.__ytEngineUtils.isBuffered = true;
+          event.target.__ytEngineUtils.isBuffered = vidId;
           // Call callback function for this video:
           event.target.__ytEngineUtils.onBufferCb(event);
           event.target.__ytEngineUtils.isPrebuffering = false;
@@ -72,7 +84,10 @@ angular.module('musicBucketEngine')
       }
 
       function selectPlayer(videoId) {
-        if (!_.isUndefined(videoToPlayerMap[videoId])) return videoToPlayerMap[videoId]
+        if (!_.isUndefined(videoToPlayerMap[videoId])) {
+          // $log.info(buildLogMsg(videoToPlayerMap[videoId], " picked(map) for: "+videoId));
+          return videoToPlayerMap[videoId];
+        }
 
         var player = getPlayerWithVideo(videoId);
         if (_.isUndefined(player))
@@ -86,6 +101,8 @@ angular.module('musicBucketEngine')
             filteredMap[key] = val;
         });
         videoToPlayerMap = filteredMap;
+        $log.info(buildLogMsg(player, " picked for: "+videoId));
+
         return player;
       }
 
@@ -94,6 +111,18 @@ angular.module('musicBucketEngine')
           return player.getVideoData().video_id;
         else return "ERROR";
       };
+      function getPlayerId(videoId) {
+        var el = getMyPlayerParentElement(videoId);
+        if (_.isNull(el) || _.isUndefined(el.id)) return "UNKNPLAYER";
+        else return el.id;
+      }
+
+      function getMyPlayerParentElement(videoId) {
+        var player = videoToPlayerMap[videoId]; // otherwise fuck u!
+        if (_.isUndefined(player)) return null;
+        return player.h;
+      }
+
       function extendPlayerByEngineUtils(player) {
         if (!_.isUndefined(player.__ytEngineUtils)) {
           console.warn("player already has engine utils, probably added to ytEngine before!");
@@ -107,19 +136,19 @@ angular.module('musicBucketEngine')
             additionalOnStateChangeCallback: _.noop,
             lastLoadedFraction: 0,
             secondIntevalCallback: function () {
-              // $log.info("YTPlayer: "+getPlayerVideoId(player)+" callback...");
+              // $log.info(" callback...");
               if (!_.isUndefined(player.getVideoLoadedFraction) && this.lastLoadedFraction !== player.getVideoLoadedFraction()) {
-                // $log.info("YTPlayer: "+getPlayerVideoId(player)+" progress update");
+                // $log.info(" progress update");
                 mbPlayerEngine.events.whileloading(getPlayerVideoId(player));
                 this.lastLoadedFraction = player.getVideoLoadedFraction();
               }
               if (!_.isUndefined(player.getPlayerState) && player.getPlayerState() === PLAYER_STATES.PLAYING)
-              // $log.info("YTPlayer: "+getPlayerVideoId(player)+" play pos update");
+              // $log.info(" play pos update");
                 mbPlayerEngine.events.whileplaying(getPlayerVideoId(player));
               // call again after delay:
               _.delay(_.bind(this.secondIntevalCallback, this), 1000);
             },
-            reinit : function() {
+            reinit: function () {
               this.isPrebuffering = false;
               this.callPlayAfterPrebuffering = false;
               this.isBuffered = false;
@@ -133,40 +162,56 @@ angular.module('musicBucketEngine')
         }
       }
 
+      function buildLogMsg(player, msg) {
+        if (_.isUndefined(player)) return "YTPlayer(UNKNOWN): UNKNOWN " + msg;
+        return "YTPlayer(" + player.h.id+ "): " + getPlayerVideoId(player) + " " + msg;
+      }
+
+      /* Public */
       this.init = function (baseEngine) {
         $log.info("YTPlayer: init...");
         mbPlayerEngine = baseEngine;
       };
 
       /* Controlls*/
-      this.play = function (videoId) {
-        $log.info("YTPlayer: " + videoId + " playing...");
+      this.play = function (videoId, onBufferedCb) {
         var dstPlayer = selectPlayer(videoId);
+        $log.info(buildLogMsg(dstPlayer, "playing..."));
+        // Is new video? then reinit:
+        if (getPlayerVideoId(dstPlayer) !== videoId) dstPlayer.__ytEngineUtils.reinit();
+
         // Video could be actually in pre-buffering state:
         if (dstPlayer && dstPlayer.__ytEngineUtils.isPrebuffering)
           dstPlayer.__ytEngineUtils.callPlayAfterPrebuffering = true;
         else if (this.isBuffered(videoId))
           dstPlayer.playVideo();
-        else
+        else {
           dstPlayer.loadVideoById(videoId);
+          dstPlayer.__ytEngineUtils.onBufferCb = onBufferedCb || _.noop;
+        }
       };
       this.isBuffered = function (videoId) {
-        var dstPlayer = selectPlayer(videoId);
-        if (_.isUndefined(dstPlayer)) return;
-        $log.info("YTPlayer: " + videoId + " isBuffered: " + dstPlayer.__ytEngineUtils.isBuffered);
-        return dstPlayer.__ytEngineUtils.isBuffered && getPlayerVideoId(dstPlayer) === videoId;
+        var result = false, dstPlayer = undefined;
+        _.each(players, function(player) {
+          if (player.__ytEngineUtils.isBuffered === videoId) {
+            result = true;
+            dstPlayer = player;
+          }
+        });
+        // $log.info(buildLogMsg(dstPlayer, "isBuffered: " + result));
+        return result;
       };
       this.buffer = function (videoId, onBufferedCb) {
-        $log.info("YTPlayer: " + videoId + " buffer...");
         if (this.isBuffered(videoId)) {
-          $log.info("YTPlayer: " + videoId + " is already buffered!");
+          $log.info(buildLogMsg(videoId, "buffer: is already buffered!"));
           return;
         }
         var dstPlayer = selectPlayer(videoId);
+        $log.info(buildLogMsg(dstPlayer, "buffer: "+videoId));
         if (_.isUndefined(dstPlayer)
-        || dstPlayer.__ytEngineUtils.isPrebuffering) return;
+          || dstPlayer.__ytEngineUtils.isPrebuffering) return;
         dstPlayer.loadVideoById(videoId);
-        this.mute(videoId);
+        dstPlayer.mute(); // BUGFIX: Calling mute on this, when videoID isn'y still there, calls mute on another player :(
         dstPlayer.__ytEngineUtils.reinit();
         dstPlayer.__ytEngineUtils.additionalOnStateChangeCallback = bufferingListener;
         dstPlayer.__ytEngineUtils.onBufferCb = onBufferedCb || _.noop;
@@ -174,8 +219,8 @@ angular.module('musicBucketEngine')
         dstPlayer.__ytEngineUtils.isBuffered = false;
       };
       this.stop = function (videoId) {
-        $log.info("YTPlayer: " + videoId + " stop");
         var dstPlayer = selectPlayer(videoId);
+        $log.info(buildLogMsg(dstPlayer, "stop"));
         // bugfix: stop only when player is actually in playing state:
         if (dstPlayer.getPlayerState() === PLAYER_STATES.PLAYING) {
           dstPlayer.pauseVideo();
@@ -183,45 +228,51 @@ angular.module('musicBucketEngine')
         }
       };
       this.pause = function (videoId) {
-        $log.info("YTPlayer: " + videoId + " pause");
-        selectPlayer(videoId).pauseVideo();
+        var dstPlayer = selectPlayer(videoId);
+        dstPlayer.pauseVideo();
+        $log.info(buildLogMsg(dstPlayer, "pause"));
       };
       this.mute = function (videoId) {
-        $log.info("YTPlayer: " + videoId + " mute");
-        selectPlayer(videoId).mute();
+        var dstPlayer = selectPlayer(videoId);
+        $log.info(buildLogMsg(dstPlayer, "mute"));
+        dstPlayer.mute();
       };
       this.unmute = function (videoId) {
-        $log.info("YTPlayer: " + videoId + " unMute");
-        selectPlayer(videoId).unMute();
-      };
-      this.pause = function (videoId) {
-        $log.info("YTPlayer: " + videoId + " pause");
-        selectPlayer(videoId).pauseVideo();
+        var dstPlayer = selectPlayer(videoId);
+        $log.info(buildLogMsg(dstPlayer, "unmute"));
+        dstPlayer.unMute();
       };
       this.setVolume = function (videoId, vol) {
-        $log.info("YTPlayer: " + videoId + " setVolume: " + vol);
-        selectPlayer(videoId).setVolume(vol);
+        var dstPlayer = selectPlayer(videoId);
+        $log.info(buildLogMsg(dstPlayer, "setVolume: " + vol));
+        dstPlayer.setVolume(vol);
       };
       this.seek = function (videoId, posSec) {
-        $log.info("YTPlayer: " + videoId + " seek: " + posSec);
-        selectPlayer(videoId).seekTo(posSec);
+        var dstPlayer = selectPlayer(videoId);
+        $log.info(buildLogMsg(dstPlayer, "seek: " + posSec));
+        dstPlayer.seekTo(posSec);
         // update playing position:
         mbPlayerEngine.events.whileplaying(videoId);
       };
       this.getDuration = function (videoId) {
         var dstPlayer = selectPlayer(videoId);
         if (_.isUndefined(dstPlayer)) return -1;
-        //$log.info("YTPlayer: "+videoId+" getDuration: "+selectPlayer(videoId).getDuration());
+        //$log.info(this.getPlayerId(videoId) + ": "+videoId+" getDuration: "+selectPlayer(videoId).getDuration());
         return selectPlayer(videoId).getDuration();
       };
       this.getLoadedProgress = function (videoId) {
-        //$log.info("YTPlayer: "+videoId+" getLoadedProgress: "+selectPlayer(videoId).getVideoLoadedFraction());
-        return selectPlayer(videoId).getVideoLoadedFraction();
+        //$log.info(this.getPlayerId(videoId) + ": "+videoId+" getLoadedProgress: "+selectPlayer(videoId).getVideoLoadedFraction());
+        var player = selectPlayer(videoId);
+        if (_.isUndefined(player) || !_.isFunction(player.getVideoLoadedFraction)) return 0;
+
+        return player.getVideoLoadedFraction();
       };
       this.getCurrentPosition = function (videoId) {
-        //$log.info("YTPlayer: "+videoId+" getCurrentPosition: "+selectPlayer(videoId).getCurrentTime());
+        //$log.info(this.getPlayerId(videoId) + ": "+videoId+" getCurrentPosition: "+selectPlayer(videoId).getCurrentTime());
         return selectPlayer(videoId).getCurrentTime();
       };
+
+      /* Utils */
       this.getInfos = function (videoId) {
         var player = selectPlayer(videoId);
         if (_.isUndefined(player))
@@ -230,47 +281,69 @@ angular.module('musicBucketEngine')
           return player.getVideoData();
       };
       this.getMyPlayerParentElement = function (videoId) {
-        var player = selectPlayer(videoId);
-        if (_.isUndefined(player)) return null;
-        return player.h;
-      }
+        return getMyPlayerParentElement(videoId);
+      };
       this.setFullscreen = function (videoId, fullscreen) {
-        $log.info("YTPlayer: " + videoId + " setFullscreen: " + fullscreen);
+        $log.info(buildLogMsg(videoId, "setFullscreen: " + fullscreen));
         var wrapperEl = this.getMyPlayerParentElement(videoId);
         inFullscreenMode = fullscreen;
         if (fullscreen) {
           var requestFullScreen = wrapperEl.requestFullScreen || wrapperEl.mozRequestFullScreen || wrapperEl.webkitRequestFullScreen;
           if (requestFullScreen) {
             requestFullScreen.bind(wrapperEl)();
-            $log.info("YTPlayer: " + videoId + " ...entered fullscreen");
+            $log.info(buildLogMsg(videoId, " ...entered fullscreen"));
           }
         }
         else {
           var exitFullScreen = wrapperEl.exitFullscreen || wrapperEl.mozCancelFullScreen || wrapperEl.msExitFullscreen;
           if (exitFullScreen) {
             exitFullScreen.bind(wrapperEl)();
-            $log.info("YTPlayer: " + videoId + " ... fullscreen exited");
+            $log.info(buildLogMsg(videoId, " ... fullscreen exited"));
           }
         }
       };
 
       this.addPlayer = function (player) {
-        $log.info("YTPlayer: add plauyer");
+        $log.info("YTPlayer: added player: "+player.h.id);
         extendPlayerByEngineUtils(player);
         players.push(player);
+        playersReady[player.h.id] = false; // change when onready called
       };
-
+      this.isReady = function () {
+        return _.some(playersReady); // all vals truthy?
+      }
       /* events handlers */
       this.onready = function (player, event) {
-        console.log("onready called by player: " + player);
+        $log.info(buildLogMsg(player, "onready called by player: " + player.h.id));
+        playersReady[player.h.id] = true;
       };
       this.onerror = function (player, event) {
+        $log.warn(buildLogMsg(player, "error!: " + event.data));
         player.__ytEngineUtils.reinit();
         mbPlayerEngine.events.onerror(new playbackError(playbackErrorTypes.youtube, getPlayerVideoId(player), event.data));
       };
+      this.onplay = function (player, event) {
+        // Call buffer callback if video wasn't prebuffered (just played)
+        if (event.target.__ytEngineUtils.isBuffered) return;
+
+        event.target.__ytEngineUtils.isBuffered = getPlayerVideoId(player);
+        // Call callback function for this video:
+        event.target.__ytEngineUtils.onBufferCb(event);
+        // BUGFIX: Set initial volume to 100
+        player.unMute();
+      }
+      this.onplayerinit = function (player, event) {
+        $log.info(buildLogMsg(player, "onplayerinit called by: " + player));
+        // BUGFIX: Set initial volume to 100
+        player.unMute();
+      }
       this.onstatechange = function (player, event) {
-        $log.info("YTPlayer: " + getPlayerVideoId(player) + " state changed: " + event.data);
+        $log.info(buildLogMsg(player, "state changed: " + stateIdToName(event.data)));
+        if (event.data === PLAYER_STATES.UNSTARTED) {
+          this.onplayerinit(player, event);
+        }
         if (event.data === PLAYER_STATES.PLAYING) {
+          this.onplay(player, event);
           mbPlayerEngine.events.onplay(getPlayerVideoId(player));
         }
         else if (event.data === PLAYER_STATES.ENDED) {
@@ -280,6 +353,7 @@ angular.module('musicBucketEngine')
         player.__ytEngineUtils.additionalOnStateChangeCallback(event);
       }
     }
+
     return new mbYoutubePlayer();
   })
 ;
