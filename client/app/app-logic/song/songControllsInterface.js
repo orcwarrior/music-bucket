@@ -83,6 +83,9 @@
         return res;
       }
 
+      // So it will can fire events that you can listen to :)
+      songControllsInterface.prototype = new observable();
+
       return songControllsInterface;
     });
 })();
