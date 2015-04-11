@@ -1,7 +1,7 @@
 /**
  * Created by orcwarrior on 2015-01-27.
  */
-@mainThemeColor: @deep-purple-600;
+@mainThemeColor: @deep-purple-500;
 @mainThemeColorAlt: @amber-A700;
 @mainThemeText: #BE90D4;
 @brand-primary:   @mainThemeColor;
@@ -13,6 +13,18 @@
 @text-color:            @lightbg-text;
 @nav-text-color:        @darkbg-text;
 @navbar-height: 60px;
+
+@font-face {
+  font-family: 'Material-Design-Icons';
+  src:url('../assets/fonts/Material-Design-Icons.eot?3ocs8m');
+  src:url('../assets/fonts/Material-Design-Icons.eot?#iefix3ocs8m') format('embedded-opentype'),
+  url('../assets/fonts/Material-Design-Icons.woff?3ocs8m') format('woff'),
+  url('../assets/fonts/Material-Design-Icons.ttf?3ocs8m') format('truetype'),
+  url('../assets/fonts/Material-Design-Icons.svg?3ocs8m#Material-Design-Icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .center-grid {
   margin-left: auto; margin-right: auto;
   text-align: center;
@@ -22,13 +34,25 @@
 }
 
 .top-search {
-  padding-top: 20px;
-  background-color:  @grey-300;
-  margin-top: 0.5em;
+  z-index: 10;
+  padding-top: 24px;
+  padding-left: 24px; padding-right: 24px;
+//  background-color:  @grey-300;
   & * {
     font-size: 24px;
+  }
+  & input {
+    font-size: 20px;
   }
 }
 .navbar-default * {
   color: @nav-text-color;
+  & .navbar-brand {
+    padding-top: 15px;
+  }
+}
+.clear-button {
+  border: none;
+  background-color: transparent;
+  color: @mainThemeColor;
 }

@@ -3,10 +3,11 @@
          ng-show="player.playlist.settingPlaylistName && player.playlist.isAltered && userLoggedIn()"
          placeholder="Playlist name">
   <!-- DK: When user is not logged in show tooltip -->
-  <a class="glyphicon glyphicon-floppy-disk disabled" ng-show="player.playlist.isAltered && !userLoggedIn()"
-     tooltip="You need to be logged in!" tooltip-placement="right"></a>
+  <a class="mdi-content-save disabled" ng-show="player.playlist.isAltered && !userLoggedIn()">
+    <md-tooltip md-direction="right">You need to be logged in!</md-tooltip>
+  </a>
   <!-- Normal save diskiette -->
-  <a class="glyphicon glyphicon-floppy-disk" ng-show="player.playlist.isAltered && userLoggedIn()"
+  <a class="mdi-content-save" ng-show="player.playlist.isAltered && userLoggedIn()"
      ng-class="{ 'disabled' : player.playlist.name == '' && player.playlist.settingPlaylistName || !userLoggedIn()}"
      ng-click="savePlaylist()"></a>
 </div>

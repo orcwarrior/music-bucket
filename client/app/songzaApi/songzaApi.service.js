@@ -59,7 +59,7 @@ angular.module('musicBucketEngine')
 
       /* Running request is debounced by time
        *  Always min. 500ms after last one */
-      var DEBOUNCE_TIME = 1000;
+      var DEBOUNCE_TIME = 100;
 
       function debounceRequest() {
         var lastTimestamp = _.last(songzaApiRequestQueryTimestamps);
@@ -84,6 +84,25 @@ angular.module('musicBucketEngine')
       _.bind(debounceRequest, this)();
 
     }
+
+    var songzaHlpGetDayPeriod = function (date) {
+      var time_periods = [
+        {'value': 0, 'label': 'Morning', 'hours_range': [4, 8]},
+        {'value': 1, 'label': 'Late Morning', 'hours_range': [9, 11]},
+        {'value': 2, 'label': 'Afternoon', 'hours_range': [12, 16]},
+        {'value': 3, 'label': 'Evening', 'hours_range': [17, 20]},
+        {'value': 4, 'label': 'Night', 'hours_range': [21, 23]},
+        {'value': 5, 'label': 'Late Night', 'hours_range': [0, 3]}
+      ];
+
+      var hour = moment(date).hour();
+      var selPeriod = null;
+      _.each(time_periods, function (period) {
+        if (period.hours_range[0] <= hour && hour <= period.hours_range[1])
+          selPeriod = period;
+      });
+      return selPeriod;
+    };
 
     return {
       song: {
@@ -115,6 +134,30 @@ angular.module('musicBucketEngine')
       artist: function (artistId) {
 
       },
+      situation: {
+        targeted: function (maxSituations, maxStations) {
+          var curDate = new Date();
+          return new songzaApiRequest("/situation/targeted", {
+            getParams: {
+              'current_date': encodeURIComponent(moment().format()), // ISO 8601
+              'day': moment().day(),
+              'period': songzaHlpGetDayPeriod(curDate).value,
+              'device': 'web',
+              'site': 'songza',
+              'optimizer': 'default',
+              'max_situations': maxSituations || 5,
+              'max_stations': maxStations || 5,
+              'style': "flat-220",
+            }
+          }).promise;
+          // situation/targeted?current_date=2015-04-10T14%3A46%3A44-02%3A240&day=5&period=2&device=web&site=songza&optimizer=default&max_situations=5&max_stations=3&style=flat-220
+        }
+      },
       user: {}
-    }
-  });
+      ,
+      helpers: {
+        getDayPeriod: songzaHlpGetDayPeriod
+  }
+}
+})
+;

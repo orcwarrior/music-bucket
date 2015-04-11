@@ -1,12 +1,11 @@
-<div class="top-search">
+<div class="top-search" sticky offset="60">
   <form>
     <div class="form-control-wrapper input-group">
-      <input class="form-control empty" id="focusedInput" ng-model="searchQuery" type="text">
+      <input class="form-control empty" id="focusedInput" ng-model="searchQuery" type="text" placeholder="Nazwa stacji songza">
 
-      <div class="floating-label">Nazwa stacji songza</div>
       <span class="material-input"></span>
-      <span class="input-group-addon "><a class="mdi-action-search" type="submit"
-                                          ng-click="searchStations(searchQuery)"></a></span>
+      <span class="input-group-addon "><button class="mdi-action-search clear-button" type="submit"
+                                          ng-click="searchStations(searchQuery)"></button></span>
     </div>
   </form>
 </div>
@@ -15,10 +14,6 @@
   <span class="loader "><span class="loader-inner"></span></span>
 </div>
 <!-- Search results -->
-<div class="col-lg-7 center-grid">
-
+<div class="col-lg-12 center-grid">
   <songza-station station="station" ng-repeat="station in foundedStations"></songza-station>
-</div>
-<div class="col-lg-5">
-  Hi there!
 </div>

@@ -2,6 +2,7 @@
   position: fixed;
   background-color: @grey-900;
   top: 0;
+  left: 0;
   /*bottom: 0;*/
   padding-top: @navbar-height;
   & #albumArt {
@@ -150,6 +151,7 @@
 /* PHONE SCREEN */
 @media screen and (max-width: @screen-xs-max) {
   #musicPlayerContainer {
+    padding: 0;
     position: static;
     & .cur-track-info {
       width: 100% !important;
@@ -158,10 +160,10 @@
       // bottom: 15px !important;
     }
   }
-
+  /*
   #musicPlayerColumn {
     display: none;
-  }
+  }*/
 
   .playlistElementContainer {
     position: relative;

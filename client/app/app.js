@@ -10,7 +10,9 @@ angular.module('musicBucketApp', [
   'musicBucketEngine',
   'musicBucketAuth',
   'ui.router',
-  'cfp.hotkeys'
+  'cfp.hotkeys',
+  'sticky',
+  'ngMaterial'
 ])
   .config(function ($locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
             $urlRouterProvider.otherwise("/");
@@ -18,7 +20,21 @@ angular.module('musicBucketApp', [
      $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
-
+  /* Angular material design theme */
+  .config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .primaryPalette('deep-purple', {
+        'default': '500', // by default use shade 400 from the pink palette for primary intentions
+        'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
+        'hue-2': '500', // use shade 600 for the <code>md-hue-2</code> class
+        'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
+      })
+      // If you specify less than all of the keys, it will inherit from the
+      // default shades
+      .accentPalette('amber', {
+        'default': 'A700' // use shade 200 for default, and keep all other shades the same
+      })
+  })
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
     return {
       // Add authorization token to headers

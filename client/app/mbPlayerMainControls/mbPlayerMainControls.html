@@ -2,8 +2,9 @@
 <mb-player-youtube-controls ng-show="player.getCurrentSong().engine.name === 'songEngineYoutube'"></mb-player-youtube-controls>
 
 <div class="row-centered player-controls">
-  <a ng-show="player.tracksHistory.canRestoreSong()" tooltip="{{getLastSongDescription()}}"
-     class="mdi-av-skip-previous player-icon" aria-hidden="true" ng-click="player.prevTrack()"></a>
+  <a ng-show="player.tracksHistory.canRestoreSong()" class="mdi-av-skip-previous player-icon" aria-hidden="true" ng-click="player.prevTrack()">
+    <md-tooltip md-direction="top">{{getLastSongDescription()}}</md-tooltip>
+  </a>
 
   <a ng-show="!player.tracksHistory.canRestoreSong()"
      class="mdi-av-skip-previous player-icon-shaded" aria-hidden="true"></a>
@@ -14,9 +15,10 @@
      class="mdi-av-pause player-icon-bg" aria-hidden="true"></a>
   <!-- NEXT SONG LOADED-->
   <a
-    class="mdi-av-skip-next player-icon" aria-hidden="true"
-    tooltip="{{getSongDescription(player.queue.peekNextSong())}}" ng-click="player.nextTrack()"
-    ng-show="player.queue.peekNextSong() != null"></a>
+    class="mdi-av-skip-next player-icon" aria-hidden="true" ng-click="player.nextTrack()"
+    ng-show="player.queue.peekNextSong() != null">
+    <md-tooltip md-direction="top">{{getSongDescription(player.queue.peekNextSong())}}</md-tooltip>
+    </a>
   <a
     class="mdi-av-skip-next player-icon-shaded" aria-hidden="true"
     ng-click="player.nextTrack()" ng-show="player.queue.peekNextSong() == null"></a>

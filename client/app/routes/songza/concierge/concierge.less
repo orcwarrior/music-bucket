@@ -1,0 +1,35 @@
+.songza-situation-wrapper {
+  display: inline-block;
+  transition: all 0.3s ease-in;
+  & .songza-situation-icon {
+    width: 180px;
+    height: 180px;
+    background-size: contain;
+    background-color: @mainThemeColor;
+  }
+  & .songza-situation-caption {
+    color: @mainThemeColor;
+    font-size: @font-size-h4;
+    width: 180px;
+  }
+  & .songza-situation-big-caption {
+    width: 180px;
+    height: 180px;
+    background-color: @mainThemeColor;
+    color: @white;
+    font-size: @font-size-h2;
+    padding: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-overflow-ellipsis: "...";
+    margin-bottom: 1em;
+  }
+
+  &.faded-out {
+    & .songza-situation-icon, & .songza-situation-big-caption {
+      background-color: fade(@mainThemeColor, 10%);
+      transition: all 0.3s ease-in;
+      // transform: translate(0, -150%);
+    }
+  }
+}

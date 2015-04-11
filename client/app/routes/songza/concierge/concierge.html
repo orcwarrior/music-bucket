@@ -1,0 +1,33 @@
+<div class="col-md-12">
+
+  <div layout="column" layout-align="center center">
+    <h1>It's {{ songzaDayTime() }} </h1>
+
+    <!--<h3 class="text-muted">Play music for</h3>-->
+  </div>
+  <!-- main situations -->
+  <div layout="row" layout-align="space-around center">
+    <div class="songza-situation-wrapper" ng-repeat="situation in concierge" ng-click="selectSituation(situation)"
+         ng-class="{ 'faded-out' : !isVisibleSituation(situation)}">
+      <div class="songza-situation-icon" ng-style="{'background-image':'url('+ situation.image_url + ')' }"></div>
+      <div class="songza-situation-caption">{{ situation.title }}</div>
+    </div>
+  </div>
+  <!-- situations -->
+  <div ng-show="selectedSituation">
+    <h3>{{ selectedSituation.selected_message }}</h3>
+
+    <div layout="row" layout-align="space-around center">
+      <div class="songza-situation-wrapper" ng-repeat="concreteSituation in selectedSituation.situations"
+           ng-click="selectConcreteSituation(concreteSituation)"
+           ng-class="{ 'faded-out' : !isVisibleConcreteSituation(concreteSituation)}">
+        <div class="songza-situation-big-caption">{{ concreteSituation.title }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- stations -->
+  <div layout="row" layout-align="space-around center" ng-show="selectedConcreteSituation">
+    <songza-station station="station" ng-repeat="station in concreteSituationsStationsInfos"/>
+  </div>
+</div>

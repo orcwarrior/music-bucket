@@ -20,7 +20,10 @@
     "underscore.string": "",
     "angular-soundmanager2": "",
     "angular-hotkeys": "chieffancypants/angular-hotkeys#~1.4.5",
-    "bootstrap-material-design" : ""
+    "bootstrap-material-design": "",
+    "ngSticky": "",
+    "angular-material": "",
+    "angular-moment": "~0.10.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.*",
