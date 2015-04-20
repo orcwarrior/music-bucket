@@ -5,8 +5,14 @@
 (function () {
   angular.module('musicBucketEngine')
     .factory('songCommons', function () {
-               return {
-                 songType    : {songza: "typeSongza", local: "typeLocal", spotify: "typeSpotify", youtube: "typeYoutube"}
-               }
-  });
+      return {
+        songType: {
+          songza: "typeSongza",
+          local: "typeLocal",
+          spotify: "typeSpotify",
+          youtube: "typeYoutube",
+          soundcloud: "typeSoundcloud"
+        }
+      };
+    });
 })();
