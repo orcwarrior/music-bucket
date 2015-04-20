@@ -6,11 +6,13 @@
     height: 180px;
     background-size: contain;
     background-color: @mainThemeColor;
+    transition: all 0.3s ease-in;
   }
   & .songza-situation-caption {
     color: @mainThemeColor;
     font-size: @font-size-h4;
     width: 180px;
+    transition: all 0.3s ease-in;
   }
   & .songza-situation-big-caption {
     width: 180px;
@@ -25,11 +27,38 @@
     margin-bottom: 1em;
   }
 
-  &.faded-out {
-    & .songza-situation-icon, & .songza-situation-big-caption {
-      background-color: fade(@mainThemeColor, 10%);
-      transition: all 0.3s ease-in;
-      // transform: translate(0, -150%);
-    }
+}
+
+& .faded-out {
+  & .songza-situation-icon, & .songza-situation-big-caption {
+    background-color: fade(@mainThemeColor, 10%);
+    transition: all 0.3s ease-in;
+    // transform: translate(0, -150%);
+  }
+}
+
+.songza-tiles-row {
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 0.3s ease-in;
+  width: 100%;
+}
+
+.songza-tiles-row.shrinked {
+  width: 70%;
+  transition: all 0.3s ease-in;
+
+  & .songza-situation-icon {
+    width: 140px;
+    height: 140px;
+  }
+  & .songza-situation-caption {
+    font-size: @font-size-h5;
+    width: 140px;
+  }
+  & .songza-situation-big-caption {
+    font-size: @font-size-h3;
+    width: 140px;
+    height: 140px;
   }
 }

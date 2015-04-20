@@ -8,39 +8,43 @@ angular.module('musicBucketApp')
     };
 
     $scope.selectedSituation = null;
-    $scope.selectSituation = function(situation) {
+    $scope.selectSituation = function (situation) {
       $scope.selectedSituation = situation;
+      $scope.selectedConcreteSituation = null;
     };
-    $scope.isVisibleSituation = function(situation) {
+    $scope.isVisibleSituation = function (situation) {
       return $scope.selectedSituation == null || $scope.selectedSituation == situation;
     }
 
     $scope.selectedConcreteSituation = null;
-    $scope.selectConcreteSituation = function(situation) {
+    $scope.selectConcreteSituation = function (situation) {
       $scope.selectedConcreteSituation = situation;
     };
-    $scope.isVisibleConcreteSituation = function(situation) {
+    $scope.isVisibleConcreteSituation = function (situation) {
       return $scope.selectedConcreteSituation == null || $scope.selectedConcreteSituation == situation;
     };
 
-    $scope.$watch('selectedConcreteSituation', function(newValue, oldValue) {
+    $scope.$watch('selectedConcreteSituation', function (newValue, oldValue) {
       if (newValue == null) return;
 
       $scope.concreteSituationsStationsInfos = [];
 
       var deffered = $q.defer();
 
-      var gatheredStations = [];
       var stationsCnt = 0;
       _.each(newValue.station_ids, function (id) {
-          songzaApi.station.get(id)
-            .then(function(station) {
-              $scope.concreteSituationsStationsInfos.push(station.data);
-            });
+        $scope.concreteSituationsStationsInfos.push(songzaApi.helpers.createStationLoader(id))
+        songzaApi.station.get(id)
+          .then(function (station) {
+            station = station.data;
+            for (var i = 0; i < $scope.concreteSituationsStationsInfos.length; i++) {
+              if ($scope.concreteSituationsStationsInfos[i].id === station.id) $scope.concreteSituationsStationsInfos[i] = station;
+            }
+          });
       });
 
       deffered.promise
-        .then(function(stations) {
+        .then(function (stations) {
 
         });
     });
