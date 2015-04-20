@@ -49,6 +49,7 @@
           _.extend(this, base);
 
           // methods:
+          this.isEmpty = function () { return !this.entries.length; };
           this.getNext = function () {
             return this.playlistSequencer.getNext(this.entries, this.songsCount, this.getNextCallback);
             /* an promise*/
