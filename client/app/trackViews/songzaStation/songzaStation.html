@@ -1,17 +1,21 @@
 <div class="songza-station-wrapper">
-  <div class="songza-station-station" ng-click="addToPlaylist(station)">
-    <div class="songza-station-add-to-playlist"">
-      <p
-        class="glyphicon glyphicon-plus"></p>
-    </div>
-    <div class="songza-station-art"
-         ng-style="{'background-image':'url('+ station.cover_url + '?size=230)' }"></div>
-    <div class="songza-station-metainfos">
-      <p>{{station.name}}</p>
-
-      <div class="songza-station-minorinfos">
-        <span class="glyphicon glyphicon-play-circle"></span> {{ station.song_count }}
-      </div>
+  <div layout="row" layout-align="center center" ng-show="station.isLoading" class="songza-station-loader">
+    <div class="loader" style="top: 0">
+      <div class="loader-inner"></div>
     </div>
   </div>
+  <div class="songza-station-station" ng-click="addToPlaylist(station)" ng-show="!station.isLoading">
+    <div class="songza-station-add-to-playlist">
+    <p class="mdi-av-playlist-add"></p>
+  </div>
+  <div class="songza-station-art"
+       ng-style="{'background-image':'url('+ station.cover_url + '?size=230)' }"></div>
+  <div class="songza-station-metainfos">
+    <p>{{station.name}}</p>
+
+    <div class="songza-station-minorinfos">
+      <span class="mdi-av-play-circle-fill"></span> {{ station.song_count }}
+    </div>
+  </div>
+</div>
 </div>
