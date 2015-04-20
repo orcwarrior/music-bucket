@@ -156,7 +156,10 @@ angular.module('musicBucketEngine')
       user: {}
       ,
       helpers: {
-        getDayPeriod: songzaHlpGetDayPeriod
+        getDayPeriod: songzaHlpGetDayPeriod,
+        createStationLoader : function (stationId) {
+          return { id : stationId, isLoading : true };
+        }
   }
 }
 })
