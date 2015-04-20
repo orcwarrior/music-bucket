@@ -6,7 +6,7 @@ angular.module('musicBucketEngine')
     var consumerKey = "8d84bbdf76bfc4a57c4996344cebbaf6"
     var soundcloudApiRequestQueryTimestamps = [];
 
-    function soundcloudApiRequest(urlScheme, params) {
+    function soundcloudApiRequest(urlScheme, params, dontRunRequest) {
       /* Init */
       if (_.isUndefined(params.method)) params.method = "get";
       var deffered = $q.defer();
@@ -14,7 +14,7 @@ angular.module('musicBucketEngine')
       /* Public */
       this.run = function () {
         var deffered = $q.defer();
-        $http[params.method](buildUrl(urlScheme, params))
+        $http[params.method](this.buildUrl(urlScheme, params))
           .then(function (response) {
             deffered.resolve(response);
           }, function (error) {
@@ -23,14 +23,14 @@ angular.module('musicBucketEngine')
         return deffered.promise;
       };
 
-      /* Private */
-      function buildUrl(urlScheme) {
+      this.buildUrl = function() {
         var urlParamRegex = /:(\w+)/g;
         var URL = getBaseUrl() + urlScheme.replace(urlParamRegex, urlParamInjector) + buildUrlGetParams();
         console.log("[soundcloudApi] Passed url: " + urlScheme);
         console.log("[soundcloudApi] Builded url: " + URL);
         return URL;
-      }
+      };
+      /* Private */
 
       (function addDefaultGetParams() {
         if (_.isUndefined(params.getParams)) params.getParams = {};
@@ -83,19 +83,20 @@ angular.module('musicBucketEngine')
           soundcloudApiRequestQueryTimestamps = _.reject(soundcloudApiRequestQueryTimestamps, function (timestamp) { return timestamp == params.timestamp;})
         }, waitTime);
       }
-
-      _.bind(debounceRequest, this)();
+      if (!dontRunRequest)
+        _.bind(debounceRequest, this)();
 
     }
 
     return {
-      song: {
-        get: function (songId) {}
+      track : {
+        // https://api.soundcloud.com/tracks/120682891/stream
+        streamUrl : function(trackId) {
+          return new soundcloudApiRequest('/tracks/:track_id/stream', {track_id: trackId}, true).buildUrl();
+        }
       },
       // https://api.soundcloud.com/tracks.json?consumer_key=8d84bbdf76bfc4a57c4996344cebbaf6&q=flume&filter=all&order=hotness
       search: {
-        artist: function (query, limit) {},
-        situation: function (query, style) {style = "flat-220"},
         track: function (query, limit, additionalFilters) {
           var params = additionalFilters || {};
           params = _.extend(params, {getParams: {'q': query, 'limit': limit || 100}});
