@@ -8,7 +8,7 @@
     .factory('entryCommons', function () {
 
                return {
-                 entryType    : {local: "eLocal", songzaPlaylist: "eSongzaPlaylist", youtubeVideo: "eYoutubeVideo", youtubePlaylist: "eYoutubePlaylist" /*...*/},
+                 entryType    : {local: "eLocal", songzaPlaylist: "eSongzaPlaylist", youtubeVideo: "eYoutubeVideo", youtubePlaylist: "eYoutubePlaylist", soundcloudTrack: 'eSoundcloudTrack' /*...*/},
                  getPlaylistDescription : function () {
                    return this.shortDescription;
                  }
