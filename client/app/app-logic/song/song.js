@@ -7,6 +7,10 @@
   angular.module('musicBucketEngine')
     .factory('song', function (songCommons, songMetainfosConstructor, songEngineConstructor, songCatalogueInfos, songAlternatives, songControllsInterface) {
 
+      var songDefaultConfig = {
+          alternates : null
+      };
+
       var song = function song(response, type, myEntryId, alternates) {
         /* initialization */
         this.type = type;
@@ -27,8 +31,22 @@
           });
           return _.keys(typeObj)[0];
         };
+        /* called when song is preparing to play
+        *  (now it means when it's added to queue */
+        this.preload = function() {
+
+          new songCatalogueInfos(this.metainfos)
+            .then(function (catalogueInfos) {
+              self.catalogueInfos = catalogueInfos;
+              // console.log("Catalogue infos:");
+              // console.log(catalogueInfos);
+              if (_.isUndefined(self.alternatives))
+                self.alternatives = new songAlternatives(self.metainfos, alternates, self.catalogueInfos);
+            });
+
+        }
       };
-      song.prototype = new songControllsInterface(function controll() {
+      song.prototype = new songControllsInterface(function control() {
         var ret, dstMethod = _.last(arguments);
         /* Calling priority
          * 1. Actuallly used alternative.
