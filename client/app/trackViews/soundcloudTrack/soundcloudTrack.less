@@ -51,7 +51,7 @@
     height: 68px;
     z-index: 2;
     color: #FFF;
-    font-size: 16px;
+    font-size: @font-size-base;
     & > p {
       height: 2em; overflow: hidden;
       white-space: nowrap;
@@ -61,8 +61,12 @@
       position: absolute; bottom: 1.5em;
       display: table-cell;
       vertical-align: text-bottom;
-      font-size: 10px;
+      font-size: 10px !important;
       text-align: left;
+      & > span {
+        /* icons */
+        font-size: 14px;
+      }
     }
   }
 }

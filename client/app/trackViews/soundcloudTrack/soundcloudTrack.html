@@ -1,8 +1,8 @@
 <div class="soundcloud-wrapper">
   <div class="soundcloud-track">
-    <div class="soundcloud-add-to-playlist" on-click="addToPlaylist(track)">
+    <div class="soundcloud-add-to-playlist" ng-click="addToPlaylist(track)">
       <p
-        class="glyphicon glyphicon-plus"></p>
+        class="mdi-av-playlist-add"></p>
     </div>
     <div class="soundcloud-art"
          ng-style="{'background-image':'url('+ changeArtworkSizeUrl(track.artwork_url) + ')' }"></div>
@@ -10,8 +10,8 @@
       <p>{{track.title}}</p>
 
       <div class="soundcloud-minorinfos">
-        <span class="glyphicon glyphicon-play-circle"></span> {{ track.playback_count }}
-        <span class="glyphicon glyphicon-heart"></span> {{ track.favoritings_count }}
+        <span class="mdi-av-play-circle-fill"></span> {{ track.playback_count }}
+        <span class="mdi-action-favorite"></span> {{ track.favoritings_count }}
       </div>
     </div>
   </div>
