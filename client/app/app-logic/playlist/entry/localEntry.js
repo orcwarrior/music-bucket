@@ -22,12 +22,13 @@
             s4() + '-' + s4() + s4() + s4();
         })();
 
-        self.getNext = function (playlistCallback) {
+        self.getNext = function (playlistCb) {
           var deferred = $q.defer();
           // TODO: Move to player (on-play, store reference to currenty playlist-entry)
           this.playedCount++;
           deferred.resolve(this.entries[0]);
-          playlistCallback(this.entries[0]);
+          if (_.isFunction(playlistCb))
+            playlistCb(this.entries[0]);
           return deferred.promise;
         };
         self.updateShortDescription = function () {
@@ -36,7 +37,7 @@
         self.getPlaylistDescription = function () {
           self.updateShortDescription();
           return this.shortDescription;
-        }
+        };
       } // commonInit
 
       return function localEntry(localSong) {
