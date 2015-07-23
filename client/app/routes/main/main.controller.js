@@ -2,16 +2,20 @@
 
 angular.module('musicBucketApp')
   .controller('MainCtrl',
-              function ($rootScope, $scope, $http, socket, Auth, mbPlayerEngine, playlistLocalStorage, songCommons, playlistService, playlist, hotkeys) {
+              function ($rootScope, $scope, $http, $location, socket, Auth, mbPlayerEngine, playlistLocalStorage, songCommons, playlistService, playlist, hotkeys) {
+                var autoplay = $location.search().autoplay;
+                var theaterMode = $location.search().theater;
                 // Loading playlist from cookies:
-                // TODO: Next song played, store playlist state in localstorage
                 // TODO#2: Playlist should be FULLY recreated by LSProvider
                 // TODO#3: Having this mechanics here is fuckedup
-                var lsPlaylist = playlistLocalStorage.restoreFromLocalstorage();
-                if (!_.isNull(lsPlaylist)) {
-                  console.log("LS Playlist:"); console.log(lsPlaylist);
-                  mbPlayerEngine.setPlaylist(new playlist(lsPlaylist));
-                }
+                soundManager.onready(function() {
+                  if (autoplay) return; // BUGFIX: When autoplay argument is active, don't load LS playlist!
+                  var lsPlaylist = playlistLocalStorage.restoreFromLocalstorage();
+                  if (!_.isNull(lsPlaylist)) {
+                    console.log("LS Playlist:"); console.log(lsPlaylist);
+                    mbPlayerEngine.setPlaylist(new playlist(lsPlaylist));
+                  }
+                });
 
                 $scope.userLoggedIn = function () {
                   return Auth.isLoggedIn();
@@ -49,5 +53,25 @@ angular.module('musicBucketApp')
                     action: 'keydown',
                     callback: _.bind(mbPlayerEngine.prevTrack, mbPlayerEngine)
                   })
+
+                // User Idle in theater mode:
+                $scope.$on('IdleStart', function() {
+                  // the user appears to have gone idle
+                  console.log("IDLE START!");
+                  if (mbPlayerEngine.theaterMode.enabled) {
+                    //mbPlayerEngine.theaterMode.playlistMenuToggled = false;
+                    mbPlayerEngine.theaterMode.userIdle = true;
+                  }
+                });
+
+                $scope.$on('IdleEnd', function() {
+                  // the user has come back from AFK and is doing stuff. if you are warning them, you can use this to hide the dialog
+                  $scope.$apply(function() {
+                    mbPlayerEngine.theaterMode.userIdle = false;
+                  });
+                  console.log("IDLE END!");
+                });
+
+                mbPlayerEngine.theaterMode.enabled = !_.isUndefined(theaterMode);
 
               });
