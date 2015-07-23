@@ -52,14 +52,14 @@ angular.module('musicBucketEngine')
 
       function getBaseUrl() {
         if (params.proxy && window.location.href.indexOf("localhost") != -1)
-          return "http://localhost:9001/songza-api-proxy";
+          return "http://localhost:9000/songza-api-proxy/api/1";
         else
-          return "/songza-api";
+          return "/songza-api/api/1";
       }
 
       /* Running request is debounced by time
        *  Always min. 500ms after last one */
-      var DEBOUNCE_TIME = 100;
+      var DEBOUNCE_TIME = 500;
 
       function debounceRequest() {
         var lastTimestamp = _.last(songzaApiRequestQueryTimestamps);
@@ -123,6 +123,47 @@ angular.module('musicBucketEngine')
         next: function (stationId) {
           return new songzaApiRequest("/station/:stationId/next", {'stationId': stationId, proxy: true}).promise;
         },
+        multi: function (stationIds) {
+          // Multi request?
+          var CHUNK_SIZE = 150;
+          var mainDeferred = $q.defer();
+          var promises = [];
+          var stationChunks = _.groupBy(stationIds, function (el, index) {
+            return Math.floor(index / CHUNK_SIZE);
+          });
+
+          console.log("Multi station request, count: " + stationIds.length + ", chunks: " + stationChunks.length);
+
+          // Setup requests
+          var requestCnt = _.size(stationChunks);
+          _.each(stationChunks, function (chunk) {
+            var stationsChain;
+            if (window.location.href.indexOf("localhost") != -1)
+              stationsChain = chunk.join();
+            else {
+              stationsChain = chunk.join("&id=");
+              stationsChain += "&app=mb";
+            }
+            promises.push(new songzaApiRequest("/station/multi", {
+              getParams: {id: stationsChain},
+              proxy: true
+            }).promise);
+
+          });
+
+          // Handle promises
+          var allStations = [];
+          _.each(promises, function (promise) {
+            promise.then(function (response) {
+              requestCnt--;
+              allStations = _.union(allStations, response.data);
+              if (!requestCnt)
+                mainDeferred.$$resolve({data: allStations});
+            });
+          });
+
+          return mainDeferred.promise;
+        },
         downvote: undefined,
         upvote: undefined,
         create: undefined,
@@ -147,20 +188,33 @@ angular.module('musicBucketEngine')
               'optimizer': 'default',
               'max_situations': maxSituations || 5,
               'max_stations': maxStations || 5,
-              'style': "flat-220",
+              'style': "flat-220"
             }
           }).promise;
           // situation/targeted?current_date=2015-04-10T14%3A46%3A44-02%3A240&day=5&period=2&device=web&site=songza&optimizer=default&max_situations=5&max_stations=3&style=flat-220
         }
       },
+      activities: function () {
+        return new songzaApiRequest("/gallery/tag/activities", {}).promise;
+      },
+      decades: function () {
+        return new songzaApiRequest("/gallery/tag/decades", {}).promise;
+      },
+      genres: function () {
+        return new songzaApiRequest("/gallery/tag/genres", {}).promise;
+      },
+      moods: function () {
+        return new songzaApiRequest("/gallery/tag/moods", {}).promise;
+      },
       user: {}
       ,
       helpers: {
         getDayPeriod: songzaHlpGetDayPeriod,
-        createStationLoader : function (stationId) {
-          return { id : stationId, isLoading : true };
+        createStationLoader: function (stationId) {
+          return {id: stationId, isLoading: true};
         }
+      }
+    }
   }
-}
-})
+)
 ;
