@@ -45,10 +45,10 @@ angular.module('musicBucketApp')
                      var next = selectNext();
                      var last = scope.lastElement;
                      scope.lastElement = next;
-                     if (checkElement(last)) {
-                       changePictures();
-                       return; // there is no last? wait till there is
-                     }
+                     // if (checkElement(last)) {
+                     //   changePictures();
+                     //   return; // there is no last? wait till there is
+                     // }
                      hideElement(last);
                      showElement(next);
                      if (checkElement(scope.elementToClear)
@@ -58,9 +58,9 @@ angular.module('musicBucketApp')
                      scope.elementToClear = last;
                    }
                    // Desynchronize:
-                   _.delay(function () {
-                     $interval(changePictures, scope.pictureChangeSpeed);
-                   }, Math.random() * 500);
+                   // _.delay(function () {
+                   //   $interval(changePictures, scope.pictureChangeSpeed);
+                   // }, Math.random() * 500);
                  }
                };
              });
