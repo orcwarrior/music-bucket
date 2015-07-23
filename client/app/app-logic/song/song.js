@@ -20,8 +20,11 @@
           this.metainfos = response;
         else
           this.metainfos = new songMetainfosConstructor(response, type);
+
         this.engine = new songEngineConstructor(this.metainfos, type);
         this.metainfos.getDuration();
+
+        this.alternatives = alternates;
         var self = this;
 
         /* methods */
@@ -45,6 +48,10 @@
             });
 
         }
+        this.getUsedEngine = function() {
+          if (!_.isUndefined(this.usedAlt)) return this.usedAlt.engine;
+          else return this.engine;
+        }
       };
       song.prototype = new songControllsInterface(function control() {
         var ret, dstMethod = _.last(arguments);
@@ -52,16 +59,29 @@
          * 1. Actuallly used alternative.
          * 2. Engine object method.
          * */
-        if (!_.isUndefined(this.usedAlt))
-          ret = this.usedAlt[dstMethod](arguments);
+        if (!_.isUndefined(this.usedAlt) && !_.isUndefined(this.usedAlt.engine))
+          ret = this.usedAlt.engine[dstMethod](arguments);
         else
           ret = this.engine[dstMethod](arguments);
 
+        /* TMP DISABLED ALTERNATIVES
         if (ret.error) {
-          this.usedAlt = this.alternatives.getAlternative();
-          if (_.isUndefined(this.usedAlt)) return {error: "No working song engine or any alternative!"};
-          ret = this.usedAlt[dstMethod](arguments);
+          if (!_.isUndefined(this.alternatives)) {
+            this.usedAlt = this.alternatives.getAlternative();
+          } else {
+            this.alternatives = new songAlternatives(this.metainfos, undefined, this.catalogueInfos);
+          }
+          if (_.isUndefined(this.usedAlt)) {
+            this.alternatives.alternativesPromise
+              .then(function(alts) {
+                self.usedAlt = self.alternatives.getAlternative();
+                ret = self.usedAlt[dstMethod](arguments);
+              });
+          } else {
+            ret = this.usedAlt[dstMethod](arguments);
+          }
         }
+        */
         return ret.result;
       });
       return song;
