@@ -46,6 +46,7 @@
           this.removeBySongId = function (songId) {
             this.entries = _.filter(this.entries, function (entry) { return entry.song.metainfos.id !== songId; });
           };
+          this.clear = function () { this.entries = []; }
 
           return this;
         }
