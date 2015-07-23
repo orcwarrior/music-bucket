@@ -3,20 +3,26 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songCookieFactory', function (song) {
+    .factory('songCookieFactory', function (song, songMetainfos) {
 
       return {
         convertFrom: function (songCookie) {
           if (_.isUndefined(songCookie.metainfos)) {
             return undefined;
           }
+          var cookieClone = _.clone(songCookie.metainfos);
+          songCookie.metainfos = new songMetainfos();
           songCookie.metainfos.metainfosAsResponse = true;
-          songCookie.metainfos.getUrl = function () { return this.url;};
+          songCookie.metainfos = _.extend(songCookie.metainfos, cookieClone);
           var result = new song(songCookie.metainfos, songCookie.type);
           return result;
         },
         convertTo: function (song) {
-          var songCookie = {
+          var songCookie;
+          // Use alternative?
+            songCookie = song.usedAlt || {};
+
+          songCookie = _.extend(songCookie, {
             metainfos: {
               id: song.metainfos.id,
               url: song.metainfos.url,
@@ -26,7 +32,7 @@
               genere: song.metainfos.genere
             },
             type: song.type
-          };
+          });
 
           // Copy album art only if it's an URL.
           if (!song.metainfos.albumArtAttached) {
