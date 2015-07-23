@@ -1,5 +1,5 @@
-<mb-player-sm2-controls ng-show="player.getCurrentSong().engine.name !== 'songEngineYoutube'"></mb-player-sm2-controls>
-<mb-player-youtube-controls ng-show="player.getCurrentSong().engine.name === 'songEngineYoutube'"></mb-player-youtube-controls>
+<mb-player-sm2-controls ng-show="!isYoutubeSong()"></mb-player-sm2-controls>
+<mb-player-youtube-controls ng-show="isYoutubeSong()"></mb-player-youtube-controls>
 
 <div class="row-centered player-controls">
   <a ng-show="player.tracksHistory.canRestoreSong()" class="mdi-av-skip-previous player-icon" aria-hidden="true" ng-click="player.prevTrack()">
