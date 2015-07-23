@@ -1,0 +1,15 @@
+<div id="volumeToolitemContainer">
+  <div ng-show="volumeSwitchToggled" class="volume-switch">
+    <a class="mdi-av-volume-mute"
+       ng-click="volumeSwitchToggled = !volumeSwitchToggled"></a>
+
+    <md-slider flex ng-model="volume" min="0" max="100" class="md-secondary"
+               ng-change="volumeChanged()">
+    </md-slider>
+  </div>
+  <a class="mdi-av-volume-up"
+     ng-click="volumeSwitchToggled = !volumeSwitchToggled"></a>
+
+  <div ng-show="volumeSwitchToggled" class="volume-unclicker" ng-click="volumeSwitchToggled = false">
+  </div>
+</div>
