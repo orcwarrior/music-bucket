@@ -1,21 +1,26 @@
-<div class="col-lg-3 col-md-4 col-sm-5 col-xs-12" id="musicPlayerContainer">
-  <div class="row">
-    <div class="col-lg-12 nopadding">
-      <div class="player-loading center-block" ng-show="isPlayerWorking">
-        <div class="loader "><div class="loader-inner"></div></div>
-      </div>
+<div id="musicPlayerContainer">
+  <!-- Main controlls & Artwork / Video-->
+  <div id="musicPlayerBase" ng-class="{ 'theatermode' : player.theaterMode.enabled, 'useridle' : player.theaterMode.userIdle }">
+    <div class="row">
+      <div class="col-lg-12 nopadding">
+        <div class="player-loading center-block" ng-show="isPlayerWorking">
+          <div class="loader ">
+            <div class="loader-inner"></div>
+          </div>
+        </div>
 
-      <mb-player-toolbar-wrapper-top></mb-player-toolbar-wrapper-top>
-      <mb-player-main-controls></mb-player-main-controls>
+        <mb-player-toolbar-wrapper-top></mb-player-toolbar-wrapper-top>
+        <mb-player-main-controls></mb-player-main-controls>
+      </div>
+    </div>
+    <div class="row">
+      <player-progressbar buffered="playerProgress.buffered" current="playerProgress.current"
+                          ng-click="playerProgressClickEvent($event)"></player-progressbar>
     </div>
   </div>
-  <div class="row">
-    <player-progressbar buffered="playerProgress.buffered" current="playerProgress.current"
-                        ng-click="playerProgressClickEvent($event)"></player-progressbar>
-  </div>
+
+  <!-- Playlist -->
   <div class="row">
   </div>
-  <div class="row row-centered playlistElementContainer">
-    <mb-player-playlist playlist="player.getPlaylist()"></mb-player-playlist>
-  </div>
+  <mb-player-playlist playlist="player.getPlaylist()"></mb-player-playlist>
 </div>
