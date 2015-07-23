@@ -92,17 +92,19 @@ angular.module('musicBucketEngine')
     return {
       // https://api.youtube.com/tracks.json?consumer_key=8d84bbdf76bfc4a57c4996344cebbaf6&q=flume&filter=all&order=hotness
       search: function (query, limit, additionalFilters) {
-        var params = additionalFilters || {};
-        params = _.extend(params,
+        var params = {};
+        // if (!_.isUndefined(additionalFilters)) params.getParams = additionalFilters;
+        params.getParams = _.extend(
           {
-            getParams: {
-              'q': query,
-              videoEmbeddable: true,
-              type : 'video',
-              order : 'relevance',
-              part : 'snippet'
-            }
-          });
+            'q': query,
+            type: 'video',
+            order: 'relevance',
+            part: 'snippet',
+            maxResults: limit
+          }, additionalFilters);
+        if (params.getParams.type === 'video')
+          params.getParams.videoEmbeddable = true;
+
         return new youtubeApiRequest("/search", params).promise;
       },
       video: {
