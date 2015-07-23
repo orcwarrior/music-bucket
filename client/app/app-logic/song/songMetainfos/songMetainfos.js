@@ -12,7 +12,7 @@
         this.album = undefined;
         this.albumArt = undefined;
         this.genere = "";
-        this.getSrc = function () { throw new Error("Base method should be overriden!"); };
+        this.getSrc = function () { return this.url; };
         this.getSongDescription = function () {
             if (this.title === '')
               return this.id;
