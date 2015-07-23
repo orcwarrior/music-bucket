@@ -10,9 +10,10 @@
       /* Note: Methods with "_" prefix are unwraped ones. */
       function createFromMetainfos(metainfos, self) {
         //check if mime is playable first: -dk
-        if (!soundManager.canPlayMIME(metainfos.type) || _.isUndefined(metainfos.type)) {
+        if ( _.isUndefined(metainfos.type) || !soundManager.canPlayMIME(metainfos.type)) {
+          console.log("MIME IS WRONG :(")
           //check if url is playable
-          if (soundManager.canPlayURL(metainfos.getUrl()) !== true) {
+          if (soundManager.canPlayURL(metainfos.getSrc()) !== true) {
             console.log('invalid song url');
             return null;
           }
@@ -97,6 +98,8 @@
                     return buildReturn();
                   else if (_.isUndefined(args) || _.isNull(args))
                     return buildReturn(_.bind(func, engine)());
+                  else if (!_.isArray(args) && !_.isObject(args))
+                    return buildReturn(_.bind(func, engine, args)());
                   else
                     return buildReturn(_.bind(func, engine, args[0], args[1], args[2], args[3], args[4])());
                 });

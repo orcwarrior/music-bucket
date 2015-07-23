@@ -20,8 +20,9 @@
         function updateMetainfosOnBuffered(event) {
           var videoInfos = mbYoutubePlayer.getInfos(videoId);
           metainfos.title = videoInfos.title || videoInfos;
+          console.log("YTPlayer: Metainfos updated: "+videoInfos.title);
           self.fireEvent("onsongready");
-          self._setVolume(1); // BUGFIX
+          // self._setVolume(1); // BUGFIX
         };
         this.isBuffered = function () {
           return mbYoutubePlayer.isBuffered(this.videoId);
@@ -42,7 +43,7 @@
           return mbYoutubePlayer.mute(this.videoId);
         };
         this.setVolume = function setVolume(vol) {
-          return mbYoutubePlayer.setVolume(this.videoId, vol * 100);
+          return mbYoutubePlayer.setVolume(this.videoId, vol);
         };
         this.seek = function seek(pos) {
           return mbYoutubePlayer.seek(this.videoId, pos);
@@ -71,6 +72,8 @@
                     return buildReturn();
                   else if (_.isUndefined(args) || _.isNull(args))
                     return buildReturn(_.bind(func, engine)());
+                  else if (!_.isArray(args) && !_.isObject(args))
+                    return buildReturn(_.bind(func, engine, args)());
                   else
                     return buildReturn(_.bind(func, engine, args[0], args[1], args[2], args[3], args[4])());
                 });
