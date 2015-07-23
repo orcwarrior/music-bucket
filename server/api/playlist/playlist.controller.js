@@ -5,7 +5,11 @@ var Playlist = require('./playlist.model');
 
 // Get list of playlists
 exports.index = function(req, res) {
-  Playlist.find(function (err, playlists) {
+  var uId = (_.isUndefined(req.user)) ? null : req.user._id;
+  Playlist.find({ $or:
+                  [ {visibility: { $in : ["public", null] }},
+                    {author: uId, visibility: "private"}]
+                }, function (err, playlists) {
     if(err) { return handleError(res, err); }
     return res.json(200, playlists);
   });
@@ -41,9 +45,17 @@ exports.update = function(req, res) {
     }
 
     var updated = _.merge(playlist, req.body);
-    updated.save(function (err) {
+    updated.entries = req.body.entries;
+    updated.modified = new Date();
+    console.log("UPDATED PLAYLIST: ");
+    console.log(updated);
+    // DK: Otherwise mongo don't see difference in documents
+    playlist.remove(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, playlist);
+      Playlist.create(updated, function (err, playlist) {
+        if (err) { return handleError(res, err); }
+        return res.json(200, playlist);
+      });
     });
   });
 };
