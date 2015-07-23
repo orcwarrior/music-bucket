@@ -10,7 +10,7 @@ var proxy = httpProxy.createProxyServer({xfwd : true, changeOrigin: true}),
 // Middleware:
 module.exports = function(req, res) {
   var pattern = /^\/songza-api\/(.*)/;
-  var proxyHost = 'http://songza.com/api/1/' + req.url.match(pattern)[1];
+  var proxyHost = 'http://songza.com/' + req.url.match(pattern)[1];
   // BUGFIX: request url haven't '?' character, add it it resolves some strange proxy error :/
   if (req.url.match(pattern)[1].indexOf('?') === -1)
     proxyHost += '?';
