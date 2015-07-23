@@ -9,6 +9,8 @@ angular.module('musicBucketApp')
     var currentSong = undefined;
 
     /* privates */
+    // Theatre mode
+
     /* engines */
     var engines = null;
 
@@ -41,8 +43,8 @@ angular.module('musicBucketApp')
       this.isWorking = false; // for graphical information that somethings happen with a player :)
       this.setIsWorking = function (working) {
         // $log.debug('mbPlayerEngine: isWorking: ' + working);
-        this.isWorking = working;
-        $rootScope.$broadcast('player:working', working);
+        this.isWorking = false; //working; // TEMPORARY
+        $rootScope.$broadcast('player:working', this.isWorking);
       }
 
       this.playlist = _playlist;
@@ -148,11 +150,18 @@ angular.module('musicBucketApp')
         // TODO: Let it use play method
         bufferingNextSongAlreadyCalled = false; // for an init TODO: Refactor
         this.setCurrentSong(song);
+        // FIX: Keep all volumes synced:
+        this.setVolume(this._volume);
+
         song.play();
         this.isPlaying = true; // TODO: Refactor
 
         // TODO: Refactor - set tab title to song name:
         window.document.title = song.metainfos.getSongDescription();
+
+        song.engine.listen("onsongready", function (observable, eventType, data) {
+          window.document.title = song.metainfos.getSongDescription();
+        });
 
         return this.getCurrentSong().metainfos.id;
       };
@@ -189,6 +198,7 @@ angular.module('musicBucketApp')
         this.setIsWorking(true);
         this.getPlaylist().getNext()
           .then(function (nextTrack) {
+
             songsRegistry[nextTrack.metainfos.id] = nextTrack;
             $log.info('mbPlayerEngine: Queue: new song in queue!');
             $log.info(nextTrack);
@@ -212,18 +222,28 @@ angular.module('musicBucketApp')
             _player.setIsWorking(false);
           });
       },
+        this.clearQueue = function () { this.queue.clear(); this._queueCleared = true;}
 
         /* track/song */
         this.setCurrentSong = function (song) {
           currentSong = song;
         };
       this.getCurrentSong = function () {
+        if (!_.isUndefined(currentSong) && !_.isUndefined(currentSong.usedAlt)) return currentSong.usedAlt;
         return currentSong;
       };
 
       /* Proxy methods */
-      this.getVolume = function () { return this.getCurrentSong().engine.getVolume(); };
-      this.setVolume = function (vol) { return this.getCurrentSong().engine.setVolume(vol); };
+      this._volume = 100;
+      this.getVolume = function () {
+        if (_.isUndefined(this.getCurrentSong())) return 0;
+        return this.getCurrentSong().engine.getVolume();
+      };
+      this.setVolume = function (vol) {
+        this._volume = vol;
+        if (_.isUndefined(this.getCurrentSong())) return;
+        return this.getCurrentSong().engine.setVolume(vol);
+      };
       this.getPosition = function () { return this.getCurrentSong().engine.getPosition(); };
       this.setPosition = function (pos) {
         return this.getCurrentSong().seek(pos);
@@ -247,7 +267,11 @@ angular.module('musicBucketApp')
         if (_.isUndefined(evtSong)) return;
 
         var progress = evtSong.getLoadedProgress();
-        var evtSongInfos = {"bytesLoaded": progress[1], "bytesTotal": progress[2], "progress": progress[0]}
+
+        var evtSongInfos;
+        if (_.isUndefined(progress)) evtSongInfos = {"bytesLoaded": 0, "bytesTotal": 1, "progress": 0};
+        else evtSongInfos = {"bytesLoaded": progress[1], "bytesTotal": progress[2], "progress": progress[0]};
+
         var currentTrack = this.getCurrentSong();
         if (!_.isUndefined(currentTrack) && songId === currentTrack.metainfos.id)
           if (!$rootScope.$$phase) {
@@ -357,8 +381,15 @@ angular.module('musicBucketApp')
           }
         },
         onfinish: function () { mbPlayerEngineInstance.nextTrack(); }
-      }
-    });
+      },
+
+      /* Theater Mode
+      * */
+      theaterMode : {
+        enabled : false,
+        playlistMenuToggled: true,
+        idle: false
+      },     });
 
     return mbPlayerEngineInstance;
   })
