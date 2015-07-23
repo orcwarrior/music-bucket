@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .directive('mbPlayerPlaylist', function ($document, $window) {
+  .directive('mbPlayerPlaylist', function ($document, $window, mbPlayerEngine) {
     return  {
       templateUrl: 'app/mbPlayerPlaylist/mbPlayerPlaylist.html',
       restrict: 'EA',
@@ -9,9 +9,10 @@ angular.module('musicBucketApp')
         playlist: '=playlist'
       },
       link: function (scope, element, attrs) {
-        var NAVBAR_HEIGHT = 50;
+        var NAVBAR_HEIGHT = 60;
         var TOOLBAR_HEIGHT = 0;       // TODO: In toolbarService store some toolbarHeight value
-        var MAINCONTROLL_HEIGHT = 320; // TODO: From where playerMainControlls Height should be taken???
+        var MAINCONTROLL_HEIGHT = 360; // TODO: From where playerMainControlls Height should be taken???
+        scope.player = mbPlayerEngine;
         element.css({
                       display: 'block',
                      'overflow-y': 'auto'
@@ -73,6 +74,9 @@ angular.module('musicBucketApp')
          ...
          };
         * */
+      scope.togglePlaylistMenu = function(opened) {
+          mbPlayerEngine.theaterMode.playlistMenuToggled = opened;
       }
+       } // link
     };
   });
