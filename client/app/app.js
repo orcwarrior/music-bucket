@@ -12,8 +12,18 @@ angular.module('musicBucketApp', [
   'ui.router',
   'cfp.hotkeys',
   'sticky',
-  'ngMaterial'
+  'ngMaterial',
+  'ngIdle',
+  'badwing.autoselect',
+  'ngMdIcons'
 ])
+  /* ng-idle config*/
+  .config(function(IdleProvider, KeepaliveProvider) {
+    // configure Idle settings
+    IdleProvider.idle(45); // in seconds
+    IdleProvider.timeout(0); // in seconds
+  })
+
   .config(function ($locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
             $urlRouterProvider.otherwise("/");
 
@@ -62,9 +72,9 @@ angular.module('musicBucketApp', [
     };
   })
 
-  .run(function ($rootScope, $location, $http, Auth, mbPlayerEngine) {
+  .run(function ($rootScope, $location, $http, Auth, mbPlayerEngine, Idle) {
     // Init Bootstrap material design:
-    $.material.init();
+    // $.material.init();
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$routeChangeStart', function (event, next) {
@@ -79,4 +89,13 @@ angular.module('musicBucketApp', [
          // TMP: initialize songza api:
          // $rootScope.songza = new songzaInit({userAgent: 'Some browser'});
     mbPlayerEngine.init();
+
+    Idle.watch();
+
+    $rootScope.$on('$stateChangeSuccess',
+      function(event, toState, toParams, fromState, fromParams){
+        // Location change -> causes exit from theatre mode.
+        if (fromState.name !== "" && fromState.url !== "^") // page wasn't just refreshed
+        mbPlayerEngine.theaterMode.enabled = false;
+      });
   });
