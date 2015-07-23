@@ -1,0 +1,20 @@
+<div class="yt-entry-wrapper">
+  <!--<div layout="row" layout-align="center center"  class="yt-entry-loader">-->
+  <!--<div class="loader" style="top: 0">-->
+  <!--<div class="loader-inner"></div>-->
+  <!--</div>-->
+  <!--</div>-->
+  <div class="yt-entry-clip" ng-click="addToPlaylist(entry)">
+    <div class="yt-entry-add-to-playlist">
+      <p class="mdi-av-playlist-add"></p>
+    </div>
+    <div class="yt-entry-art"
+         ng-style="{'background-image':'url('+ entry.snippet.thumbnails.high.url + ')' }"></div>
+    <div class="yt-entry-metainfos">
+      <p>{{entry.snippet.title}}</p>
+      <!--<div class="yt-entry-minorinfos">-->
+      <!--<span class="mdi-av-play-circle-fill"></span> {{ wrapper.song_count }}-->
+      <!--</div>-->
+    </div>
+  </div>
+</div>

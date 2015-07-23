@@ -27,7 +27,8 @@
           return match[1];
         }
       }
-      function getShortDescription (plEntry) {
+
+      function getShortDescription(plEntry) {
         return youtubeApiHelper.getPlaylist(plEntry.id);
       }
 
@@ -43,8 +44,14 @@
       return function youtubeEntry(url) {
         var self = this;
         this.url = url;
-        this.id = extractIdFromUrl(url);
-        this.type = isYoutubePlaylist(this) ? entryCommons.entryType.youtubePlaylist : entryCommons.entryType.youtubeVideo;
+        if (_.isObject(url)) {
+          this.id = url.videoId || url.playlistId;
+          this.type = (url.kind === "youtube#video") ? entryCommons.entryType.youtubeVideo : entryCommons.entryType.youtubePlaylist;
+        }
+        else {
+          this.id = extractIdFromUrl(url);
+          this.type = isYoutubePlaylist(this) ? entryCommons.entryType.youtubePlaylist : entryCommons.entryType.youtubeVideo;
+        }
         this.songsCount = 1; // TODO: Playlist case.
         this.playedIDs = [];
         this.playedCount = 0;
@@ -56,7 +63,7 @@
               self.songsCount = entries.length;
             });
           getShortDescription(this)
-            .then(function (response){
+            .then(function (response) {
               self.shortDescription = response.data.items[0].snippet.title;
             });
         } else {
@@ -69,7 +76,7 @@
         });
 
         this.getPlaylistDescription = function () {
-          if (isYoutubePlaylist(this)) return this.shortDescription + "("+this.playedCount+"/"+this.songsCount+")";
+          if (isYoutubePlaylist(this)) return this.shortDescription + "(" + this.playedCount + "/" + this.songsCount + ")";
           else return this.entries[0].metainfos.getSongDescription();
         }
         this.getNext = function (playlistCb) {
@@ -78,12 +85,13 @@
           // Resolve after metainfos gathered???
           if (isYoutubePlaylist(this)) {
             if (_.isUndefined(this.entries)) { // still not instanitated - recurency save'us
-              _.delay(function() {
+              _.delay(function () {
                 self.getNext()
                   .then(function (next) {
                     ytPromise.resolve(next);
                   });
-              }, 500); return ytPromise.promise;
+              }, 500);
+              return ytPromise.promise;
             }
 
             var idx = Math.round(Math.random() * this.entries.length);
@@ -92,15 +100,16 @@
             selectedEntry = this.entries[0];
           }
           // Already played?
-          if (_.some(this.playedIDs, function (pID) { return pID == selectedEntry.metainfos.id; }))
-          {
+          if (_.some(this.playedIDs, function (pID) { return pID == selectedEntry.metainfos.id; })) {
             console.log("Video:", selectedEntry.metainfos.id, "already played!");
             if (this.playedIDs.length >= this.songsCount)
               ytPromise.reject();
             else
               return this.getNext(playlistCb);
           }
-          this.playedIDs.push(selectedEntry.id);
+          else console.log("New video: " + selectedEntry.metainfos.id);
+          this.playedIDs.push(selectedEntry.metainfos.id);
+          console.log(this.playedIDs);
           this.playedCount = self.playedIDs.length;
           ytPromise.resolve(selectedEntry);
           if (_.isFunction(playlistCb))
