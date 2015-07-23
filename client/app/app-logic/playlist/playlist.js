@@ -31,19 +31,23 @@
       return function playlist (base) {
           var self = this;
 
-          this.name = '';
-          this.entries = [];
+        function init() {
+          self.name = '';
+          self.entries = [];
+          self.sampleSongs = [];
+          self.isAltered = false;
+        };
+        init();
 
-          this.playlistSequencer = playlistSequencers['default'];
+        this.clear = function() { init(); }
+
+          this.playlistSequencer = playlistSequencers['random'];
           this.nextPlaylistSequencer = function () {
             var playlistSequencersArr = playlistSequencers.toArray();
             var thisIdx = playlistSequencersArr.indexOf(this.playlistSequencer);
             var nextIdx = ++thisIdx % playlistSequencersArr.length;
             this.playlistSequencer = playlistSequencersArr[nextIdx];
           };
-
-          this.sampleSongs = [];
-          this.isAltered = false;
 
           _.extend(this, playlistLocalStorage);
           _.extend(this, base);
@@ -70,6 +74,7 @@
 
           this.alter = function () {
             this.isAltered = true;
+            this.modified = new Date();
             this.sampleSongs.splice(Math.round(this.sampleSongs.length * Math.random()), 1);
             this.recalculateSongsCount();
             this.storeInLocalstorage();
