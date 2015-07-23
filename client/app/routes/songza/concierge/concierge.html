@@ -6,8 +6,8 @@
     <!--<h3 class="text-muted">Play music for</h3>-->
   </div>
   <!-- main situations -->
-  <div layout="row" layout-align="space-around center" class="songza-tiles-row" ng-class="{ 'shrinked' : selectedSituation }">
-    <div class="songza-situation-wrapper" ng-repeat="situation in concierge" ng-click="selectSituation(situation)"
+  <div layout="row" layout-align="space-around center" layout-wrap class="songza-tiles-row" ng-class="{ 'shrinked' : selectedSituation }">
+    <div class="songza-situation-wrapper"  ng-repeat="situation in concierge" ng-click="selectSituation(situation)"
          ng-class="{ 'faded-out' : !isVisibleSituation(situation)}">
       <div class="songza-situation-icon" ng-style="{'background-image':'url('+ situation.image_url + ')' }"></div>
       <div class="songza-situation-caption">{{ situation.title }}</div>
@@ -17,7 +17,7 @@
   <div ng-show="selectedSituation">
     <h3>{{ selectedSituation.selected_message }}</h3>
 
-    <div layout="row" layout-align="space-around center" class="songza-tiles-row" ng-class="{ 'shrinked' : selectedConcreteSituation }">
+    <div layout="row" layout-align="space-around center" layout-wrap class="songza-tiles-row" ng-class="{ 'shrinked' : selectedConcreteSituation }">
       <div class="songza-situation-wrapper" ng-repeat="concreteSituation in selectedSituation.situations track by $index"
            ng-click="selectConcreteSituation(concreteSituation)"
            ng-class="{ 'faded-out' : !isVisibleConcreteSituation(concreteSituation)}">
@@ -27,7 +27,7 @@
   </div>
 
   <!-- stations -->
-  <div layout="row" layout-align="space-around center" ng-show="selectedConcreteSituation">
+  <div layout="row" layout-align="space-around center" layout-wrap ng-show="selectedConcreteSituation" layout-wrap>
     <songza-station station="station" ng-repeat="station in concreteSituationsStationsInfos"/>
   </div>
 </div>
