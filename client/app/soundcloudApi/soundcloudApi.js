@@ -99,7 +99,7 @@ angular.module('musicBucketEngine')
       search: {
         track: function (query, limit, additionalFilters) {
           var params = additionalFilters || {};
-          params = _.extend(params, {getParams: {'q': query, 'limit': limit || 100}});
+          params = _.extend(params, {getParams: {'q': query, 'limit': limit || 100, 'streamable' : true}});
           return new soundcloudApiRequest("/tracks.json", params).promise;
         },
       },
