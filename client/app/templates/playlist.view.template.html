@@ -1,0 +1,41 @@
+<md-dialog class="md-dialog-borderless">
+  <div class="playlist-cover-wrapper">
+    <div class="playlist-cover"
+         ng-style="{'background-image':'url(' + (playlist.imageUrl || 'http://i.imgur.com/imF4L49.jpg') + ')' }">
+    </div>
+    <div class="playlist-cover-gradient"></div>
+    <div class="playlist-songs-count">
+      <span class="mdi-av-my-library-music"></span>
+      {{ playlist.songsCount }}
+    </div>
+    <div class="md-header-metainfos" ng-show="!coverEditing">
+      <h2> {{ playlist.name }} </h2>
+      <h6> {{ playlist.modified | momentFrom }} </h6>
+    </div>
+  </div>
+  <md-dialog-content>
+    <!-- tags-->
+    <label>Tags</label>
+    <md-chips ng-model="playlist.tags" readonly="true"></md-chips>
+    <p ng-if="playlist.tags.length == 0">no tags</p>
+    <!-- visibility -->
+    <label>Visibility</label>
+    <br/>
+    {{playlist.visibility || 'public'}} playlist
+    <hr/>
+    <!-- description -->
+    <label>Desciption</label>
+
+    <p>
+      {{ playlist.description || '(no description)' }}
+    </p>
+
+    <p class="md-body-2">
+      curated by {{ playlist.authorName }}
+    </p>
+
+  </md-dialog-content>
+  <div class="md-actions" layout="row" layout-align="end center">
+    <md-button ng-click="cancel()">Close</md-button>
+  </div>
+</md-dialog>

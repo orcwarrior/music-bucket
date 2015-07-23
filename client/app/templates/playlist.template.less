@@ -1,0 +1,115 @@
+.md-dialog-borderless {
+  border-radius: 0;
+}
+
+md-dialog {
+  max-width: 850px;
+  width: 600px;
+  background-color: white;
+  & .playlist-cover-wrapper {
+    position: relative;
+    z-index: 2;
+    height: 170px;
+    min-height: 100px;
+    & .playlist-cover {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      background-position: center center;
+    }
+    & .playlist-cover-gradient {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      .albumArtGradient();
+      opacity: 0.7;
+    }
+  }
+  & .md-header-metainfos {
+    color: @grey-100;
+    position: absolute;
+    bottom: 0;
+    padding: 12px;
+    padding-bottom: 6px;
+    z-index: 3;
+    width: 100%;
+
+    & .md-header-title {
+      padding-bottom: 0;
+      & input {
+        font-size: @font-size-h2;
+        color: @grey-100 !important;
+      }
+    }
+    & h2 {
+      display: inline-block;
+      clear: none;
+    }
+    & h6 {
+      position: absolute;
+      right: 16px; bottom: 0;
+      display: inline-block;
+      clear: none;
+      float: right;
+    }
+  }
+  & md-chips {
+    font-size: @font-size-small;
+  }
+  md-card-content > label {
+    color: @grey-400;
+  }
+  .md-header-fab {
+    position: absolute;
+    bottom: -32px;
+    right: 16px;
+    padding-top: 6px;
+  }
+  .playlist-songs-count {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 12px !important;
+    color: @grey-100;
+    & > span {
+      font-size: 12px !important;
+    }
+  }
+  .md-header-url-choose {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    background-color: fadeout(@inverse, 30%);
+    .transition(all 0.3s ease-in);
+
+    & .md-header-url-input {
+      position: relative; top: 0;
+      z-index: 10;
+      width: 60%;
+      pointer-events: all;
+      opacity: 1;
+      .transition(all 0.3s ease-in);
+      & input {
+        font-size: @font-size-h4;
+        color: @grey-100 !important;
+        width: 100%;
+      }
+    }
+  }
+  .md-header-url-choose.ng-hide {
+    display: block !important;
+    background-color: transparent;
+    .transition(all 0.3s ease-in);
+  }
+  .md-header-url-choose.ng-hide .md-header-url-input {
+      top: -150px;
+    }
+
+}
