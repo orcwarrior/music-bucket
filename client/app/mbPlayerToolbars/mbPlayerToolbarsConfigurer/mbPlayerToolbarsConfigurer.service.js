@@ -5,7 +5,7 @@ angular.module('musicBucketApp')
     // AngularJS will instantiate a singleton by calling "new" on this function
 
     var registry = {
-      "mbPlayerToolbarWrapperTop": ["mbPlayerToolItemPlayOrder", "mbPlayerToolItemSavePlaylist"]
+      "mbPlayerToolbarWrapperTop": ["mbPlayerToolItemPlayOrder", "mbPlayerToolItemSavePlaylist", "mbPlayerToolItemVolume", "mbPlayerToolItemClearPlaylist"]
     };
 
     return function mbPlayerToolbarsConfigurer() {
