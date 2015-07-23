@@ -14,6 +14,7 @@
         this.songsCount = 1;
         this.playedIDs = [];
         this.playedCount = 0;
+        this._scObj = soundcloudTrackObj;
 
         this.entries = [new song(soundcloudTrackObj, songCommons.songType.soundcloud, this.id)];
 
@@ -26,6 +27,7 @@
           scPromise.resolve(selectedEntry);
           if (_.isFunction(playlistCb))
             playlistCb(selectedEntry);
+          this.playedCount = 1;
           return scPromise.promise;
         };
       }
