@@ -11,7 +11,9 @@ angular.module('musicBucketEngine')
         return metainfos.title;
       }
     }
-
+    function filterMetainfos(metainfos) {
+      return _.pick(metainfos, 'album', 'artist', 'title', 'albumArt', 'genere');
+    }
 
     var SEEKING_SERVICES = 2;
     return function songSeeker(metainfos) {
@@ -26,7 +28,8 @@ angular.module('musicBucketEngine')
           var firstEntry = _.first(response.data.items);
           if (firstEntry) {
             var ytSong = new song(firstEntry, songCommons.songType.youtube);
-            ytSong.metainfos = _.extend(ytSong.metainfos, metainfos);
+            ytSong.metainfos = _.extend(ytSong.metainfos,
+              filterMetainfos(metainfos));
             foundedSongs.push(ytSong);
           }
           if (++resolvedServices >= SEEKING_SERVICES)
@@ -36,7 +39,8 @@ angular.module('musicBucketEngine')
         .then(function (response) {
           if (response.data.length > 0) {
             var scSong = new song(response.data[0], songCommons.songType.soundcloud);
-            scSong.metainfos = _.extend(scSong.metainfos, metainfos);
+            scSong.metainfos = _.extend(scSong.metainfos,
+              filterMetainfos(metainfos));
             foundedSongs.push(scSong);
           }
           if (++resolvedServices >= SEEKING_SERVICES)
