@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('playlistEntryCookieFactory', function (songCookieFactory, localEntry, songzaStationEntry, youtubeEntry, entryCommons) {
+    .factory('playlistEntryCookieFactory', function (songCookieFactory, localEntry, songzaStationEntry, youtubeEntry, soundcloudEntry, entryCommons) {
 
       var localEntry_fromCookieModel = function (cookie) {
         var locEntry = new localEntry();
@@ -41,6 +41,14 @@
         entry.playedIDs = cookie.playedIDs;
         return entry;
       };
+      var soundcloudEntry_fromCookieModel = function (cookie) {
+        var entry = new soundcloudEntry(cookie.scObj);
+        entry.playedCount = cookie.playedCount;
+        entry.playedIDs = cookie.playedIDs;
+        return entry;
+      }
+
+      /// Convert To
       var localEntry_toCookieModel = function (localEntr) {
         return {
           id: localEntr.id,
@@ -68,10 +76,24 @@
         return {
           url: youtube.url, // nothing else is needed :)
           type: youtube.type,
-          playedCount : youtube.playedCount,
-          playedIDs : youtube.playedIDs
+          playedCount: youtube.playedCount,
+          playedIDs: youtube.playedIDs
         };
       };
+      var soundcloudEntry_toCookieModel = function (soundcloud) {
+        return {
+          scObj: {
+            id: soundcloud._scObj.id,
+            title: soundcloud._scObj.title,
+            genere: soundcloud._scObj.genre,
+            artwork_url: soundcloud._scObj.artwork_url,
+            user: {username: soundcloud._scObj.user.username}
+          },
+          playedCount: soundcloud.playedCount,
+          playedIDs: soundcloud.playedIDs,
+          type: entryCommons.entryType.soundcloudTrack
+        };
+      }
 
       return {
         convertFrom: function (cookieModel) {
@@ -90,6 +112,8 @@
               return new youtubeEntry_fromCookieModel(cookieModel);
             case (entryCommons.entryType.youtubePlaylist) :
               return new youtubeEntry_fromCookieModel(cookieModel);
+            case (entryCommons.entryType.soundcloudTrack) :
+              return new soundcloudEntry_fromCookieModel(cookieModel);
           }
         },
         convertTo: function (playlistEntry) {
@@ -101,9 +125,11 @@
             ):
               return new songzaStation_toCookieModel(playlistEntry);
             case (entryCommons.entryType.youtubeVideo) :
-                  return new youtubeEntry_toCookieModel(playlistEntry);
+              return new youtubeEntry_toCookieModel(playlistEntry);
             case (entryCommons.entryType.youtubePlaylist) :
               return new youtubeEntry_toCookieModel(playlistEntry);
+            case (entryCommons.entryType.soundcloudTrack) :
+              return new soundcloudEntry_toCookieModel(playlistEntry);
           }
         }
       };
