@@ -6,13 +6,14 @@
 @mainThemeText: #BE90D4;
 @brand-primary:   @mainThemeColor;
 @primary: @mainThemeColor;
-@inverse: @mainThemeColor; // material main color
+@inverse: @mainThemeColorAlt; // material main color
 @soundcloud-primary: #FF6D00;
 @songza-primary: #2962FF;
 @transcluent-black: rgba(0,0,0,0.40);
 @text-color:            @lightbg-text;
 @nav-text-color:        @darkbg-text;
 @navbar-height: 60px;
+@mainPlayerHeight: 360px;
 
 @font-face {
   font-family: 'Material-Design-Icons';
@@ -24,7 +25,16 @@
   font-weight: normal;
   font-style: normal;
 }
-
+.navbar {
+  z-index: 20;
+  height: @navbar-height;
+  .transition(all 0.5s);
+  .transition-timing-function(ease-out);
+}
+.navbar.ng-hide {
+  display: block;
+  top: -90px;
+}
 .center-grid {
   margin-left: auto; margin-right: auto;
   text-align: center;
@@ -37,7 +47,7 @@
   z-index: 10;
   padding-top: 24px;
   padding-left: 24px; padding-right: 24px;
-//  background-color:  @grey-300;
+  background-color:  @grey-100;
   & * {
     font-size: 24px;
   }
@@ -55,4 +65,8 @@
   border: none;
   background-color: transparent;
   color: @mainThemeColor;
+}
+
+.row {
+  margin-left: 0; margin-right: 0;
 }
