@@ -4,6 +4,9 @@ angular.module('musicBucketEngine')
   .factory('mbYoutubePlayer', function ($log, playbackError, playbackErrorTypes) {
 
     function mbYoutubePlayer() {
+      var playerProperty = "f";
+      var parentProperty = "m";
+
       var self = this;
       var mbPlayerEngine;
       var inFullscreenMode = false;
@@ -120,7 +123,7 @@ angular.module('musicBucketEngine')
       function getMyPlayerParentElement(videoId) {
         var player = videoToPlayerMap[videoId]; // otherwise fuck u!
         if (_.isUndefined(player)) return null;
-        return player.h;
+        return player[parentProperty];
       }
 
       function extendPlayerByEngineUtils(player) {
@@ -163,8 +166,8 @@ angular.module('musicBucketEngine')
       }
 
       function buildLogMsg(player, msg) {
-        if (_.isUndefined(player)) return "YTPlayer(UNKNOWN): UNKNOWN " + msg;
-        return "YTPlayer(" + player.h.id+ "): " + getPlayerVideoId(player) + " " + msg;
+        if (_.isUndefined(player) || _.isUndefined(player[playerProperty].id)) return "YTPlayer(UNKNOWN): UNKNOWN " + msg;
+        return "YTPlayer(" + player[playerProperty].id+ "): " + getPlayerVideoId(player) + " " + msg;
       }
 
       /* Public */
@@ -304,18 +307,18 @@ angular.module('musicBucketEngine')
       };
 
       this.addPlayer = function (player) {
-        $log.info("YTPlayer: added player: "+player.h.id);
+        $log.info("YTPlayer: added player: "+player[playerProperty].id);
         extendPlayerByEngineUtils(player);
         players.push(player);
-        playersReady[player.h.id] = false; // change when onready called
+        playersReady[player[playerProperty].id] = false; // change when onready called
       };
       this.isReady = function () {
         return _.some(playersReady); // all vals truthy?
       }
       /* events handlers */
       this.onready = function (player, event) {
-        $log.info(buildLogMsg(player, "onready called by player: " + player.h.id));
-        playersReady[player.h.id] = true;
+        $log.info(buildLogMsg(player, "onready called by player: " + player[playerProperty].id));
+        playersReady[player[playerProperty].id] = true;
       };
       this.onerror = function (player, event) {
         $log.warn(buildLogMsg(player, "error!: " + event.data));
@@ -333,6 +336,7 @@ angular.module('musicBucketEngine')
         player.unMute();
       }
       this.onplayerinit = function (player, event) {
+        // event.target.getIframe().parentNode (To get div el. id)
         $log.info(buildLogMsg(player, "onplayerinit called by: " + player));
         // BUGFIX: Set initial volume to 100
         player.unMute();
