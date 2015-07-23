@@ -18,7 +18,8 @@
         } else {
           this.title = src.title;
         }
-        this.albumArt = src.artwork_url.replace('large.jpg', 'crop.jpg');
+        if (!_.isNull(src.artwork_url))
+          this.albumArt = src.artwork_url.replace('large.jpg', 'crop.jpg');
         this.genere = src.genre;
         this.url = soundcloudApi.track.streamUrl(src.id);
         this.getUrl = function () { return this.url;};
