@@ -1,8 +1,8 @@
 <div class="col-md-12">
   <h3>No elo, wybierz z którego serwisu chcesz dodać pliki:</h3>
   <!-- Songza -->
-  <a class="col-xs-12 col-sm-6 col-md-3 col-lg-2" ui-sref="main.songza">
-    <img class="img-in-col"
+  <a class="col-xs-12 col-sm-6 col-md-3 col-lg-2" ui-sref="main.songza.concierge">
+    <img class="img-in-col" ui-sref="main.songza.concierge"
          src="http://www.todaysparent.com/wp-content/uploads/2012/05/Songza-logo-and-monster_660x660.jpg"/>
   </a>
   <!-- Local -->
@@ -15,16 +15,33 @@
   </a>
   <!-- SoundCloud -->
   <a class="col-xs-12 col-sm-6 col-md-3 col-lg-2" ui-sref="main.soundcloud">
-    <img class="img-in-col" src="http://www.youredm.com/wp-content/uploads/bfi_thumb/SoundCloud-639casjvam669u00vbqjgh6hij076y149ltqpkrnvhe.png?a33bbe"/>
+    <img class="img-in-col"
+         src="http://www.youredm.com/wp-content/uploads/bfi_thumb/SoundCloud-639casjvam669u00vbqjgh6hij076y149ltqpkrnvhe.png?a33bbe"/>
   </a>
 
 </div>
 <div class="col-md-12">
   <hr>
-  Najnowsze poprawki <b>(05.04.2015)</b><br/>
-  <b>
-    * Naprawiłem jutuba ;_; (?). <br/>
-  </b>
+  Najnowsze poprawki <b>(17.07.2015)</b><br/>
+  * Wyszukiwarka dla youtube'a. <b>(Playlist też)</b> <br/>
+  * Serwisy songzy pozwalające na wybieranie utworów wg. dekad, nastroju, gatunków i zajęć. <a ui-sref="main.songza.activities">(klik)</a> <br/>
+
+  * Linkowanie playlist, okno udostępniania playlisty. <a ui-sref="main.playlists({ id: '558bde5697b9500300ff8670', autoplay: true, theater: true })">(klik)</a> <br/>
+    (poprawiono generowanie linków do playlist w menu kontekstowym playlist) <br/>
+  * Tryb pełnoekranowy "Theater mode" (Przycisk obok loginu). (poprawki) <br/>
+  * Regulacja głośności *.* <br/>
+  * Quickfix youtube. <br/>
+  * Klipy na playlistach YT odtwarzają się tylko raz. <br/>
+  * Wpisy z soundclouda nie odtwarzają się ponownie. <br/>
+  * Poprawki obsługi plików z soundcloud'a. <br/>
+  * Poprawny zapis zmodyfikowanych playlist w bazie. <br/>
+  * Tymczasowe wyłączenie sygnalizacji "zajętości" (sprawiało problemy). <br/>
+  * Częsciowo działające wyszukiwanie alternatyw utworów w innych serwisach. <br/>
+  * Obsługa Soundcloud (wyszukiwanie, odtwarzanie) <br/>
+  * Poprawki błedów dla przegladarek mobilnych <br/>
+  * Wybór stacji songzy przez proste sugestie (concierge). <br/>
+  * <a href="http://www.google.com/design/spec/material-design/introduction.html">Material Design</a><br/>
+  * Naprawiłem jutuba ;_; (?). <br/>
   * Obsługa menu wpisów playlist: doprowadzenie przycisków "Play", "Play Next", "Queue" do używalności. <br/>
   * Odtwarzacz sygnalizuje "zajętość". <br/>
   * Debounceowanie kontrolli odtwarzania (next/prev) (częściowo)<br/>
@@ -36,16 +53,8 @@
   * Skróty klawiaturowe do aplikacji <br/>
   <hr/>
   Nastepne poprawki: <br/>
-  * Przejscie na generowanie songUnresolved (czyli takich które znane dopiero po wysłaniu zapytania (resolve'owaniu) w
-  odpowiedni sposób) <br/>
-  * Wyszukiwanie i powiazanie alternatywy do dodanych utworów, tak aby gdy jedno źrodło dla utworu nie zadziała, można
-  było odtworzyć je z innych źródeł:
-  np. odtwarzanie z lokalnego pliku nie powiodło się znaleziono ten sam utwór na youtube, zostanie od odtworzony w
-  zamian <br/>
-  * Dodanie obsługi SoundCloud API. <br/>
   * Bardziej zaawansowane zapisywanie obecnego stanu odtwarzacza w sesji lokalnej: zapamietywanie obecnego stanu
   kolejki, historii odtwarzanych, obecnego utworu i obecnie odtwarzanej sekundy(?) <br/>
-
   <hr/>
   Poprawki w nieprzyjaznej użytkownikowi formie :)
   <br/> <a href="https://github.com/orcwarrior/music-bucket/commits/master">GitHub Repository Commits</a> </br>
