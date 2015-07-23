@@ -13,6 +13,10 @@
                  _playlist.name = db.name;
                  _playlist.songsCount = db.songsCount;
                  _playlist.sampleSongs = db.sampleSongs;
+                 _playlist.visibility = db.visibility || "public";
+                 _playlist.tags = db.tags || [];
+                 _playlist.imageUrl = db.imageUrl;
+                 _playlist.modified = db.modified;
                  _playlist.entries = _.map(db.entries,
                                           function (entry) { return playlistEntryDBFactory.convertFrom(entry);});
                }
@@ -21,7 +25,11 @@
                    songsCount      : _playlist.songsCount,
                    name            : _playlist.name,
                    entries         : _.map(_playlist.entries, function(entry) {return playlistEntryDBFactory.convertTo(entry); } ),
-                   sampleSongs     : _playlist.sampleSongs
+                   sampleSongs     : _playlist.sampleSongs,
+                   visibility      : _playlist.visibility,
+                   tags            : _playlist.tags,
+                   imageUrl        : _playlist.imageUrl,
+                   modified        : _playlist.modified
                  };
                }
 
