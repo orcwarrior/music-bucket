@@ -1,4 +1,7 @@
 @player-prog-bar-height: 14px;
+@player-prog-bar-line: 4px;
+@player-prog-bar-line-theatermode: 8px;
+
 .player-prog-bar-wrapper{
  position: relative;
   padding-top: @player-prog-bar-height;
@@ -11,14 +14,14 @@
   width: 100%;
   height: @player-prog-bar-height/2;
   background-color: transparent;
-  border-bottom: 4px @gray solid;//@gray-darker solid;
+  border-bottom: @player-prog-bar-line @gray solid;//@gray-darker solid;
 }
 .player-prog-bar-buffered {
   z-index: 22;
   position: absolute; left: 0;
 //  width: 70%;
   height: @player-prog-bar-height/2;
-  border-bottom: 4px @gray-light solid;//@gray-darker solid;
+  border-bottom: @player-prog-bar-line @gray-light solid;//@gray-darker solid;
 
 }
 .player-prog-bar-current {
@@ -26,6 +29,15 @@
   position: absolute; left: 0;
 //  width: 40%;
   height: @player-prog-bar-height/2;
-  border-bottom: 4px @mainThemeColorAlt solid;//@gray-darker solid;
+  border-bottom: @player-prog-bar-line @mainThemeColorAlt solid;//@gray-darker solid;
 
+}
+
+#musicPlayerBase.theatermode {
+   & .player-prog-bar-wrapper {
+     padding-top: 12px;
+   }
+  &  .player-prog-bar-current, .player-prog-bar-buffered, .player-prog-bar-base {
+    border-bottom-width:  @player-prog-bar-line-theatermode;
+  }
 }
