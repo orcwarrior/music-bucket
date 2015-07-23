@@ -1,11 +1,36 @@
-<div class="col-md-12 content-column">
-  <h1>Youtube</h1>
-  <form>
-    <div class="input-group">
-      <input type="text" class="form-control" ng-model="ytUrl" placeholder="Youtube ID/URL">
-        <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" ng-click="addYTEntry()"><span
-          class="glyphicon glyphicon-plus"></span></button>
-      </span>
-  </form>
+<div class="row">
+  <div style="position: absolute; top: 60px; bottom:  0px; overflow: hidden">
+    <md-toolbar class="md-transparent">
+      <form class="md-toolbar-tools">
+        <div class="form-control-wrapper input-group">
+          <input class="form-control empty" id="focusedInput" ng-model="searchQuery" type="text"
+                 placeholder="Youtube query/Youtube URL">
+
+          <span class="material-input"></span>
+      <span class="input-group-addon "><button class="mdi-action-search clear-button" type="submit"
+                                               ng-click="inteliSearch(searchQuery)"></button></span>
+        </div>
+      </form>
+    </md-toolbar>
+    <md-content md-theme="altTheme" style="position: absolute; top: 64px; bottom: 0;">
+      <section ng-if="ytClips">
+        <md-subheader class="md-accent">Videos</md-subheader>
+        <md-list layout="row" layout-align="start center" layout-wrap>
+          <!--<md-list-item class="md-3-line">-->
+            <youtube-entry entry="ytEntry" ng-repeat="ytEntry in ytClips">
+            </youtube-entry>
+          <!--</md-list-item>-->
+        </md-list>
+      </section>
+      <!-- plalists -->
+      <section ng-if="ytPlaylists">
+        <md-subheader class="md-accent">Playlists</md-subheader>
+        <md-list layout="row" layout-align="start center" layout-wrap>
+            <youtube-entry entry="ytEntry" ng-repeat="ytEntry in ytPlaylists">
+            </youtube-entry>
+        </md-list>
+      </section>
+    </md-content>
+
+  </div>
 </div>
