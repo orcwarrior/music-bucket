@@ -12,7 +12,11 @@ var PlaylistSchema = new Schema({
                                   authorName : String,
                                   entries    : Array,
                                   songsCount : Number,
-                                  sampleSongs: Array
+                                  sampleSongs: Array,
+                                  visibility: String,
+                                  tags : Array,
+                                  imageUrl: String,
+                                  modified: { type: Date, default: Date.now }
                                 });
 
 module.exports = mongoose.model('Playlist', PlaylistSchema);
