@@ -12,6 +12,7 @@
         } else {
           this.id = providedInfos;
         }
+        this.albumArt = "http://img.youtube.com/vi/"+this.id+"/hqdefault.jpg";
         this.url = "http://youtube.com/?watch=" + this.id;
         this.getUrl = function () { return this.url; };
       };
