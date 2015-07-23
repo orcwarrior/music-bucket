@@ -75,6 +75,10 @@
       <script src="bower_components/angular-material/angular-material.js"></script>
       <script src="bower_components/moment/moment.js"></script>
       <script src="bower_components/angular-moment/angular-moment.js"></script>
+      <script src="bower_components/ng-idle/angular-idle.js"></script>
+      <script src="bower_components/angular-autoselect/autoselect.js"></script>
+      <script src="bower_components/angular-material-icons/angular-material-icons.min.js"></script>
+      <script src="bower_components/svg-morpheus/compile/minified/svg-morpheus.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -101,6 +105,7 @@
           <script src="app/app-logic/playlist/entry/localEntry.js"></script>
           <script src="app/app-logic/playlist/entry/playlistEntryBase.js"></script>
           <script src="app/app-logic/playlist/entry/songzaStationEntry.js"></script>
+          <script src="app/app-logic/playlist/entry/soundcloudEntry.js"></script>
           <script src="app/app-logic/playlist/entry/youtubeEntry.js"></script>
           <script src="app/app-logic/playlist/playlist.js"></script>
           <script src="app/app-logic/playlist/playlistLocalStorage.js"></script>
@@ -122,12 +127,15 @@
           <script src="app/app-logic/song/songMetainfos/songMetainfosConstructor.js"></script>
           <script src="app/app-logic/song/songMetainfos/songMetainfosLocal.js"></script>
           <script src="app/app-logic/song/songMetainfos/songMetainfosSongza.js"></script>
+          <script src="app/app-logic/song/songMetainfos/songMetainfosSoundcloud.js"></script>
           <script src="app/app-logic/song/songMetainfos/songMetainfosYoutube.js"></script>
+          <script src="app/app-logic/song/songSeeker.js"></script>
           <script src="app/app-logic/song/songUnresolved.js"></script>
           <script src="app/app-logic/tracksHistory/tracksHistory.js"></script>
           <script src="app/app-logic/tracksHistory/tracksHistoryEntry.js"></script>
           <script src="app/commons/decorators/logDecorator.js"></script>
           <script src="app/commons/directives/dragAndDrop.js"></script>
+          <script src="app/commons/directives/moment.js"></script>
           <script src="app/commons/js/JavaScript-ID3-Reader/dist/id3-minimized.js"></script>
           <script src="app/commons/js/JavaScript-ID3-Reader/src/binaryfile.js"></script>
           <script src="app/commons/js/JavaScript-ID3-Reader/src/bufferedbinaryajax.js"></script>
@@ -145,8 +153,10 @@
           <script src="app/mbPlayerPlaylist/mbPlayerPlaylist.directive.js"></script>
           <script src="app/mbPlayerPlaylistEntry/mbPlayerPlaylistEntry.directive.js"></script>
           <script src="app/mbPlayerSm2Controls/mbPlayerSm2Controls.directive.js"></script>
+          <script src="app/mbPlayerToolbars/mbPlayerToolItemClearPlaylist/mbPlayerToolItemClearPlaylist.directive.js"></script>
           <script src="app/mbPlayerToolbars/mbPlayerToolItemPlayOrder/mbPlayerToolItemPlayOrder.directive.js"></script>
           <script src="app/mbPlayerToolbars/mbPlayerToolItemSavePlaylist/mbPlayerToolItemSavePlaylist.directive.js"></script>
+          <script src="app/mbPlayerToolbars/mbPlayerToolItemVolume/mbPlayerToolItemVolume.directive.js"></script>
           <script src="app/mbPlayerToolbars/mbPlayerToolbarWrapperTop/mbPlayerToolbarWrapperTop.directive.js"></script>
           <script src="app/mbPlayerToolbars/mbPlayerToolbarsConfigurer/mbPlayerToolbarsConfigurer.service.js"></script>
           <script src="app/mbPlayerYoutubeControls/mbPlayerYoutubeControls.directive.js"></script>
@@ -166,10 +176,18 @@
           <script src="app/routes/main/main.js"></script>
           <script src="app/routes/playlists/playlists.controller.js"></script>
           <script src="app/routes/playlists/playlists.js"></script>
+          <script src="app/routes/songza/activities/activities.controller.js"></script>
+          <script src="app/routes/songza/activities/activities.js"></script>
           <script src="app/routes/songza/concierge/concierge.controller.js"></script>
           <script src="app/routes/songza/concierge/concierge.js"></script>
+          <script src="app/routes/songza/decades/decades.controller.js"></script>
+          <script src="app/routes/songza/decades/decades.js"></script>
+          <script src="app/routes/songza/genres/geners.controller.js"></script>
+          <script src="app/routes/songza/genres/genres.js"></script>
           <script src="app/routes/songza/login/songza.controller.js"></script>
           <script src="app/routes/songza/login/songza.js"></script>
+          <script src="app/routes/songza/mood/mood.controller.js"></script>
+          <script src="app/routes/songza/mood/mood.js"></script>
           <script src="app/routes/songza/search/search.controller.js"></script>
           <script src="app/routes/songza/search/search.js"></script>
           <script src="app/routes/songza/songza.controller.js"></script>
@@ -180,8 +198,11 @@
           <script src="app/routes/youtube/youtube.js"></script>
           <script src="app/songzaApi/songzaApi.service.js"></script>
           <script src="app/soundcloudApi/soundcloudApi.js"></script>
+          <script src="app/templates/playlist.template.controller.js"></script>
           <script src="app/trackViews/songzaStation/songzaStation.directive.js"></script>
           <script src="app/trackViews/soundcloudTrack/soundcloudTrack.directive.js"></script>
+          <script src="app/trackViews/youtubeEntry/youtubeEntry.directive.js"></script>
+          <script src="app/youtubeApi/youtubeApi.js"></script>
           <script src="components/auth/musicBucket.auth.js"></script>
           <script src="components/auth/services/auth.service.js"></script>
           <script src="components/auth/services/user.service.js"></script>

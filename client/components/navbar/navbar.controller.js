@@ -24,9 +24,12 @@ angular.module('musicBucketApp')
     $scope.isActive = function(route) {
       return route === $location.path();
     };
-                $scope.isJulek = function() {
-                  return navigator.userAgent.indexOf('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) Apple') !== -1;
-                };
+    $scope.isJulek = function() {
+      return navigator.userAgent.indexOf('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) Apple') !== -1;
+    };
+
+      $scope.$watch('player.theaterMode.userIdle', function() {
+      });
     $scope.showCheatSheet = function() {
       hotkeys.toggleCheatSheet()
     }
