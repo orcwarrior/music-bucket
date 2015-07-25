@@ -3,7 +3,7 @@
  */
 
 angular.module('musicBucketApp')
-.controller('PlaylistSaveDialogController', function ($mdDialog, $scope, playlist) {
+.controller('PlaylistSaveDialogController', function ($mdDialog, $scope, playlist, playlistService) {
 
   $scope.playlist = playlist || {
     tags: ['pop', 'alternative', 'easy-listening'],
