@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .service('mbPlayerEngine', function ($rootScope, $log, playlist, queue, tracksHistory, angularPlayer, mbYoutubePlayer) {
+  .service('mbPlayerEngine', function ($rootScope, $log, $interval, playlist, queue, tracksHistory, angularPlayer, mbYoutubePlayer, playlistService) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var injector = angular.injector(['musicBucketEngine']);
     var _playlist;
@@ -101,8 +101,9 @@ angular.module('musicBucketApp')
        * */
       this.togglePlay = function () {
         $log.info('mbPlayerEngine: TogglePlay track: ' + this.isPlaying);
-        if (this.isPlaying) this.pause();
-        else                this.play();
+        __beginingPlaylistId = this.getPlaylist().id;
+        if (this.isPlaying) { this.pause(); $interval.cancel(__playlistAdvancerInterval); }
+        else                { this.play();  __playlistAdvancerInterval = $interval(_playlistTimerAdvancer, 60 * 1000); }
       };
       /*
        * nextTrack
@@ -300,6 +301,16 @@ angular.module('musicBucketApp')
         }
         ;
       };
+
+      /* private */
+      var __beginingPlaylistId;
+      var __playlistAdvancerInterval;
+      var _playlistTimerAdvancer = function() {
+        if (mbPlayerEngineInstance.getPlaylist().id === __beginingPlaylistId)
+          playlistService.advanceTimer(mbPlayerEngineInstance.getPlaylist().id);
+        __beginingPlaylistId = mbPlayerEngineInstance.getPlaylist().id;
+        console.log("Playlist: advance timer...");
+      }
     };
 
     var mbPlayerEngineInstance = new mbPlayerEngine();
