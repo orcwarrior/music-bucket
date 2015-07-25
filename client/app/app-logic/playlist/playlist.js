@@ -34,6 +34,7 @@
         function init() {
           self.name = '';
           self.entries = [];
+          self.description = '';
           self.sampleSongs = [];
           self.isAltered = false;
         };

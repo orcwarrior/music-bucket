@@ -11,8 +11,14 @@
         _playlist.author = cookie.author;
         _playlist.authorName = cookie.authorName;
         _playlist.name = cookie.name;
+        _playlist.description = cookie.description;
         _playlist.songsCount = cookie.songsCount;
         _playlist.sampleSongs = cookie.sampleSongs;
+        _playlist.visibility = cookie.visibility || "public";
+        _playlist.tags = cookie.tags || [];
+        _playlist.imageUrl = cookie.imageUrl;
+        _playlist.modified = cookie.modified;
+        _playlist.description = cookie.description;
         _playlist.playlistSequencer = playlistSequencers[cookie.playlistSequencer.name];
         _playlist.isAltered = cookie.isAltered;
         _playlist.entries = _.map(cookie.entries,
@@ -28,6 +34,11 @@
           name: _playlist.name,
           songsCount: _playlist.songsCount,
           sampleSongs: _playlist.sampleSongs,
+          visibility      : _playlist.visibility,
+          tags            : _playlist.tags,
+          imageUrl        : _playlist.imageUrl,
+          modified        : _playlist.modified,
+          description     : _playlist.description,
           playlistSequencer: {name: _playlist.playlistSequencer.name},
           isAltered: _playlist.isAltered,
           entries: _.map(_playlist.entries, function (entry) {return playlistEntryCookieFactory.convertTo(entry); })

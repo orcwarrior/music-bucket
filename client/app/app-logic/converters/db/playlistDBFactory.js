@@ -17,6 +17,7 @@
                  _playlist.tags = db.tags || [];
                  _playlist.imageUrl = db.imageUrl;
                  _playlist.modified = db.modified;
+                 _playlist.description = db.description;
                  _playlist.entries = _.map(db.entries,
                                           function (entry) { return playlistEntryDBFactory.convertFrom(entry);});
                }
@@ -29,7 +30,8 @@
                    visibility      : _playlist.visibility,
                    tags            : _playlist.tags,
                    imageUrl        : _playlist.imageUrl,
-                   modified        : _playlist.modified
+                   modified        : _playlist.modified,
+                   description     : _playlist.description
                  };
                }
 
