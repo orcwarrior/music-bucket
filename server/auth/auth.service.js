@@ -70,7 +70,34 @@ function setTokenCookie(req, res) {
   res.redirect('/');
 }
 
+/**
+ * Extracts user from authorization field in header
+ *
+ */
+function getUserWithoutValidation() {
+  return compose()
+    // Validate jwt
+    .use(function(req, res, next) {
+      if (!req.headers.authorization) { next(); return;}
+
+      // allow access_token to be passed through query parameter as well
+      if(req.query && req.query.hasOwnProperty('access_token')) {
+        req.headers.authorization = 'Bearer ' + req.query.access_token;
+      }
+      validateJwt(req, res, next);
+    })
+    // Attach user to request
+    .use(function(req, res, next) {
+      if (req.user && req.user._id)
+      User.findById(req.user._id, function (err, user) {
+        req.user = user;
+        next();
+      });
+      else next();
+    });
+}
 exports.isAuthenticated = isAuthenticated;
 exports.hasRole = hasRole;
 exports.signToken = signToken;
 exports.setTokenCookie = setTokenCookie;
+exports.extractUser = getUserWithoutValidation;
