@@ -10,7 +10,7 @@
     </div>
     <div class="md-header-metainfos" ng-show="!coverEditing">
       <h2> {{ playlist.name }} </h2>
-      <h6> {{ playlist.modified | momentFrom }} </h6>
+      <h6> <span ng-if="playlist.totalPlaytime"> {{ playlist.totalPlaytime | momentDuration:'minutes' }} of playling,</span> modified {{ playlist.modified | momentFrom }} </h6>
     </div>
   </div>
   <md-dialog-content>
