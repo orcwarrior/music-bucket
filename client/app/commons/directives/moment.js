@@ -13,3 +13,8 @@ angular.module('musicBucketApp')
       return moment().from(date);
     }
   })
+.filter('momentDuration', function() {
+  return function (dur, format) {
+    return moment.duration(dur, format).humanize().toString(); // 2 minutes
+  }
+});
