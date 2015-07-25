@@ -118,6 +118,9 @@ angular.module('musicBucketEngine')
       },
       get: function (playlistId) {
         return $http.get('/api/playlist/' + playlistId);
+      },
+      advanceTimer: function (playlistId) {
+        return $http.post('/api/playlist/' + playlistId + '/advanceTimer', {});
       }
     };
   });
