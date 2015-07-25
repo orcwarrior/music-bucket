@@ -1,19 +1,21 @@
 @tileTransformDuration: 0.5s;
 .playlist-tile {
-  background-color: @grey-800;
-  width: 200px; height: 200px;
-  margin: 10px 5px;
+  background-color: transparent;
+
+  width: 25%; min-width: 300px;
+  height: 264px;
+  padding: 4px;
   background-size: cover;
-  padding: 0;
   overflow: hidden;
   & .playlist-wrapper, .playlist-wrapper2 {
     width: 100%; height: 100%;
     padding: 5px;
   }
-  & .playlist-wrapper { position: absolute; z-index: 11; background-color: rgba(0,0,0,0);}
+  & .playlist-wrapper { position: absolute; z-index: 11;
+  background-color: @grey-800;;}
   // display underneath art
   & .playlist-wrapper2 {
-    background-color: fadeout(@black, 40%);
+    background-color: @primary;
     position: absolute;
     bottom: 0px; height: 64px;
     left: 0;
@@ -21,7 +23,7 @@
   & .playlist-dim {
     position: absolute;
     top: 200px; height: 0px;
-    // background-color: @mainThemeColor;
+    background-color: @primary;
     left: 0; width: 100%;
     z-index: 3; }
 
@@ -77,7 +79,7 @@
   * .playlist-icon-more {
     z-index: 99999;
     position: absolute;
-    right: 0;
+    right: 4px;
     pointer-events: all;
   }
   & mb-picture-mosaic {

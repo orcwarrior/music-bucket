@@ -7,25 +7,36 @@ angular.module('musicBucketApp')
     var autoplay = $location.search().autoplay;
     var theaterMode = $location.search().theater;
 
+    function _getSelectedPlaylist() {
+      if (!_.isUndefined(selectedPlaylistId)) {
+        var pickedPlaylist = _.find($scope.playlists, function (playlist) {
+          return (playlist._id == selectedPlaylistId);
+        });
+
+        mbPlayerEngine.theaterMode.enabled = !_.isUndefined(theaterMode);
+        $scope.loadPlaylist(pickedPlaylist);
+        if (autoplay) {
+          mbPlayerEngine.clearQueue();
+          mbPlayerEngine.play();
+        }
+      }
+    }
+    function _categorizePlaylists(playlists) {
+      var categorized = { 'private' : [], 'public' : []};
+      _.each(playlists, function(playlist) {
+        categorized[playlist.visibility || 'public'].push(playlist);
+      });
+      return categorized;
+    }
+
     function getPlaylists() {
       playlistService.query()
         .then(function (response) {
           $scope.playlists = response.data;
-          if (!_.isUndefined(selectedPlaylistId)) {
-            var pickedPlaylist = _.find($scope.playlists, function (playlist) {
-              return (playlist._id == selectedPlaylistId);
-            });
-
-            mbPlayerEngine.theaterMode.enabled = !_.isUndefined(theaterMode);
-            $scope.loadPlaylist(pickedPlaylist);
-            if (autoplay) {
-              mbPlayerEngine.clearQueue();
-              mbPlayerEngine.play();
-            }
-          }
+          _getSelectedPlaylist();
+          $scope.playlists = _categorizePlaylists($scope.playlists);
         });
     }
-
     getPlaylists();
 
     $scope.loadPlaylist = function (playlist) {

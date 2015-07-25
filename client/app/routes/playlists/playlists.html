@@ -1,35 +1,83 @@
 <div class="row row-centered">
-  <div class="playlist-tile col-lg-3 col-md-4 col-sm-6 col-xs-6 col-centered" ng-repeat="playlist in playlists">
-    <div class="playlist-wrapper">
-      <!-- Context menu -->
-      <div dropdown is-open="playlistDropdown" class="playlist-context-icon">
-        <a class="mdi-navigation-menu dropdown-toggle" dropdown-toggle></a>
-        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-          <li><a class="dropdown-menu-item"><span class="mdi-av-playlist-add"/>Add to playlist</a></li>
-          <!--<li class="divider"></li>-->
-          <li><a class="dropdown-menu-item" ng-show="isPlaylistOwner(playlist)"
-                 ng-click="deletePlaylist(playlist)"><span class="mdi-action-delete"/>Remove playlist</a>
-          <li><a class="dropdown-menu-item" ng-click="showDialogShare($event, playlist)"><span
-            class="mdi-social-share"/>Share...</a></li>
-          </li>
-        </ul>
-      </div>
-      <mb-picture-mosaic src="playlist.sampleSongs" speed="5000"></mb-picture-mosaic>
-      <!-- Play overlay -->
-      <div class="playlist-play-wrapper" ng-click="loadPlaylist(playlist)">
-        <span class="icon-music" aria-hidden="true"></span> Play!
-      </div>
-      <div class="playlist-wrapper2">
-        <div class="playlist-infos">
-          <p class="playlist-name">{{playlist.name}}</p>
 
-          <p class="playlist-author">{{playlist.authorName}}</p>
+    <section ng-if="playlists.private.lengthY">
+      <label class="md-accent">My private playlists</label>
+      <md-list layout="row" layout-align="start center" layout-wrap>
+        <!--<md-list-item class="md-3-line">-->
+
+        <div class="playlist-tile col-lg-3 col-md-4 col-sm-6 col-xs-6 col-centered" ng-repeat="playlistPriv in playlists.private">
+          <div class="playlist-wrapper">
+            <!-- Context menu -->
+            <div dropdown is-open="playlistDropdown" class="playlist-context-icon">
+              <a class="mdi-navigation-menu dropdown-toggle" dropdown-toggle></a>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a class="dropdown-menu-item"><span class="mdi-av-playlist-add"/>Add to playlist</a></li>
+                <!--<li class="divider"></li>-->
+                <li><a class="dropdown-menu-item" ng-show="isPlaylistOwner(playlistPriv)"
+                       ng-click="deletePlaylist(playlistPriv)"><span class="mdi-action-delete"/>Remove playlist</a>
+                <li><a class="dropdown-menu-item" ng-click="showDialogShare($event, playlistPriv)"><span
+                  class="mdi-social-share"/>Share...</a></li>
+                </li>
+              </ul>
+            </div>
+            <mb-picture-mosaic src="playlistPriv.sampleSongs" speed="5000"></mb-picture-mosaic>
+            <!-- Play overlay -->
+            <div class="playlist-play-wrapper" ng-click="loadPlaylist(playlistPriv)">
+              <span class="icon-music" aria-hidden="true"></span> Play!
+            </div>
+            <div class="playlist-wrapper2">
+              <div class="playlist-infos">
+                <p class="playlist-name">{{playlistPriv.name}}</p>
+
+                <p class="playlist-author">{{playlistPriv.authorName}}</p>
+              </div>
+              <div class="playlist-icon-more">
+                <ng-md-icon icon="more_vert" style="fill: #fff" ng-click="moreInfosAboutPlaylist($event, playlistPriv)"></ng-md-icon>
+              </div>
+            </div>
+            <div class="playlist-dim"></div>
+          </div>
         </div>
-        <div class="playlist-icon-more">
-          <ng-md-icon icon="more_vert" style="fill: #fff" ng-click="moreInfosAboutPlaylist($event, playlist)"></ng-md-icon>
+        <!--</md-list-item>-->
+      </md-list>
+    </section>
+    <!-- plalists -->
+    <section>
+      <label class="md-accent">Public playlists</label>
+      <md-list layout="row" layout-align="center center" layout-wrap>
+        <div class="playlist-tile col-lg-3 col-md-4 col-sm-6 col-xs-6 col-centered" ng-repeat="playlistPub in playlists.public">
+          <div class="playlist-wrapper">
+            <!-- Context menu -->
+            <div dropdown is-open="playlistDropdown" class="playlist-context-icon">
+              <a class="mdi-navigation-menu dropdown-toggle" dropdown-toggle></a>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a class="dropdown-menu-item"><span class="mdi-av-playlist-add"/>Add to playlist</a></li>
+                <!--<li class="divider"></li>-->
+                <li><a class="dropdown-menu-item" ng-show="isPlaylistOwner(playlistPub)"
+                       ng-click="deletePlaylist(playlistPub)"><span class="mdi-action-delete"/>Remove playlist</a>
+                <li><a class="dropdown-menu-item" ng-click="showDialogShare($event, playlistPub)"><span
+                  class="mdi-social-share"/>Share...</a></li>
+                </li>
+              </ul>
+            </div>
+            <mb-picture-mosaic src="playlistPub.sampleSongs" speed="5000"></mb-picture-mosaic>
+            <!-- Play overlay -->
+            <div class="playlist-play-wrapper" ng-click="loadPlaylist(playlistPub)">
+              <span class="icon-music" aria-hidden="true"></span> Play!
+            </div>
+            <div class="playlist-wrapper2">
+              <div class="playlist-infos">
+                <p class="playlist-name">{{playlistPub.name}}</p>
+
+                <p class="playlist-author">{{playlistPub.authorName}}</p>
+              </div>
+              <div class="playlist-icon-more">
+                <ng-md-icon icon="more_vert" style="fill: #fff" ng-click="moreInfosAboutPlaylist($event, playlistPub)"></ng-md-icon>
+              </div>
+            </div>
+            <div class="playlist-dim"></div>
+          </div>
         </div>
-      </div>
-      <div class="playlist-dim"></div>
-    </div>
-  </div>
+      </md-list>
+    </section>
 </div>

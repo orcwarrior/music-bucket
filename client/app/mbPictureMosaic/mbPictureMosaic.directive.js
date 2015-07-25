@@ -10,6 +10,7 @@ angular.module('musicBucketApp')
                    pictureChangeSpeed: '=speed'
                  },
                  link       : function (scope, element, attrs) {
+                   scope.pictures = _.first(scope.pictures, 6);
                    //var test = angular.element(element.children()[0]);
                    if (_.isUndefined(scope.pictureChangeSpeed))
                      scope.pictureChangeSpeed = 1500;
