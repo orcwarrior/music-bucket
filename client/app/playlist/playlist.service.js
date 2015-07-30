@@ -58,18 +58,19 @@ angular.module('musicBucketEngine')
         // Make sure there's an actual playlist:
         $http.get('/api/playlist/' + playlist.id)
           .success(function (response) {
-           // there is an playlist with this id
-              updatePlaylist(playlist)
-                .then(function (response) {
-                  deferred.resolve(response);
-                })})
+            // there is an playlist with this id
+            updatePlaylist(playlist)
+              .then(function (response) {
+                deferred.resolve(response);
+              })
+          })
           /* error */
           .error(
-          function(error) {
-              createNewPlaylist(playlist)
-                .then(function (response) {
-                  deferred.resolve(response);
-                });
+          function (error) {
+            createNewPlaylist(playlist)
+              .then(function (response) {
+                deferred.resolve(response);
+              });
           })
       }
       return deferred.promise;
@@ -121,6 +122,10 @@ angular.module('musicBucketEngine')
       },
       advanceTimer: function (playlistId) {
         return $http.post('/api/playlist/' + playlistId + '/advanceTimer', {});
+      },
+      isPlaylistOwner: function (playlist) {
+        var curId = Auth.getCurrentUser()._id;
+        return (playlist.author === curId);
       }
     };
   });
