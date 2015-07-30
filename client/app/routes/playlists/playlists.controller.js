@@ -1,29 +1,47 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .controller('PlaylistsCtrl', function ($scope, $http, $location, $mdDialog, mbPlayerEngine, Auth, playlistDBFactory, playlistService) {
+  .controller('PlaylistsCtrl', function ($scope, $log, $http, $location, $mdDialog, mbPlayerEngine, Auth, playlistDBFactory, playlistService) {
 
     var selectedPlaylistId = $location.search().id;
     var autoplay = $location.search().autoplay;
     var theaterMode = $location.search().theater;
+    var pickedPlaylist;
+
+
+    function _prepareSelectedPlaylist() {
+      if (_.isUndefined(pickedPlaylist)) return;
+      mbPlayerEngine.theaterMode.enabled = !_.isUndefined(theaterMode);
+      $scope.loadPlaylist(pickedPlaylist);
+      if (autoplay) {
+        mbPlayerEngine.clearQueue();
+        mbPlayerEngine.play();
+      }
+    }
 
     function _getSelectedPlaylist() {
       if (!_.isUndefined(selectedPlaylistId)) {
-        var pickedPlaylist = _.find($scope.playlists, function (playlist) {
+        $log.info("selected playlist: " + selectedPlaylistId);
+        pickedPlaylist = _.find($scope.playlists, function (playlist) {
           return (playlist._id == selectedPlaylistId);
         });
-
-        mbPlayerEngine.theaterMode.enabled = !_.isUndefined(theaterMode);
-        $scope.loadPlaylist(pickedPlaylist);
-        if (autoplay) {
-          mbPlayerEngine.clearQueue();
-          mbPlayerEngine.play();
-        }
+        $log.info("picked playlist: " + pickedPlaylist);
+        if (_.isUndefined(pickedPlaylist)) {
+          $log.info("Playlist private, or not exist, checking" + pickedPlaylist);
+          playlistService.get(selectedPlaylistId)
+            .then(function (response) {
+              pickedPlaylist = response.data;
+              $log.info("..playlist received: " + pickedPlaylist);
+              _prepareSelectedPlaylist();
+            });
+        } else
+          _prepareSelectedPlaylist();
       }
     }
+
     function _categorizePlaylists(playlists) {
-      var categorized = { 'private' : [], 'public' : []};
-      _.each(playlists, function(playlist) {
+      var categorized = {'private': [], 'public': []};
+      _.each(playlists, function (playlist) {
         categorized[playlist.visibility || 'public'].push(playlist);
       });
       return categorized;
@@ -37,6 +55,7 @@ angular.module('musicBucketApp')
           $scope.playlists = _categorizePlaylists($scope.playlists);
         });
     }
+
     getPlaylists();
 
     $scope.loadPlaylist = function (playlist) {
@@ -47,20 +66,20 @@ angular.module('musicBucketApp')
     $scope.isPlaylistOwner = function (playlist) {
       var curId = Auth.getCurrentUser()._id;
       return (playlist.author === curId);
-    }
+    };
     $scope.deletePlaylist = function (playlist) {
       // TODO: On playlist remove error, show some msg
       var result = playlistService.remove(playlist);
       getPlaylists();
     }
 
-    $scope.moreInfosAboutPlaylist = function(event, playlist) {
+    $scope.moreInfosAboutPlaylist = function (event, playlist) {
       $mdDialog.show({
         controller: 'PlaylistSaveDialogController',
         templateUrl: 'app/templates/playlist.view.template.html',
         parent: angular.element(document.body),
         targetEvent: event,
-        locals:{
+        locals: {
           'playlist': playlist
         },
       });
@@ -118,7 +137,8 @@ angular.module('musicBucketApp')
     }
 
   })
-  .controller('DialogShareController', function DialogShareController($scope, $mdDialog, playlistId) {
+  .
+  controller('DialogShareController', function DialogShareController($scope, $mdDialog, playlistId) {
     $scope.pId = playlistId;
     $scope.baseUrl = window.location.href;
     $scope.buildUrl = function () {
