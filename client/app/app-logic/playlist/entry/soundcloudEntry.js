@@ -21,12 +21,12 @@
         this.getPlaylistDescription = function () {
           return this.entries[0].metainfos.getSongDescription();
         };
-        this.getNext = function (playlistCb) {
+        this.getNext = function (options) {
           var scPromise = $q.defer();
           var selectedEntry = this.entries[0];
           scPromise.resolve(selectedEntry);
-          if (_.isFunction(playlistCb))
-            playlistCb(selectedEntry);
+          if (_.isFunction(options.playlistCallback))
+            options.playlistCallback(selectedEntry);
           this.playedCount = 1;
           return scPromise.promise;
         };

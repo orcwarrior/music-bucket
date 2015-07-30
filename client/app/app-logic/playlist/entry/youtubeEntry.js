@@ -79,7 +79,7 @@
           if (isYoutubePlaylist(this)) return this.shortDescription + "(" + this.playedCount + "/" + this.songsCount + ")";
           else return this.entries[0].metainfos.getSongDescription();
         }
-        this.getNext = function (playlistCb) {
+        this.getNext = function (options) {
           var ytPromise = $q.defer();
           var selectedEntry;
           // Resolve after metainfos gathered???
@@ -100,20 +100,21 @@
             selectedEntry = this.entries[0];
           }
           // Already played?
-          if (_.some(this.playedIDs, function (pID) { return pID == selectedEntry.metainfos.id; })) {
+          if (_.some(this.playedIDs, function (pID) { return pID == selectedEntry.metainfos.id; })
+          && (!options.force && this.playedIDs.length !== this.songsCount)) {
             console.log("Video:", selectedEntry.metainfos.id, "already played!");
             if (this.playedIDs.length >= this.songsCount)
               ytPromise.reject();
             else
-              return this.getNext(playlistCb);
+              return this.getNext(options);
           }
           else console.log("New video: " + selectedEntry.metainfos.id);
           this.playedIDs.push(selectedEntry.metainfos.id);
           console.log(this.playedIDs);
           this.playedCount = self.playedIDs.length;
           ytPromise.resolve(selectedEntry);
-          if (_.isFunction(playlistCb))
-            playlistCb(selectedEntry);
+          if (_.isFunction(options.playlistCallback))
+            options.playlistCallback(selectedEntry);
           return ytPromise.promise;
         };
       }

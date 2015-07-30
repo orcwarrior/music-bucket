@@ -157,6 +157,10 @@ angular.module('musicBucketEngine')
             promise.then(function (response) {
               requestCnt--;
               allStations = _.union(allStations, response.data);
+              // BUGFIX: Strange behaviour - multi duplicates stations somehow, let them be unique.
+              allStations = _.uniq(allStations, false, function(station) {
+                return station.id;
+              });
               if (!requestCnt)
                 mainDeferred.$$resolve({data: allStations});
             });

@@ -56,7 +56,7 @@
           // methods:
           this.isEmpty = function () { return !this.entries.length; };
           this.getNext = function () {
-            return this.playlistSequencer.getNext(this.entries, this.songsCount, this.getNextCallback);
+            return this.playlistSequencer.getNext(this.entries, this.songsCount, { playlistCallback: this.getNextCallback });
             /* an promise*/
           };
           this.getNextCallback = function (song) {

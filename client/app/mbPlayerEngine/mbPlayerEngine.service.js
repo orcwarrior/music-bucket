@@ -340,7 +340,7 @@ angular.module('musicBucketApp')
       entryPlay: function (entry) {
         mbPlayerEngineInstance.setIsWorking(true);
         if (_.isFunction(entry.getNext)) {
-          entry.getNext()
+          entry.getNext({force: true})
             .then(function (song) {
               mbPlayerEngineInstance.playSong(song, true);
               mbPlayerEngineInstance.playlist.storeInLocalstorage();
@@ -353,7 +353,7 @@ angular.module('musicBucketApp')
       entryPlayNext: function (entry) {
         mbPlayerEngineInstance.setIsWorking(true);
         if (_.isFunction(entry.getNext)) {
-          entry.getNext()
+          entry.getNext({force: true})
             .then(function (song) {
               mbPlayerEngineInstance.queue.enqueueNext(song);
               mbPlayerEngineInstance.playlist.storeInLocalstorage();
@@ -364,7 +364,7 @@ angular.module('musicBucketApp')
       entryEnqueue: function (entry) {
         mbPlayerEngineInstance.setIsWorking(true);
         if (_.isFunction(entry.getNext)) {
-          entry.getNext()
+          entry.getNext({force: true})
             .then(function (song) {
               mbPlayerEngineInstance.queue.enqueue(song);
               mbPlayerEngineInstance.playlist.storeInLocalstorage();

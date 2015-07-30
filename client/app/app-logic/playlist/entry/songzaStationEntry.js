@@ -22,7 +22,7 @@
             });
         };
         // Returns promise of songSongza (based on base song object)
-        function tryGetNewSong(songzaPromise, playlistCallback) {
+        function tryGetNewSong(songzaPromise, options) {
           //$rootScope.songza.station.nextSong(self.id)
           //$http.get('/songza-api/station/'+self.id+'/next')
           songzaApi.station.next(self.id)
@@ -33,32 +33,35 @@
                 return;
               }
               response = response.data; // TEMPORARY!!!
-              if (_.some(self.playedIDs, function (pID) { return pID == response.song.id;})) {
+              if (_.some(self.playedIDs, function (pID) { return pID == response.song.id;})
+              || (options.forced && self.playedCount < self.songsCount)) {
                 console.log("Song:", response, "already played!");
-                tryGetNewSong(songzaPromise);
+                tryGetNewSong(songzaPromise, options);
                 return false;
               }
-              self.playedIDs.push(response.song.id)
+              self.playedIDs.push(response.song.id);
               self.playedCount = self.playedIDs.length;
               self.updateShortDescription();
 
               // TODO: As songUnresolved:
               var songSongza = new song(response, songCommons.songType.songza, self.id);
               songzaPromise.resolve(songSongza);
-              if (!_.isUndefined(playlistCallback))
-                playlistCallback(songSongza);
+              if (!_.isUndefined(options.playlistCallback))
+                options.playlistCallback(songSongza);
               return true;
             },
             /*error callback*/function (error) {
               console.warn("Error trying get new songza song: " + error);
-              setInterval(tryGetNewSong(songzaPromise, playlistCallback), 1000);
+              setInterval(tryGetNewSong(songzaPromise, options), 1000);
             });
 
         }
 
-        self.getNext = function (playlistCallback) {
+        // options
+        // playlistCallback
+        self.getNext = function (options) {
           var songzaPromise = $q.defer();
-          tryGetNewSong(songzaPromise, playlistCallback);
+          tryGetNewSong(songzaPromise, options);
           return songzaPromise.promise;
         }
         self.updateShortDescription = function () {

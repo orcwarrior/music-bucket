@@ -22,13 +22,13 @@
             s4() + '-' + s4() + s4() + s4();
         })();
 
-        self.getNext = function (playlistCb) {
+        self.getNext = function (options) {
           var deferred = $q.defer();
           // TODO: Move to player (on-play, store reference to currenty playlist-entry)
           this.playedCount++;
           deferred.resolve(this.entries[0]);
-          if (_.isFunction(playlistCb))
-            playlistCb(this.entries[0]);
+          if (_.isFunction(options.playlistCallback))
+            options.playlistCallback(this.entries[0]);
           return deferred.promise;
         };
         self.updateShortDescription = function () {
