@@ -53,6 +53,11 @@ angular.module('musicBucketApp')
                     action: 'keydown',
                     callback: _.bind(mbPlayerEngine.prevTrack, mbPlayerEngine)
                   })
+                  .add({
+                  combo: ['T'],
+                  description: 'Toggle Theater mode',
+                  action: 'keydown',
+                  callback: _.bind(function() { mbPlayerEngine.theaterMode.enabled = !mbPlayerEngine.theaterMode.enabled; }, mbPlayerEngine)});
 
                 // User Idle in theater mode:
                 $scope.$on('IdleStart', function() {
