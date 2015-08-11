@@ -2,6 +2,8 @@
  * Created by orcwarrior on 2015-01-27.
  */
 @mainThemeColor: @deep-purple-500;
+@mainThemeColorLight: @deep-purple-100;
+@mainThemeColorDark: @deep-purple-700;
 @mainThemeColorAlt: @amber-A700;
 @mainThemeText: #BE90D4;
 @brand-primary:   @mainThemeColor;
@@ -67,6 +69,20 @@
   color: @mainThemeColor;
 }
 
+.material-transition(@time: 300ms, @prop: all) {
+
+-webkit-transition: @time cubic-bezier(.55,0,.1,1) @prop;
+  -moz-transition: @time cubic-bezier(.55,0,.1,1) @prop;
+  -ms-transition: @time cubic-bezier(.55,0,.1,1) @prop;
+  -o-transition: @time cubic-bezier(.55,0,.1,1) @prop;
+  transition: @time cubic-bezier(.55,0,.1,1) @prop;
+}
+.row-no-padding {
+  [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
 .row {
   margin-left: 0; margin-right: 0;
 }
