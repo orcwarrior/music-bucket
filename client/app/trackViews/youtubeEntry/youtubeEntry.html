@@ -1,20 +1,15 @@
 <div class="yt-entry-wrapper">
-  <!--<div layout="row" layout-align="center center"  class="yt-entry-loader">-->
-  <!--<div class="loader" style="top: 0">-->
-  <!--<div class="loader-inner"></div>-->
-  <!--</div>-->
-  <!--</div>-->
-  <div class="yt-entry-clip" ng-click="addToPlaylist(entry)">
-    <div class="yt-entry-add-to-playlist">
+  <div class="yt-entry-clip">
+    <div class="yt-entry-add-to-playlist" ng-click="addToPlaylist(entry)">
       <p class="mdi-av-playlist-add"></p>
     </div>
     <div class="yt-entry-art"
-         ng-style="{'background-image':'url('+ entry.snippet.thumbnails.high.url + ')' }"></div>
+         ng-style="{'background-image':'url('+ entry.snippet.thumbnails.medium.url + ')' }"></div>
     <div class="yt-entry-metainfos">
       <p>{{entry.snippet.title}}</p>
-      <!--<div class="yt-entry-minorinfos">-->
-      <!--<span class="mdi-av-play-circle-fill"></span> {{ wrapper.song_count }}-->
-      <!--</div>-->
+      <div class="yt-entry-icon-more">
+        <ng-md-icon icon="more_vert" style="fill: #fff" ng-click="moreInfos($event)"></ng-md-icon>
+      </div>
     </div>
   </div>
 </div>

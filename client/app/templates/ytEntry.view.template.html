@@ -1,0 +1,64 @@
+<md-dialog class="md-dialog-borderless">
+  <div class="yt-entry-cover-wrapper">
+    <div class="yt-entry-cover"
+         ng-style="{'background-image':'url(' + (entry.snippet.thumbnails.high.url || 'http://i.imgur.com/imF4L49.jpg') + ')' }">
+    </div>
+    <div class="yt-entry-cover-gradient"></div>
+    <div class="yt-entry-songs-count">
+      <span class="mdi-av-my-library-music"></span>
+      {{ entry.songsCount }}
+    </div>
+    <div class="md-header-metainfos" ng-show="!coverEditing">
+      <h2>{{entry.snippet.title}}</h2>
+      <h6> added {{ entry.snippet.publishedAt | momentFrom }}. </h6>
+    </div>
+  </div>
+  <div class="yt-entry-actionsbar">
+    <md-button class="md-primary" ng-click="doAction('add')"><div class="mdi-av-playlist-add"></div>Add</md-button>
+    <md-button class="md-primary" ng-click="doAction('play')"><div class="mdi-av-play-circle-fill"></div>Play now</md-button>
+    <md-button class="md-primary" ng-click="doAction('play-next')"><div class="mdi-content-redo"></div>Play next</md-button>
+    <md-button class="md-primary" ng-click="doAction('queue')"><div class="mdi-action-schedule"></div>Queue</md-button>
+  </div>
+  <md-dialog-content>
+    <!-- description -->
+    <label>Desciption</label>
+
+    <p>
+      {{ entry.snippet.description || '(no description)' }}
+    </p>
+
+    <p class="md-body-2">
+      by
+      <a href="http://youtube.com/channel/{{entry.snippet.channelId}}/">{{ entry.snippet.channelTitle }}</a>
+    </p>
+
+  </md-dialog-content>
+  <div class="md-actions" layout="row" layout-align="end center">
+    <md-button ng-click="cancel()">Close</md-button>
+  </div>
+</md-dialog>
+
+<!--
+id: {kind: "youtube#video", videoId: "nxg4C365LbQ"}
+kind: "youtube#video"
+videoId: "nxg4C365LbQ"
+kind: "youtube#searchResult"
+snippet:
+  channelId: "UCEXRv_qihRwjsV91ftx23-A"
+  channelTitle: "ninja000"
+  description: "Official video for Lorn's 'Weigh Me Down', taken from the album 'Ask The Dust', out now on Ninja Tune. 'Weigh Me Down' EP out now on 12" clear vinyl and ..."
+  liveBroadcastContent: "none"
+  publishedAt: "2012-09-13T10:00:32.000Z"
+  thumbnails: {default: {url: "https://i.ytimg.com/vi/UEBIsUsvheA/default.jpg"},…}
+  title: "Lorn - 'Weigh Me Down' (Official Video)"
+
+channelId: "UCSfzccFKl3oiILS3DyyJnLg"
+channelTitle: ""
+description: "Artist : LORN Title: Acid Rain Director: Julian Flores / Pavel Brenner / Sherif Alabede Label: Wednesday Sound Producer: David Olano DOP: Pavel Brenner ..."
+liveBroadcastContent: "none"
+publishedAt: "2015-07-16T22:53:08.000Z"
+thumbnails: {default: {url: "https://i.ytimg.com/vi/nxg4C365LbQ/default.jpg"},…}
+title: "Lorn - Acid Rain (Official Music Video)"
+
+
+-->
