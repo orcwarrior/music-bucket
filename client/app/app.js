@@ -4,6 +4,7 @@ angular.module('musicBucketApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
+  'ngAnimate',
   'btford.socket-io',
   'ui.bootstrap',
   'angularSoundManager',
