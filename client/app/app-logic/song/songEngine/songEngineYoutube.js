@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songEngineYoutube', function (songControllsInterface, mbYoutubePlayer, $log) {
+    .factory('songEngineYoutube', function (songControllsInterface, songMetainfosYoutube, mbYoutubePlayer, $log) {
 
       var songEngineYoutube = function (metainfos) {
         var self = this;
@@ -19,7 +19,9 @@
         }
         function updateMetainfosOnBuffered(event) {
           var videoInfos = mbYoutubePlayer.getInfos(videoId);
-          metainfos.title = videoInfos.title || videoInfos;
+          var data = songMetainfosYoutube.extractArtistAndTitle(videoInfos.title || videoInfos);
+          metainfos.artist = data.artist;
+          metainfos.title = data.title;
           console.log("YTPlayer: Metainfos updated: "+videoInfos.title);
           self.fireEvent("onsongready");
           // self._setVolume(1); // BUGFIX
