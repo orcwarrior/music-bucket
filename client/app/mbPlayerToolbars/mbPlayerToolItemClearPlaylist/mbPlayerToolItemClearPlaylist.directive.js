@@ -9,6 +9,9 @@ angular.module('musicBucketApp')
         scope.getPlaylist = function () {
           return mbPlayerEngine.getPlaylist();
         };
+        scope.clearPlaylist = function () {
+          mbPlayerEngine.clearPlaylist();
+        };
       }
     };
   });
