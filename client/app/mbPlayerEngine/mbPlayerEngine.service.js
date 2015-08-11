@@ -159,9 +159,11 @@ angular.module('musicBucketApp')
 
         // TODO: Refactor - set tab title to song name:
         window.document.title = song.metainfos.getSongDescription();
+        mbPlayerEngineInstance.fireEvent("songChange", song);
 
         song.engine.listen("onsongready", function (observable, eventType, data) {
           window.document.title = song.metainfos.getSongDescription();
+          mbPlayerEngineInstance.fireEvent("songChange", song);
         });
 
         return this.getCurrentSong().metainfos.id;
@@ -301,6 +303,9 @@ angular.module('musicBucketApp')
         }
         ;
       };
+      this.clearPlaylist = function() {
+        this.playlist = _playlist = new playlist();
+      }
 
       /* private */
       var __beginingPlaylistId;
@@ -312,6 +317,9 @@ angular.module('musicBucketApp')
         console.log("Playlist: advance timer...");
       }
     };
+
+    // Make it observable:
+    mbPlayerEngine.prototype = new observable();
 
     var mbPlayerEngineInstance = new mbPlayerEngine();
     mbPlayerEngineInstance = _.extend(mbPlayerEngineInstance, {
