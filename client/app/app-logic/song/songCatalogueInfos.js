@@ -12,7 +12,8 @@
 
       };
       function updateMetainfos(catalogueInfos, metainfos) {
-        metainfos.artist = musicbrainzApi.helper.concatArtists(catalogueInfos['artist-credit']);
+        if (!musicbrainzApi.helper.concatArtists(catalogueInfos['artist-credit']).indexOf('feat.'))
+          metainfos.artist = musicbrainzApi.helper.concatArtists(catalogueInfos['artist-credit']);
         metainfos.title = catalogueInfos.title;
         metainfos.album = catalogueInfos.releases[0].title;
 
