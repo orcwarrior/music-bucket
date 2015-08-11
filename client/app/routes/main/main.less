@@ -11,6 +11,11 @@ body, html, .content-column{
 }
 .content-column {
   margin-top: @navbar-height;
+  height: auto;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: 0;
 //  padding-left: 30px; padding-right: 30px;
 }
 .nopadding {
@@ -47,10 +52,11 @@ img.img-in-col {
 
   .col-offset-body {
     margin-left: 0;
-    padding-left: 15px;
-    padding-right: 15px;
+    // padding-left: 15px;
+    // padding-right: 15px;
   }
   .content-column {
+    position: static;
     margin-top: 0;
   }
 }
