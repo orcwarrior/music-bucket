@@ -1,0 +1,127 @@
+.discover-artist-col {
+  position: relative;
+  height: 100%;
+  overflow-y: auto; overflow-x: hidden;
+  .artist-col-wrapper {
+    width: 100%;
+  }
+  #artistImgPalette {
+    display: none;
+  }
+  & .artist-image {
+    display: block;
+    width: auto;
+    max-height: 450px;
+    height: 370px;
+    //background-position: center;
+    background-position: 50% 33%;
+    background-size: cover;
+  }
+  & .artist-name {
+    position: relative;
+    top: -1.8em;
+    margin-bottom: -1.5em;
+    width: 96%;
+    color: @mainThemeColorLight;
+    text-align: right;
+  }
+  & .artist-bio {
+    font-size: 1.2em;
+    padding: 0 1em;
+    color: @grey-300;
+    & > a {
+      color: @grey-50;
+    }
+  }
+  & .artist-gradient {
+    width: 100%;
+    height: 100%;
+    .albumArtGradient(@grey-900);
+  }
+  & .artist-toptracks {
+    width: 95%;
+    margin: auto auto;
+    & h3 {
+      display: block;
+      float: right;
+      text-align: right;
+      width: 100%;
+    }
+    & .artist-toptracks-tracks-wrapper {
+      display: block;
+      width: 100%;
+      clear: both;
+    }
+    & .artist-toptracks-track {
+      padding: 4px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: all 0.3s !important;
+      & > * {
+        transition: all 0.3s !important;
+      }
+      & > div {
+        padding-left: 8px;
+        padding-top: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: rgba(0, 0, 0, 0.5);
+      }
+    }
+    & .artist-toptracks-track .track-controls {
+      position: absolute;
+      top: 4px;
+      opacity: 0;
+      color: @grey-300;
+      transition: all 0.3s !important;
+      width: 100%;
+      text-align: center;
+      & > span > span {
+        font-size: 18px;
+        padding: 0 6px;
+      }
+    }
+    & .artist-toptracks-track:hover .artist-track-playcountbar {
+      width: 98% !important;
+    }
+    & .artist-toptracks-track:hover .track-name {
+      opacity: 0;
+    }
+    & .artist-toptracks-track:hover .track-controls {
+      opacity: 1;
+      color: @grey-300;
+    }
+    & .artist-track-playcountbar {
+      padding: 4px 0;
+      position: absolute;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      transition: all 0s !important;
+      & > div {
+        //margin-left: 6px;
+        overflow: hidden;
+        color: @grey-400;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.discover-album-col {
+
+}
+
+.discover-lyrics-col {
+  background-color: @grey-300;
+}
+
+// Media queries
+@media (min-width: @screen-tablet) {
+  .artist-col-wrapper {
+    position: absolute;
+    top: 0px;
+    display: block;
+    // bottom: 0;
+    // height: 100%;
+  }
+}
