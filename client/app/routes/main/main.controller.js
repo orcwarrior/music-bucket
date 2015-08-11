@@ -2,7 +2,7 @@
 
 angular.module('musicBucketApp')
   .controller('MainCtrl',
-              function ($rootScope, $scope, $http, $location, socket, Auth, mbPlayerEngine, playlistLocalStorage, songCommons, playlistService, playlist, hotkeys) {
+              function ($rootScope, $animate, $scope, $http, $location, socket, Auth, mbPlayerEngine, playlistLocalStorage, songCommons, playlistService, playlist, hotkeys) {
                 var autoplay = $location.search().autoplay;
                 var theaterMode = $location.search().theater;
                 // Loading playlist from cookies:
@@ -54,7 +54,7 @@ angular.module('musicBucketApp')
                     callback: _.bind(mbPlayerEngine.prevTrack, mbPlayerEngine)
                   })
                   .add({
-                  combo: ['T'],
+                  combo: ['t'],
                   description: 'Toggle Theater mode',
                   action: 'keydown',
                   callback: _.bind(function() { mbPlayerEngine.theaterMode.enabled = !mbPlayerEngine.theaterMode.enabled; }, mbPlayerEngine)});

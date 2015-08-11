@@ -2,7 +2,7 @@
      ng-show="!player.theaterMode.enabled || (player.theaterMode.playlistMenuToggled && !player.theaterMode.userIdle)">
 
   <div class="list-group playlistEntriesList">
-    <div ng-repeat="playlistEntry in playlist.entries" style="position: relative">
+    <div ng-repeat="playlistEntry in playlist.entries" class="playlist-entry-wrapper">
       <mb-player-playlist-entry class="playlistEntry" entry="playlistEntry">
       </mb-player-playlist-entry>
     </div>

@@ -13,6 +13,10 @@ angular.module('musicBucketApp')
         scope.isEntryActive = function(entry) {
           return !_.isUndefined(mbPlayerEngine.getCurrentSong()) && entry.id === mbPlayerEngine.getCurrentSong().entryId;
         };
+        scope.menuAction = function(actionCb) {
+          scope.actionsToggled = false;
+          actionCb();
+        };
       }
     };
   });
