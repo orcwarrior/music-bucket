@@ -4,23 +4,28 @@
   margin-right: -4px;
   margin-bottom: -5px;
 }
+
 .songza-station-loader {
-  width: 230px; height: 298px;
+  width: 230px;
+  height: 298px;
 }
+
 .songza-station-station {
   position: relative;
-  padding: 0px; margin: 0px;
+  padding: 0px;
+  margin: 0px;
   cursor: pointer;
   display: table;
 
-  width: 230px; height: 298px;
+  width: 230px;
+  height: 230px;
   overflow: hidden;
 
   & .songza-station-add-to-playlist {
     display: table;
     position: absolute;
     z-index: 2;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0, 0, 0, 0.3);
     width: 100%;
     height: 230px;
     color: @gray-lighter;
@@ -47,34 +52,36 @@
     background-size: contain;
     // margin-bottom: 68px;
   }
-  & .songza-station-metainfos {
-    position: absolute; bottom: 0;
-    background-color: @brand-primary;
-    background-position: center;
-    display: block;
-    padding: 0.5em;
-    width: 100%;
-    height: 68px;
-    z-index: 2;
-    color: #FFF;
-    font-size: 16px;
-    & > p {
-      height: 2em; overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-    & .songza-station-minorinfos {
-      position: absolute; bottom: 1.5em;
-      display: table-cell;
-      vertical-align: text-bottom;
-      font-size: 10px;
-      text-align: left;
-      & > span {
-        font-size: 14px;
-      }
-    }
+
+}
+
+.songza-station-metainfos {
+  position: relative;
+  background-color: @brand-primary;
+  display: block;
+  padding: 0.5em;
+  padding-bottom: 0;
+  width: 230px;
+  height: 68px;
+  z-index: 2;
+  color: @grey-100;
+  font-size: 15px;
+  & > p {
+    height: 3em;
+    overflow: hidden;
+    width: 80%;
+    white-space: normal;
+    text-overflow: ellipsis;
+  }
+  & .songza-station-icon-more {
+    z-index: 99999;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    pointer-events: all;
   }
 }
+
 .songza-station-station:hover .songza-station-add-to-playlist {
   pointer-events: all !important;
   opacity: 1 !important;

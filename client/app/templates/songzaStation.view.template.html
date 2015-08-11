@@ -1,0 +1,34 @@
+<md-dialog class="md-dialog-borderless">
+  <div class="songzaStation-cover-wrapper">
+    <div class="songzaStation-header-metainfos" ng-show="!coverEditing">
+      <h3> {{ station.name }} </h3>
+      <h5>{{ station.song_count }} tracks collected by {{ station.creator_name }}.</h5>
+    </div>
+    <div class="songzaStation-cover"
+         ng-style="{'background-image':'url(' + (station.cover_url || 'http://i.imgur.com/imF4L49.jpg') + ')' }">
+    </div>
+  </div>
+  <div class="songzaStation-actionsbar">
+    <md-button class="md-primary" ng-click="doAction('add')"><div class="mdi-av-playlist-add"></div>Add</md-button>
+    <md-button class="md-primary" ng-click="doAction('play')"><div class="mdi-av-play-circle-fill"></div>Play now</md-button>
+    <md-button class="md-primary" ng-click="doAction('play-next')"><div class="mdi-content-redo"></div>Play next</md-button>
+    <md-button class="md-primary" ng-click="doAction('queue')"><div class="mdi-action-schedule"></div>Queue</md-button>
+  </div>
+  <md-dialog-content>
+    <!-- description -->
+    <label>Desciption</label>
+    <p>
+      {{ station.description || '(no description)' }}
+    </p>
+    <!-- featured artists-->
+    <label>Featured artist</label>
+    <md-chips ng-model="station.featured_artists" readonly="true">
+      <md-chip-template>
+        <strong>{{$chip.name}}</strong>
+      </md-chip-template>
+    </md-chips>
+  </md-dialog-content>
+  <div class="md-actions" layout="row" layout-align="end center">
+    <md-button ng-click="cancel()">Close</md-button>
+  </div>
+</md-dialog>
