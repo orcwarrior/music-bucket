@@ -16,7 +16,9 @@ angular.module('musicBucketApp', [
   'ngMaterial',
   'ngIdle',
   'badwing.autoselect',
-  'ngMdIcons'
+  'ngMdIcons',
+  'angular-svg-round-progress',
+  'ngScrollbar'
 ])
   /* ng-idle config*/
   .config(function(IdleProvider, KeepaliveProvider) {
