@@ -1,7 +1,19 @@
 .discover-artist-col {
   position: relative;
-  height: 100%;
-  overflow-y: auto; overflow-x: hidden;
+  height: 100%; min-height: 200px;
+  //overflow-y: auto; overflow-x: hidden;
+  overflow-y: hidden;
+  transition: all 0.4s !important; /* COOL! */
+
+  & .ngsb-container {
+    /* HACKS WERE NEEDED TO MAKE IT WORKS
+      (with percentage height content was clipped alot,
+       setting overflow to visible wasn't enough (directive changed
+       it anyway) :(
+       */
+    height: 100%;
+    overflow: visible !important;
+  }
   .artist-col-wrapper {
     width: 100%;
   }
@@ -24,9 +36,9 @@
     width: 96%;
     color: @mainThemeColorLight;
     text-align: right;
+    transition: all 0.4s !important; /* COOL! */
   }
   & .artist-bio {
-    font-size: 1.2em;
     padding: 0 1em;
     color: @grey-300;
     & > a {
@@ -38,6 +50,8 @@
     height: 100%;
     .albumArtGradient(@grey-900);
   }
+
+
   & .artist-toptracks {
     width: 95%;
     margin: auto auto;
@@ -46,66 +60,81 @@
       float: right;
       text-align: right;
       width: 100%;
+      transition: all 0.4s !important; /* COOL! */
     }
     & .artist-toptracks-tracks-wrapper {
-      display: block;
       width: 100%;
-      clear: both;
     }
     & .artist-toptracks-track {
-      padding: 4px 0;
-      white-space: nowrap;
-      overflow: hidden;
+      position: relative; display: inline-block;
+      padding: 2% 1% 0 1%; //4px 0;
       transition: all 0.3s !important;
+
+      width: 105px;
       & > * {
         transition: all 0.3s !important;
       }
-      & > div {
-        padding-left: 8px;
-        padding-top: 4px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: rgba(0, 0, 0, 0.5);
+      & .track-infos {
+        display: block; position: absolute;
+        top: 50%; bottom: auto;
+        left: 50%;
+        transform: translateY(-50%) translateX(-50%);
+        font-size: @font-size-h3;
+        font-weight: 100;
+        line-height: 1;
+        opacity: 1;
+        & > div {
+          display: block;
+          text-align:center;
+          font-size: @font-size-h6;
+          transition: all 0.4s !important; /* COOL! */
+        }
+      }
+      & .track-name {
+        font-size: @font-size-h6;
+        height: 30px; overflow: hidden;
+        width: 100%; text-align: center;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+      & .artist-toptracks-circle.loading {
+        animation:spin 5s cubic-bezier(.55,0,.1,1) infinite;
+      }
+      @keyframes spin
+      {
+        20% { transform:rotate(360deg); }
+        50% { transform:rotate(-360deg); }
+        75% { transform:rotate(-300eg); }
+        100% { transform:rotate(0deg); }
       }
     }
     & .artist-toptracks-track .track-controls {
       position: absolute;
-      top: 4px;
+      top: 42%; bottom: auto;
+      left: 50%;
+      width: 80%;
+      transform: translateY(-50%) translateX(-50%);
+
       opacity: 0;
-      color: @grey-300;
       transition: all 0.3s !important;
-      width: 100%;
       text-align: center;
       & > span > span {
-        font-size: 18px;
-        padding: 0 6px;
+        font-size: 25px;
+        padding: 1px 4px;
+        transition: all 0.4s !important; /* COOL! */
       }
-    }
-    & .artist-toptracks-track:hover .artist-track-playcountbar {
-      width: 98% !important;
-    }
-    & .artist-toptracks-track:hover .track-name {
-      opacity: 0;
     }
     & .artist-toptracks-track:hover .track-controls {
+      transition: all 0.3s !important;
       opacity: 1;
-      color: @grey-300;
     }
-    & .artist-track-playcountbar {
-      padding: 4px 0;
-      position: absolute;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      transition: all 0s !important;
-      & > div {
-        //margin-left: 6px;
-        overflow: hidden;
-        color: @grey-400;
-        white-space: nowrap;
-      }
+    & .artist-toptracks-track:hover .track-infos {
+      transition: all 0.3s !important;
+      opacity: 0;
     }
   }
 }
+
 
 .discover-album-col {
 

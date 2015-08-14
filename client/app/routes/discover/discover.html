@@ -1,9 +1,13 @@
-<div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-artist-col"
-     ng-style=" {'background-color' : artPalette.DarkMuted.getHex()}">
+<div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-artist-col scrollme"
+     ng-scrollbar rebuild-on-resize
+     ng-mouseover="artistScroll=true" ng-mouseleave="artistScroll=false"
+     is-bar-shown="artistScroll"
+     rebuild-on="discover:artist:updated">
 
-  <div class="artist-col-wrapper">
+  <div class="artist-col-wrapper"
+       ng-style="{'background-color' : artPalette.DarkMuted.getHex()}">
     <!-- artist image-->
-    <img id="artistImgPalette" ng-src="/proxy/{{__artist.image[4]['#text']}}"
+    <img id="artistImgPalette" ng-src="/proxy/{{__artist.image[2]['#text']}}"
          ng-vibrant ng-vibrant-palette="artPalette"/>
 
     <div class="artist-image"
@@ -23,22 +27,36 @@
     <div class="artist-toptracks">
       <h3 class="col-sm-12" ng-style="{'color' : artPalette.Vibrant.getHex()}">Top Tracks</h3>
 
-      <div class="artist-toptracks-tracks-wrapper">
-        <div class="artist-toptracks-track col-sm-12 col-lg-6" ng-repeat="track in artistTopTracks.track | limitTo: 10">
-          <div class="artist-track-playcountbar"
-               ng-style="{'width' : '{{track.playcount/artistTopTracks.track[0].playcount*98}}%' }">
-            <div class="track-name">#{{$index+1}} {{track.name}}</div>
+      <div class="artist-toptracks-tracks-wrapper"
+           layout="row" layout-align="space-around center" layout-wrap>
+        <div class="artist-toptracks-track" ng-repeat="track in artistTopTracks.track | limitTo: 12">
+          <div style="position: relative">
+            <div class="artist-toptracks-circle"
+                 ng-class="{'loading' : track.isLoading }"
+              round-progress
+              max="artistTopTracks.maxplayscount"
+              current="track.playcount"
+              color="{{artPalette.Vibrant.getHex()}}"
+              bgcolor="{{artPalette.Muted.getHex()}}"
+              responsive="true"
+              iterations="25"
+              radius="49"
+              stroke="4"
+              animation="easeInOutQuart"></div>
+            <div class="track-infos" ng-style="{'color' : artPalette.Vibrant.getHex()}">
+              #{{$index+1}}
+              <div>{{track.playcount | number}}</div>
+            </div>
           </div>
-
-          <div class="track-name">#{{$index+1}} {{track.name}}</div>
-          <div class="track-controls">
-            <span class="menu-item" ng-click="songAction('play', track.artist.name + ' - ' + track.name)">
+          <div class="track-name" ng-style="{'color' : artPalette.Muted.getHex()}">{{track.name}}</div>
+          <div class="track-controls" ng-style="{'color' : artPalette.Muted.getHex() }">
+            <span class="menu-item" ng-click="songAction('play', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-av-play-circle-fill"></span>
             </span>
-            <span class="menu-item" ng-click="songAction('play-next', track.artist.name + ' - ' + track.name)">
+            <span class="menu-item" ng-click="songAction('play-next', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-content-redo"></span>
             </span>
-            <span class="menu-item" ng-click="songAction('enqueue', track.artist.name + ' - ' + track.name)">
+            <span class="menu-item" ng-click="songAction('enqueue', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-action-schedule"></span>
             </span>
           </div>
