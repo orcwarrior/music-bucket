@@ -9,8 +9,9 @@
         if (_.isObject(providedInfos)) {
           var combTitle = providedInfos.snippet.title;
           this.id = providedInfos.id.videoId;
-          this.artist = combTitle.split('-')[0];
-          this.title = combTitle.split('-')[1];
+          this.artist = combTitle.split(' -')[0].trim();
+          if (combTitle.split(' -')[1])
+            this.title = combTitle.split(' -')[1].trim();
         } else {
           this.id = providedInfos;
         }
@@ -21,6 +22,7 @@
       songMetainfosYoutube.extractArtistAndTitle = function(videoTitle) {
         var res = {artist:'', title:''};
         res.artist = videoTitle.split(' -')[0].trim();
+        if (videoTitle.split(' -')[1])
         res.title = videoTitle.split(' -')[1].trim();
         return res;
       };
