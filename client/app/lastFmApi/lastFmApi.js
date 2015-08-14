@@ -57,7 +57,7 @@ angular.module('musicBucketEngine')
       }
 
       function getBaseUrl() {
-        return "http://ws.audioscrobbler.com/2.0/";
+        return "https://ws.audioscrobbler.com/2.0/";
       }
 
       /* Running request is debounced by time
