@@ -51,7 +51,9 @@ angular.module('musicBucketApp')
       this.queue = _queue;
       this.tracksHistory = new tracksHistory();
 
-      this.getSongById = function (id) { return songsRegistry[id]; };
+      this.getSongById = function (id) {
+        return songsRegistry[id];
+      };
       /*
        * Play
        * */
@@ -102,8 +104,14 @@ angular.module('musicBucketApp')
       this.togglePlay = function () {
         $log.info('mbPlayerEngine: TogglePlay track: ' + this.isPlaying);
         __beginingPlaylistId = this.getPlaylist().id;
-        if (this.isPlaying) { this.pause(); $interval.cancel(__playlistAdvancerInterval); }
-        else                { this.play();  __playlistAdvancerInterval = $interval(_playlistTimerAdvancer, 60 * 1000); }
+        if (this.isPlaying) {
+          this.pause();
+          $interval.cancel(__playlistAdvancerInterval);
+        }
+        else {
+          this.play();
+          __playlistAdvancerInterval = $interval(_playlistTimerAdvancer, 60 * 1000);
+        }
       };
       /*
        * nextTrack
@@ -194,6 +202,18 @@ angular.module('musicBucketApp')
       };
 
       /* queue */
+      this.queueSong = function(song) {
+        $log.info('mbPlayerEngine: Queue: new song in queue!');
+        $log.info(song);
+        songsRegistry[song.metainfos.id] = song;
+        this.queue.enqueue(song);
+      };
+      this.queueSongNext = function(song) {
+        $log.info('mbPlayerEngine: Queue: new song in queue (play-next)!');
+        $log.info(song);
+        songsRegistry[song.metainfos.id] = song;
+        this.queue.enqueueNext(song);
+      };
       this.pushNextSongToQueue = function (onLoadCallback) {
         if (this.getPlaylist().isEmpty()) return;
         $log.info('mbPlayerEngine: pushing new song to queue...');
@@ -202,10 +222,7 @@ angular.module('musicBucketApp')
         this.getPlaylist().getNext()
           .then(function (nextTrack) {
 
-            songsRegistry[nextTrack.metainfos.id] = nextTrack;
-            $log.info('mbPlayerEngine: Queue: new song in queue!');
-            $log.info(nextTrack);
-            _player.queue.enqueue(nextTrack);
+            _player.queueSong(nextTrack);
             onLoadCallback(nextTrack);
 
             if (nextTrack.isBuffered()) _player.setIsWorking(false);
@@ -225,12 +242,15 @@ angular.module('musicBucketApp')
             _player.setIsWorking(false);
           });
       },
-        this.clearQueue = function () { this.queue.clear(); this._queueCleared = true;}
+        this.clearQueue = function () {
+          this.queue.clear();
+          this._queueCleared = true;
+        }
 
-        /* track/song */
-        this.setCurrentSong = function (song) {
-          currentSong = song;
-        };
+      /* track/song */
+      this.setCurrentSong = function (song) {
+        currentSong = song;
+      };
       this.getCurrentSong = function () {
         if (!_.isUndefined(currentSong) && !_.isUndefined(currentSong.usedAlt)) return currentSong.usedAlt;
         return currentSong;
@@ -247,12 +267,16 @@ angular.module('musicBucketApp')
         if (_.isUndefined(this.getCurrentSong())) return;
         return this.getCurrentSong().engine.setVolume(vol);
       };
-      this.getPosition = function () { return this.getCurrentSong().engine.getPosition(); };
+      this.getPosition = function () {
+        return this.getCurrentSong().engine.getPosition();
+      };
       this.setPosition = function (pos) {
         return this.getCurrentSong().seek(pos);
       };
 
-      this.mute = function () { this.setVolume(0);};
+      this.mute = function () {
+        this.setVolume(0);
+      };
 
       /* Helpers */
       this.moveCurrentSongToHistory = function (newSong, saveToHistory) {
@@ -303,14 +327,14 @@ angular.module('musicBucketApp')
         }
         ;
       };
-      this.clearPlaylist = function() {
+      this.clearPlaylist = function () {
         this.playlist = _playlist = new playlist();
       }
 
       /* private */
       var __beginingPlaylistId;
       var __playlistAdvancerInterval;
-      var _playlistTimerAdvancer = function() {
+      var _playlistTimerAdvancer = function () {
         if (mbPlayerEngineInstance.getPlaylist().id === __beginingPlaylistId)
           playlistService.advanceTimer(mbPlayerEngineInstance.getPlaylist().id);
         __beginingPlaylistId = mbPlayerEngineInstance.getPlaylist().id;
@@ -384,13 +408,17 @@ angular.module('musicBucketApp')
        * (called by child player engines)
        *  */
       events: {
-        onplay: function (songId) { mbPlayerEngineInstance.updateSongBytesLoaded(songId); },
+        onplay: function (songId) {
+          mbPlayerEngineInstance.updateSongBytesLoaded(songId);
+        },
         onerror: function (err) {
           $log.warn('mbPlayerEngine: error catched:"');
           $log.warn(err);
           mbPlayerEngineInstance.removeCorruptedSong(err.songId)
         },
-        whileloading: function (songId) { mbPlayerEngineInstance.updateSongBytesLoaded(songId); },
+        whileloading: function (songId) {
+          mbPlayerEngineInstance.updateSongBytesLoaded(songId);
+        },
         whileplaying: function () {
           var trackProgress = 0;
           if (!_.isUndefined(mbPlayerEngineInstance.getCurrentSong()))
@@ -399,16 +427,19 @@ angular.module('musicBucketApp')
             $rootScope.$broadcast('track:progress', trackProgress);
           }
         },
-        onfinish: function () { mbPlayerEngineInstance.nextTrack(); }
+        onfinish: function () {
+          mbPlayerEngineInstance.nextTrack();
+        }
       },
 
       /* Theater Mode
-      * */
-      theaterMode : {
-        enabled : false,
+       * */
+      theaterMode: {
+        enabled: false,
         playlistMenuToggled: true,
         idle: false
-      },     });
+      },
+    });
 
     return mbPlayerEngineInstance;
   })
