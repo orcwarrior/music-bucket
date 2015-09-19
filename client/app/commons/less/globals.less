@@ -17,6 +17,9 @@
 @navbar-height: 60px;
 @mainPlayerHeight: 360px;
 
+
+@screen-lg: 1333px;
+
 @font-face {
   font-family: 'Material-Design-Icons';
   src:url('../assets/fonts/Material-Design-Icons.eot?3ocs8m');
@@ -71,11 +74,11 @@
 
 .material-transition(@time: 300ms, @prop: all) {
 
--webkit-transition: @time cubic-bezier(.55,0,.1,1) @prop;
-  -moz-transition: @time cubic-bezier(.55,0,.1,1) @prop;
-  -ms-transition: @time cubic-bezier(.55,0,.1,1) @prop;
-  -o-transition: @time cubic-bezier(.55,0,.1,1) @prop;
-  transition: @time cubic-bezier(.55,0,.1,1) @prop;
+-webkit-transition: @prop @time cubic-bezier(.55,0,.1,1);
+  -moz-transition: @prop @time cubic-bezier(.55,0,.1,1);
+  -ms-transition: @prop @time cubic-bezier(.55,0,.1,1);
+  -o-transition: @prop @time cubic-bezier(.55,0,.1,1);
+  transition: @prop @time cubic-bezier(.55,0,.1,1);
 }
 .row-no-padding {
   [class*="col-"] {
