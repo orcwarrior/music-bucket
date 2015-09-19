@@ -18,7 +18,8 @@ angular.module('musicBucketApp', [
   'badwing.autoselect',
   'ngMdIcons',
   'angular-svg-round-progress',
-  'ngScrollbar'
+  'ngScrollbar',
+  'dcbImgFallback'
 ])
   /* ng-idle config*/
   .config(function(IdleProvider, KeepaliveProvider) {
@@ -79,6 +80,8 @@ angular.module('musicBucketApp', [
     // Init Bootstrap material design:
     // $.material.init();
 
+   // _.mixin(s.exports());
+
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$routeChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
@@ -89,8 +92,7 @@ angular.module('musicBucketApp', [
 
     });
     $http.defaults.useXDomain = true;
-         // TMP: initialize songza api:
-         // $rootScope.songza = new songzaInit({userAgent: 'Some browser'});
+
     mbPlayerEngine.init();
 
     Idle.watch();
