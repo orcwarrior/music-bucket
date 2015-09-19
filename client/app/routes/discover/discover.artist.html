@@ -1,0 +1,56 @@
+
+<div class="artist-col-wrapper"
+     ng-style="{'background-color' : artPalette().DarkMuted.getHex()}">
+  <!-- artist image-->
+  <img id="artistImgPalette" ng-src="{{'/proxy/'+song.tmpMetainfos.artist.image[2]['#text']}}"
+       ng-vibrant ng-vibrant-palette="song.palette"/>
+
+  <div class="artist-img-wrapper" style="position: relative">
+    <div class="artist-btn-back-to-root" ng-if="song.hasRootMetainfos()"
+         ng-click="song.backToRootMetainfos()"
+         ng-style="{'background-color' : artPalette().Vibrant.getHex()}">
+      <span class="mdi-image-navigate-before"></span>
+    </div>
+    <div class="artist-image"
+         ng-style="{'background-image':'url(' + song.discoverInfos.artist.image[4]['#text'] + ')' }">
+      <div class="artist-gradient"></div>
+    </div>
+    <h1 class="artist-name" ng-style="{'color' : artPalette().Vibrant.getHex()}">{{song.discoverInfos.artist.name}}</h1>
+  </div>
+
+  <!-- artist tags -->
+  <div class="artist-summary" ng-style="{'background-color' : artPalette().Vibrant.getHex()}">
+    <h4 class="summary-year">{{artist.bio.yearformed}}</h4>
+    <h4 class="plays-count" ng-style="{'color' : artPalette().DarkVibrant.getHex()}">
+      <!--<span class="mdi-av-play-arrow"></span>-->
+      {{song.discoverInfos.artist.stats.playcount | number}}
+    </h4>
+
+    <div class="plays-label" ng-style="{'color' : artPalette().DarkMuted.getHex()}">plays</div>
+
+    <div class="artist-generes" layout="row" layout-align="space-around center">
+      <div ng-repeat="tag in song.discoverInfos.artist.tags.tag | limitTo:4"
+           ng-style="{'color' : artPalette().DarkVibrant.getHex()}">
+        {{tag.name}}
+      </div>
+    </div>
+
+  </div>
+  <div class="artist-similars row">
+    <div class="col-xs-3 nopadding" ng-click="song.requestInfos({ 'artist' : art.name, 'album' : '', 'title' : ''})"
+         ng-repeat="art in song.discoverInfos.artist.similar.artist | limitTo: 4">
+      <img ng-src="{{art.image[2]['#text']}}"/>
+
+      <div class="similar-name" ng-style="{'color' : artPalette().Vibrant.getHex()}">
+        {{art.name}}
+      </div>
+    </div>
+  </div>
+  <!-- artist bio -->
+  <div class="artist-bio"
+       ng-bind-html="song.discoverInfos.artist.bio.summary">
+  </div>
+
+  <div class="hidden-sm">
+  </div>
+</div>

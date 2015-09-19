@@ -1,85 +1,77 @@
+<!-- Such ugly ng-if (all scrollbars directives sucks :< -->
 <div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-artist-col scrollme"
      ng-scrollbar="!mobileView" rebuild-on-resize
      ng-mouseover="artistScroll=true" ng-mouseleave="artistScroll=false"
-     is-bar-shown="showScrollbar()"
+     is-bar-shown="artistScroll" ng-if="!mobileView"
      rebuild-on="discover:artist:updated">
 
-  <div class="artist-col-wrapper"
-       ng-style="{'background-color' : artPalette.DarkMuted.getHex()}">
-    <!-- artist image-->
-    <img id="artistImgPalette" ng-src="{{'/proxy/'+__artist.image[2]['#text']}}"
-         ng-vibrant ng-vibrant-palette="artPalette"/>
-
-    <div class="artist-image"
-         ng-style="{'background-image':'url(' + artist.imageUrl + ')' }">
-      <div class="artist-gradient"></div>
-    </div>
+  <ng-include src="'/app/routes/discover/discover.artist.html'"></ng-include>
+</div>
 
 
-    <h1 class="artist-name" ng-style="{'color' : artPalette.Vibrant.getHex()}">{{artist.name}}</h1>
+<div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-artist-col"
+     ng-if="mobileView">
+  <ng-include src="'/app/routes/discover/discover.artist.html'"></ng-include>
+</div>
 
-    <!-- artist tags -->
-    <md-chips class="artist-tags" ng-model="artist.tags.tag" readonly="true"
-              layout="row" layout-align="space-around center" layout-wrap>
-      <md-chip-template>
-        {{$chip.name}}
-      </md-chip-template>
-    </md-chips>
-    <br/>
-    <!-- artist bio -->
-    <div class="artist-bio"
-         ng-bind-html="artist.bio.summary || 'No biography yet.'">
-    </div>
+<div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-album-col"
+     ng-style="{'background-color' : artPalette().DarkMuted.getHex()}">
+  <div class="artist-albums">
+    <div class="discover-label" ng-style="{'color' : artPalette().Vibrant.getHex()}">Albums</div>
 
-    <!-- artist top tracks -->
-    <div class="artist-toptracks">
-      <h3 class="col-sm-12" ng-style="{'color' : artPalette.Vibrant.getHex()}">Top Tracks</h3>
+    <mb-albums-grid albums="song.discoverInfos.artistTopAlbums"
+                    theme-color="artPalette().Vibrant.getHex()"></mb-albums-grid>
+    <!--<div ng-repeat="album in artistTopAlbums | limitTo: 6">-->
+    <!--<img ng-src="{{album.image[2]['#text']}}" />-->
+    <!--{{album.name}}-->
+    <!--{{album.playcount}}-->
 
-      <div class="artist-toptracks-tracks-wrapper"
-           layout="row" layout-align="space-around center" layout-wrap>
-        <div class="artist-toptracks-track" ng-repeat="song in artistTopTracks.track | orderBy:orderTopTracks | limitTo: 12">
-          <div style="position: relative">
-            <div class="artist-toptracks-circle"
-                 ng-class="{'loading' : song.isLoading }"
-              round-progress
-              max="artistTopTracks.maxplayscount"
-              current="song.circleValue || song.playcount"
-              color="{{artPalette.Vibrant.getHex()}}"
-              bgcolor="{{artPalette.Muted.getHex()}}"
-              responsive="true"
-              iterations="25"
-              radius="48"
-              stroke="4"
-              animation="easeInOutQuart"></div>
-            <div class="track-infos" ng-style="{'color' : artPalette.Vibrant.getHex()}">
-              #{{$index+1}}
-              <div>{{song.playcount | number}}</div>
-            </div>
+
+    <!--</div>-->
+  </div>
+  <!-- artist top tracks -->
+  <div class="artist-toptracks">
+    <div class="discover-label" ng-style="{'color' : artPalette().Vibrant.getHex()}">Top Tracks</div>
+
+    <div class="artist-toptracks-tracks-wrapper"
+         layout="row" layout-align="space-around center" layout-wrap>
+      <div class="artist-toptracks-track"
+           ng-repeat="track in song.discoverInfos.artistTopTracks.track | orderBy:orderTopTracks | limitTo: 12">
+        <div style="position: relative">
+          <div class="artist-toptracks-circle"
+               ng-class="{'loading' : song.isLoading }"
+               round-progress
+               max="song.discoverInfos.artistTopTracks.maxplayscount"
+               current="track.circleValue || track.playcount"
+               color="{{artPalette().Vibrant.getHex()}}"
+               bgcolor="{{artPalette().Muted.getHex()}}"
+               responsive="true"
+               iterations="25"
+               radius="48"
+               stroke="4"
+               animation="easeInOutQuart"></div>
+          <div class="track-infos" ng-style="{'color' : artPalette().Vibrant.getHex()}">
+            #{{$index+1}}
+            <div>{{track.playcount | number}}</div>
           </div>
-          <div class="track-name" ng-style="{'color' : artPalette.Muted.getHex()}">{{song.name}}</div>
-          <div class="track-controls" ng-style="{'color' : artPalette.Muted.getHex() }">
-            <span class="menu-item" ng-click="songAction('play', song.artist.name + ' - ' + song.name, $index)">
+        </div>
+        <div class="track-name" ng-style="{'color' : artPalette().Muted.getHex()}">{{track.name}}</div>
+        <div class="track-controls" ng-style="{'color' : artPalette().Muted.getHex() }">
+            <span class="menu-item" ng-click="song.songAction('play', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-av-play-circle-fill"></span>
             </span>
-            <span class="menu-item" ng-click="songAction('play-next', song.artist.name + ' - ' + song.name, $index)">
+            <span class="menu-item" ng-click="song.songAction('play-next', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-content-redo"></span>
             </span>
-            <span class="menu-item" ng-click="songAction('enqueue', song.artist.name + ' - ' + song.name, $index)">
+            <span class="menu-item" ng-click="song.songAction('enqueue', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-action-schedule"></span>
             </span>
-          </div>
         </div>
       </div>
     </div>
-    <div class="hidden-sm">
-      <br/>
-      <br/>
-    </div>
   </div>
 </div>
-<div class="col-md-6 col-sm-12 col-lg-4 discover-album-col">
-  album column
-</div>
+
 <div class="col-md-6 col-sm-12 col-lg-4 discover-lyrics-col">
   Lyrics column
 </div>
@@ -192,7 +184,8 @@
             }, {
                 "name": "Das Pop",
                 "url": "http:\/\/www.last.fm\/music\/Das+Pop",
-                "image": [{
+                "image
+                ": [{
                     "#text": "http:\/\/userserve-ak.last.fm\/serve\/34\/8144985.jpg",
                     "size": "small"
                 }, {
@@ -208,7 +201,7 @@
                     "#text": "http:\/\/userserve-ak.last.fm\/serve\/500\/8144985\/Das+Pop+l_c033371921fa5ab887ec60c01f59.jpg",
                     "size": "mega"
                 }]
-            }]
+            }] Widzisz cokolwiek????
         },
         "tags": {
             "tag": [{
