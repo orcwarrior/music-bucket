@@ -3,7 +3,7 @@
  */
 
 angular.module('musicBucketApp')
-  .controller('YTEntryDialogController', function ($mdDialog, $scope, entry, mbPlayerEngine) {
+  .controller('YTEntryDialogController', function ($mdDialog, $scope, entry, mbPlayerEngine, youtubeEntry) {
 
     $scope.entry = entry;
     $scope.doAction = function (action) {
