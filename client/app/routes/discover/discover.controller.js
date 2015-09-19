@@ -201,6 +201,9 @@ angular.module('musicBucketApp')
       $scope.song = new discoverMetainfos(song);
       $scope.song.requestInfos();
     });
+    $scope.curSong = function () {
+      return mbPlayerEngine.getCurrentSong();
+    };
 
     if (!_.isUndefined($scope.curSong())) {
       $scope.song = new discoverMetainfos($scope.curSong());
@@ -216,9 +219,6 @@ angular.module('musicBucketApp')
       });
     }, 100);
 
-    $scope.curSong = function () {
-      return mbPlayerEngine.getCurrentSong();
-    };
     $scope.songAction = function (action, query, idx) {
 
     };
