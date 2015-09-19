@@ -82,16 +82,8 @@ angular.module('musicBucketEngine')
         // so new user can rename it.
         if (playlist.author !== Auth.getCurrentUser()._id) {
           playlist.id = undefined; // So it will be an 'fresh' playlist
-          playlist.name = '';
+          //playlist.name = '';
           playlist.author = Auth.getCurrentUser()._id;
-        }
-
-        if (playlist.name === '') playlist.settingPlaylistName = true; // it should be handled by view
-
-        if (playlist.settingPlaylistName) {
-          if (playlist.name === '') return;
-          else
-            playlist.settingPlaylistName = false;
         }
 
         savePlaylist(playlist)
@@ -121,7 +113,8 @@ angular.module('musicBucketEngine')
         return $http.get('/api/playlist/' + playlistId);
       },
       advanceTimer: function (playlistId) {
-        return $http.post('/api/playlist/' + playlistId + '/advanceTimer', {});
+        if (!_.isUndefined(playlistId))
+          return $http.post('/api/playlist/' + playlistId + '/advanceTimer', {});
       },
       isPlaylistOwner: function (playlist) {
         var curId = Auth.getCurrentUser()._id;
