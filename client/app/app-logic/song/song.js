@@ -43,8 +43,8 @@
               self.catalogueInfos = catalogueInfos;
               // console.log("Catalogue infos:");
               // console.log(catalogueInfos);
-              if (_.isUndefined(self.alternatives))
-                self.alternatives = new songAlternatives(self.metainfos, alternates, self.catalogueInfos);
+              // if (_.isUndefined(self.alternatives))
+              //   self.alternatives = new songAlternatives(self.metainfos, alternates, self.catalogueInfos);
             });
 
         }
