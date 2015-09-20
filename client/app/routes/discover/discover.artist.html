@@ -11,8 +11,9 @@
          ng-style="{'background-color' : artPalette().Vibrant.getHex()}">
       <span class="mdi-image-navigate-before"></span>
     </div>
-    <div class="artist-image"
-         ng-style="{'background-image':'url(' + song.discoverInfos.artist.image[4]['#text'] + ')' }">
+    <div class="artist-image"><img
+              ng-src="{{song.discoverInfos.artist.image[4]['#text']}}"
+              fallback-src="http://i.imgur.com/IfOgubJ.jpg" />
       <div class="artist-gradient"></div>
     </div>
     <h1 class="artist-name" ng-style="{'color' : artPalette().Vibrant.getHex()}">{{song.discoverInfos.artist.name}}</h1>

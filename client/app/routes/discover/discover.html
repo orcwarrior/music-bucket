@@ -5,13 +5,13 @@
      is-bar-shown="artistScroll" ng-if="!mobileView"
      rebuild-on="discover:artist:updated">
 
-  <ng-include src="'/app/routes/discover/discover.artist.html'"></ng-include>
+  <div ng-include="'app/routes/discover/discover.artist.html'"></div>
 </div>
 
 
 <div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-artist-col"
      ng-if="mobileView">
-  <ng-include src="'/app/routes/discover/discover.artist.html'"></ng-include>
+  <div ng-include="'app/routes/discover/discover.artist.html'"></div>
 </div>
 
 <div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-album-col"
