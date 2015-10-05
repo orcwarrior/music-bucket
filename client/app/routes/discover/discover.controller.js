@@ -1,10 +1,16 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .factory('discoverMetainfos', function ($log, $location, songBuilder, lastFmApi, mbPlayerEngine) {
+  .factory('discoverMetainfos', function ($log, $location, songBuilder, lastFmApi, mbPlayerEngine, musicbrainzApi) {
     var prevDiscoverMetainfos = undefined;
     var discoverMetainfosHistory = [];
 
+    /* neat functions urls:
+    * Get release recordings (tracklist)
+    * http://musicbrainz.org/ws/2/release/40f32c34-097e-454d-aa4b-cb8347105689/?inc=recordings&gmt=json
+    * Get release with tracks by artist id
+    * http://musicbrainz.org/ws/2/release?artist=31dd3369-d9d7-42a4-a586-9029c0520ddd&inc=recordings
+    * */
     function discoverMetainfosEntry(config, discoverInfos, palette) {
       this.config = config;
       this.discoverInfos = discoverInfos;
@@ -38,6 +44,12 @@ angular.module('musicBucketApp')
         return _.isEqual(one, two);
       }
 
+      function __processAlbums(albums) {
+        return _.filter(albums, function (album) {
+          return !_.isUndefined(album.mbid);
+        });
+      }
+
       function __isNewArtist(config) {
         return config.artist !== "" && _.isUndefined(previousDiscMeta.artist) || previousDiscMeta.artist.toUpperCase() !== config.artist.toUpperCase();
       }
@@ -55,6 +67,14 @@ angular.module('musicBucketApp')
       this.tmpMetainfos = {};
       /* observe object */
       this._observeCb = function (changes) {
+        if (changes[0].name == "artist") {
+          var artist = changes[0].object.artist;
+          if ( artist.mbid )
+          musicbrainzApi.search.release({ getParams : {artist : artist.mbid}}, 30, ['recordings'])
+            .then(function (response) {
+              discoverMetainfosInstance.discoverInfos.albumsMB = response.data;
+            });
+        }
         if (changes[0].object.artist && changes[0].object.artistTopAlbums && changes[0].object.artistTopTracks) {
           discoverMetainfosInstance.tmpMetainfos.allPrepared = true;
           discoverMetainfosInstance.discoverInfos = discoverMetainfosInstance.tmpMetainfos;
@@ -93,7 +113,7 @@ angular.module('musicBucketApp')
           lastFmApi.artist.getTopAlbums(conf.artist)
             .then(function (response) {
               if (response.status == 200 && response.data.topalbums)
-                self.tmpMetainfos.artistTopAlbums = response.data.topalbums.album;
+                self.tmpMetainfos.artistTopAlbums = __processAlbums(response.data.topalbums.album);
             });
         })();
         return this; // chaining
