@@ -51,8 +51,9 @@ angular.module('musicBucketEngine')
       }
 
       function getBaseUrl() {
-        if (params.proxy && window.location.href.indexOf("localhost") != -1)
-          return "http://localhost:9000/songza-api-proxy/api/1";
+        if (params.proxy && (window.location.href.indexOf("localhost") != -1
+          || window.location.href.indexOf("192.168.0.") != -1))
+          return "http://" + window.location.host + "/songza-api-proxy/api/1";
         else
           return "/songza-api/api/1";
       }
@@ -77,7 +78,9 @@ angular.module('musicBucketEngine')
             }, function (error) {
               deffered.reject(error);
             });
-          songzaApiRequestQueryTimestamps = _.reject(songzaApiRequestQueryTimestamps, function (timestamp) { return timestamp == params.timestamp;})
+          songzaApiRequestQueryTimestamps = _.reject(songzaApiRequestQueryTimestamps, function (timestamp) {
+            return timestamp == params.timestamp;
+          })
         }, waitTime);
       }
 
@@ -106,15 +109,20 @@ angular.module('musicBucketEngine')
 
     return {
       song: {
-        get: function (songId) {}
+        get: function (songId) {
+        }
       },
       search: {
-        artist: function (query, limit) {},
-        situation: function (query, style) {style = "flat-220"},
+        artist: function (query, limit) {
+        },
+        situation: function (query, style) {
+          style = "flat-220"
+        },
         station: function (query, limit) {
           return new songzaApiRequest("/search/station", {getParams: {'query': query, 'limit': limit}}).promise;
         },
-        song: function (query, limit) {},
+        song: function (query, limit) {
+        },
       },
       station: {
         get: function (stationId) {
@@ -158,7 +166,7 @@ angular.module('musicBucketEngine')
               requestCnt--;
               allStations = _.union(allStations, response.data);
               // BUGFIX: Strange behaviour - multi duplicates stations somehow, let them be unique.
-              allStations = _.uniq(allStations, false, function(station) {
+              allStations = _.uniq(allStations, false, function (station) {
                 return station.id;
               });
               if (!requestCnt)
