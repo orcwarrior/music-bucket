@@ -35,6 +35,16 @@ angular.module('musicBucketApp')
       }
     }
 
+    var mobileHTML5 = undefined;
+    function _isMobileHTML5() {
+      // based on SM2 functionality;
+      if (!_.isUndefined(mobileHTML5)) return mobileHTML5;
+      var ua = navigator.userAgent,
+        is_iDevice = ua.match(/(ipad|iphone|ipod)/i), isAndroid = ua.match(/android/i), isIE = ua.match(/msie/i);
+        mobileHTML5 = (ua.match(/(mobile|pre\/|xoom)/i) || is_iDevice || isAndroid);
+      return mobileHTML5;
+    }
+
     /* mbPlayerEngine */
     function mbPlayerEngine() {
       var bufferingNextSongAlreadyCalled = false;
@@ -202,13 +212,13 @@ angular.module('musicBucketApp')
       };
 
       /* queue */
-      this.queueSong = function(song) {
+      this.queueSong = function (song) {
         $log.info('mbPlayerEngine: Queue: new song in queue!');
         $log.info(song);
         songsRegistry[song.metainfos.id] = song;
         this.queue.enqueue(song);
       };
-      this.queueSongNext = function(song) {
+      this.queueSongNext = function (song) {
         $log.info('mbPlayerEngine: Queue: new song in queue (play-next)!');
         $log.info(song);
         songsRegistry[song.metainfos.id] = song;
@@ -288,7 +298,7 @@ angular.module('musicBucketApp')
         }
       };
       this.updateSongBytesLoaded = function (songId) {
-        //soundManager._writeDebug('sound '+this.id+' loading, '+this.bytesLoaded+' of '+this.bytesTotal);
+
         //broadcast track download progress:
         var evtSong = this.getSongById(songId);
         if (_.isUndefined(evtSong)) return;
@@ -305,10 +315,14 @@ angular.module('musicBucketApp')
             $rootScope.$broadcast('currentTrack:bytesLoaded',
               evtSongInfos);
           }
+
+        // NOTE: On mobile SM2 will run in global HTML5 Audio instance file so further queueing
+        // has to be disabled on them.
+        if (_isMobileHTML5()) return;
         if (((!_.isUndefined(evtSongInfos.progress) && (evtSongInfos.progress ) >= 0.5 )
           || (!_.isUndefined(evtSongInfos.bytesLoaded) && (evtSongInfos.bytesLoaded / evtSongInfos.bytesTotal ) >= 0.5 ))
           && bufferingNextSongAlreadyCalled == false) {
-          $log.info('mbPlayerEngine: loaded 99% of song, going to push new song in queue!');
+          $log.info('mbPlayerEngine: loaded 50% of song, going to push new song in queue!');
           bufferingNextSongAlreadyCalled = true;
           if (!_queue.hasNext()) {
             mbPlayerEngineInstance.pushNextSongToQueue(function (song) {
@@ -367,7 +381,6 @@ angular.module('musicBucketApp')
             engine.init(mbPlayerEngineInstance);
         });
       },
-
       // Entry based controlls:
       entryPlay: function (entry) {
         mbPlayerEngineInstance.setIsWorking(true);
