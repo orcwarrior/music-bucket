@@ -14,6 +14,13 @@
   <div ng-include="'app/routes/discover/discover.artist.html'"></div>
 </div>
 
+
+<div class="col-md-6 col-sm-12 col-lg-4 discover-top-tracks-col"
+     ng-style="{'background-color' : artPalette().DarkMutedAlt.getHex()}">
+  <div ng-include="'app/routes/discover/discover.top-tracks.html'">
+  </div>
+</div>
+
 <div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-album-col"
      ng-style="{'background-color' : artPalette().DarkMuted.getHex()}">
   <div class="artist-albums">
@@ -21,59 +28,7 @@
 
     <mb-albums-grid albums="song.discoverInfos.artistTopAlbums"
                     theme-color="artPalette().Vibrant.getHex()"></mb-albums-grid>
-    <!--<div ng-repeat="album in artistTopAlbums | limitTo: 6">-->
-    <!--<img ng-src="{{album.image[2]['#text']}}" />-->
-    <!--{{album.name}}-->
-    <!--{{album.playcount}}-->
-
-
-    <!--</div>-->
   </div>
-  <!-- artist top tracks -->
-  <div class="artist-toptracks">
-    <div class="discover-label" ng-style="{'color' : artPalette().Vibrant.getHex()}">Top Tracks</div>
-
-    <div class="artist-toptracks-tracks-wrapper"
-         layout="row" layout-align="space-around center" layout-wrap>
-      <div class="artist-toptracks-track"
-           ng-repeat="track in song.discoverInfos.artistTopTracks.track | orderBy:orderTopTracks | limitTo: 12">
-        <div style="position: relative">
-          <div class="artist-toptracks-circle"
-               ng-class="{'loading' : song.isLoading }"
-               round-progress
-               max="song.discoverInfos.artistTopTracks.maxplayscount"
-               current="track.circleValue || track.playcount"
-               color="{{artPalette().Vibrant.getHex()}}"
-               bgcolor="{{artPalette().Muted.getHex()}}"
-               responsive="true"
-               iterations="25"
-               radius="48"
-               stroke="4"
-               animation="easeInOutQuart"></div>
-          <div class="track-infos" ng-style="{'color' : artPalette().Vibrant.getHex()}">
-            #{{$index+1}}
-            <div>{{track.playcount | number}}</div>
-          </div>
-        </div>
-        <div class="track-name" ng-style="{'color' : artPalette().Muted.getHex()}">{{track.name}}</div>
-        <div class="track-controls" ng-style="{'color' : artPalette().Muted.getHex() }">
-            <span class="menu-item" ng-click="song.songAction('play', track.artist.name + ' - ' + track.name, $index)">
-              <span class="mdi-av-play-circle-fill"></span>
-            </span>
-            <span class="menu-item" ng-click="song.songAction('play-next', track.artist.name + ' - ' + track.name, $index)">
-              <span class="mdi-content-redo"></span>
-            </span>
-            <span class="menu-item" ng-click="song.songAction('enqueue', track.artist.name + ' - ' + track.name, $index)">
-              <span class="mdi-action-schedule"></span>
-            </span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="col-md-6 col-sm-12 col-lg-4 discover-lyrics-col">
-  Lyrics column
 </div>
 
 <!--

@@ -32,12 +32,6 @@
     background-position: 50% 33%;
     background-size: cover;
     .material-transition();
-    & > img {
-      position: absolute;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center
-    }
   }
   & .artist-btn-back-to-root {
     position: absolute;
@@ -131,9 +125,7 @@
   text-transform: uppercase;
   padding-right: 1em;
 }
-& .artist-albums {
-  padding-top: 1em;
-}
+
 & .artist-toptracks {
   margin: auto auto;
   & h3 {
@@ -225,11 +217,13 @@
 
 .discover-album-col {
   //height: 100%;
+  padding-top: 1em;
   overflow: auto;
   background-color: @grey-700;
 }
 
-.discover-lyrics-col {
+.discover-top-tracks-col {
+  padding-top: 1em;
   background-color: @grey-700;
 }
 
@@ -243,6 +237,9 @@
     // height: 100%;
   }
   .discover-album-col {
+    height: 100%;
+  }
+  .discover-top-tracks-col {
     height: 100%;
   }
 }
