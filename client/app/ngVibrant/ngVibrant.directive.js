@@ -24,14 +24,13 @@ angular.module('musicBucketApp')
           var avgFgLightness = (palette.Vibrant.hsl[2] + palette.Muted.hsl[2]) / 2;
           console.log("color: AVG.FG: " + avgFgLightness + ", DM: " + palette.DarkMuted.hsl[2]);
           if (palette.DarkMuted && palette.DarkMuted.hsl[2]) {
-            console.log("DM.Color corrected by: " + palette.DarkMuted.hsl[2] + " => " + _fixColor(palette.DarkMuted.hsl[2], avgFgLightness, true));
+            console.log("DM.Color corrected by: " + palette.DarkMuted.hsl[2] + " => " + _fixColor(palette.DarkMuted.hsl[2], avgFgLightness, true, 2.0));
             palette.DarkMuted.hsl[2] = _fixColor(palette.DarkMuted.hsl[2], avgFgLightness, true);
             palette.DarkMuted.rgb = window.Vibrant.hslToRgb(
               palette.DarkMuted.hsl[0],
               palette.DarkMuted.hsl[1],
               palette.DarkMuted.hsl[2]);
           }
-          ;
           if (palette.Muted && palette.Muted.hsl[2]) {
             console.log("M.Color corrected by: " + palette.Muted.hsl[2] + " => " + _fixColor(palette.Muted.hsl[2], palette.DarkMuted.hsl[2], false, 2.5));
             palette.Muted.hsl[2] = _fixColor(palette.Muted.hsl[2], palette.DarkMuted.hsl[2], false, 1.3);
@@ -48,6 +47,24 @@ angular.module('musicBucketApp')
               palette.DarkVibrant.hsl[1],
               palette.DarkVibrant.hsl[2]);
           }
+          if (palette.Vibrant && palette.Vibrant.hsl[2]) {
+            console.log("V.Color corrected by: " + palette.Vibrant.hsl[2] + " => " + _fixColor(palette.Vibrant.hsl[2], palette.DarkMuted.hsl[2], false, 3.5));
+            palette.Vibrant.hsl[2] = _fixColor(palette.Vibrant.hsl[2], palette.DarkMuted.hsl[2], false, 1.3);
+            palette.Vibrant.rgb = window.Vibrant.hslToRgb(
+              palette.Vibrant.hsl[0],
+              palette.Vibrant.hsl[1],
+              palette.Vibrant.hsl[2]);
+          }
+          // DarkMutedAlt(ernative):
+          palette.DarkMutedAlt = new Swatch(palette.DarkMuted.rgb, 0);
+          palette.DarkMutedAlt.getHsl();
+          palette.DarkMutedAlt.hsl[2] *= 0.98;
+          palette.DarkMutedAlt.hsl[1] *= 1.02;
+          palette.DarkMutedAlt.rgb = window.Vibrant.hslToRgb(
+            palette.DarkMutedAlt.hsl[0],
+            palette.DarkMutedAlt.hsl[1],
+            palette.DarkMutedAlt.hsl[2]);
+
           return palette;
         }
 
