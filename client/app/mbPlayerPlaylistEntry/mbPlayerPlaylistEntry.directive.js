@@ -9,13 +9,25 @@ angular.module('musicBucketApp')
         entry : '=entry'
       }, // scope will be inherited from parent scope
       link: function (scope, element, attrs) {
-        scope.player = mbPlayerEngine;
         scope.isEntryActive = function(entry) {
           return !_.isUndefined(mbPlayerEngine.getCurrentSong()) && entry.id === mbPlayerEngine.getCurrentSong().entryId;
         };
-        scope.menuAction = function(actionCb) {
+        scope.menuAction = function(action) {
           scope.actionsToggled = false;
-          actionCb();
+          switch (action) {
+            case "play":
+              mbPlayerEngine.entryPlay(scope.entry);
+              break;
+            case "play-next":
+              mbPlayerEngine.entryPlayNext(scope.entry);
+              break;
+            case "queue":
+              mbPlayerEngine.entryEnqueue(scope.entry);
+              break;
+            case "remove":
+              mbPlayerEngine.playlist.removeEntry(scope.entry.id);
+              break;
+          }
         };
       }
     };

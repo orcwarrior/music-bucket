@@ -5,22 +5,22 @@
 <div class="menu-circle" ng-if="actionsToggled">
 </div>
 <div class="menu-items-wrapper" ng-if="actionsToggled">
-  <span class="menu-item" ng-click="menuAction(player.entryPlay(entry))">
+  <span class="menu-item" ng-click="menuAction('play')">
     <md-tooltip md-direction="top">
       Play
     </md-tooltip>
     <span class="mdi-av-play-circle-fill"></span></span>
-  <span class="menu-item" ng-click="menuAction(player.entryPlayNext(entry))">
+  <span class="menu-item" ng-click="menuAction('play-next')">
     <md-tooltip md-direction="top">
       Play next
     </md-tooltip>
     <span class="mdi-content-redo"></span></span>
-  <span class="menu-item" ng-click="menuAction(player.entryEnqueue(entry))">
+  <span class="menu-item" ng-click="menuAction('queue')">
     <md-tooltip md-direction="top">
       Enqueue
     </md-tooltip>
     <span class="mdi-action-schedule"></span></span>
-  <span class="menu-item" ng-click="menuAction(player.playlist.removeEntry(entry.id))">
+  <span class="menu-item" ng-click="menuAction('remove')">
     <md-tooltip md-direction="top">
       Remove
     </md-tooltip>
