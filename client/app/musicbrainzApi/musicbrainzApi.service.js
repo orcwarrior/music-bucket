@@ -4,9 +4,21 @@ angular.module('musicBucketEngine')
   .service('musicbrainzApi', function ($http, $q) {
 
     var REQ_TYPE_SEARCH = "search";
+    var REQ_TYPE_SINGLE = "single";
     var mbApiRequestQueryTimestamps = [];
 
-    function musicbrainzApiRequest(entity, params) {
+    function musicbrainzApiRequestSingle(entity, id, params) {
+      params.requestType = REQ_TYPE_SINGLE;
+      params.entityId = id;
+      return new musibrainzApiRequestVirtual(entity, params);
+    }
+
+    function musicbrainzApiRequestSearch(entity, params) {
+      params.requestType = REQ_TYPE_SEARCH;
+      return new musicbrainzApiRequestVirtual(entity, params);
+    }
+
+    function musicbrainzApiRequestVirtual(entity, params) {
       /* Config */
       var QUERY_DURATION_DELTA_MS = 10000; // +/-10s
       /* Init */
@@ -16,9 +28,12 @@ angular.module('musicBucketEngine')
       params = processParams();
 
       function buildUrl() {
-        return "http://musicbrainz.org/ws/2/" + entity + (function () {
-            if (params.requestType === REQ_TYPE_SEARCH) return "/?query=" + buildQuery();
+        return "https://musicbrainz.org/ws/2/" + entity + (function () {
+            if (params.requestType === REQ_TYPE_SEARCH) return buildQuery();
+            if (params.requestType === REQ_TYPE_SINGLE) return params.entityId + "/";
+            /* here add additional kinds of request url schema */
           })() + buildGetParams();
+
       }
 
       function processParams() {
@@ -41,7 +56,7 @@ angular.module('musicBucketEngine')
 
       function buildQuery() {
         var query = "";
-        var queryParams = _.omit(params, "requestType", "getParams", "timestamp");
+        var queryParams = _.omit(params, "requestType", "getParams", "timestamp", "entityId");
         _.map(queryParams, function (val, key) {
           if (query != "") query += " AND ";
           if (key === "query") // special case:
@@ -49,16 +64,28 @@ angular.module('musicBucketEngine')
           else
             query += key + ":" + val;
         });
+        if (query !== "") query += "/?query=";
         return query;
       }
 
       function buildGetParams() {
-        return "&fmt=" + params.getParams.format;
+        // Add all get params to URL
+        var getParams = "";
+        if (!_.isUndefined(params.getParams)) {
+          _.each(params.getParams, function (value, key) {
+            if (!_.isUndefined(value)) {
+              getParams += (getParams == "") ? "?" : "&";
+              getParams += key + "=" + value;
+            }
+            ;
+          });
+        }
+        return getParams;
       }
 
       function unescapeQueryValue(value) {
         var specials = [
-          "-"
+          // "-"
           , "["
           , "]"
           // order doesn't matter for any of these
@@ -73,7 +100,7 @@ angular.module('musicBucketEngine')
           , "."   // 1
           , "\\"  // 1
           , "^"   // 1
-          , "-"   // 1
+          // , "-"   // 1
           , "&"   // 1
           , "\""   // 1
         ];
@@ -96,7 +123,7 @@ angular.module('musicBucketEngine')
 
       /* Running request is debounced by time
        *  Always min. 500ms after last one */
-      var DEBOUNCE_TIME = 2000;
+      var DEBOUNCE_TIME = 1000;
 
       function debounceRequest() {
         var lastTimestamp = _.last(mbApiRequestQueryTimestamps);
@@ -112,7 +139,9 @@ angular.module('musicBucketEngine')
             .then(function (response) {
               deffered.resolve(response);
             });
-          mbApiRequestQueryTimestamps = _.reject(mbApiRequestQueryTimestamps, function (timestamp) { return timestamp == params.timestamp;})
+          mbApiRequestQueryTimestamps = _.reject(mbApiRequestQueryTimestamps, function (timestamp) {
+            return timestamp == params.timestamp;
+          })
         }, waitTime);
       }
 
@@ -121,7 +150,7 @@ angular.module('musicBucketEngine')
 
     function setDefaultOptions(options) {
       if (_.isUndefined(options.getParams)) options.getParams = {};
-      if (_.isUndefined(options.getParams.format)) options.getParams.format = "json";
+      if (_.isUndefined(options.getParams.fmt)) options.getParams.fmt = "json";
     }
 
     return {
@@ -133,8 +162,18 @@ angular.module('musicBucketEngine')
       search: {
         recording: function (queryOpt, limit) {
           setDefaultOptions(queryOpt);
-          queryOpt.requestType = REQ_TYPE_SEARCH;
-          return new musicbrainzApiRequest("recording", queryOpt, limit).promise;
+          return new musicbrainzApiRequestSearch("recording", queryOpt, limit).promise;
+        },
+        release: function (query, limit, incEntities) {
+          setDefaultOptions(query);
+          query.getParams = _.extend(query.getParams, {'inc': incEntities.join('+')});
+          return new musicbrainzApiRequestSearch("release", query, limit).promise;
+        }
+      },
+      get: {
+        release: function (rId, incEntities) {
+          setDefaultOptions(queryOpt);
+          return new musicbrainzApiRequestSingle("release", {release: rId, getParams: {'inc': incEntities.join('+')}});
         }
       },
       helper: {
