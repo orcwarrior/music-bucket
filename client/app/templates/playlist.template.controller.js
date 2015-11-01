@@ -5,13 +5,6 @@
 angular.module('musicBucketApp')
 .controller('PlaylistSaveDialogController', function ($mdDialog, $scope, playlist, playlistService) {
 
-  $scope.playlist = playlist || {
-    tags: ['pop', 'alternative', 'easy-listening'],
-    name: "Crowd pleasing",
-    songsCount: 172,
-    visibility: 'public',
-    authorName: "orcwarrior"
-  };
   if (_.isUndefined(playlist.tags))
     playlist.tags = [];
 

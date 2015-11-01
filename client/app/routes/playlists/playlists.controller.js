@@ -140,7 +140,7 @@ angular.module('musicBucketApp')
   .
   controller('DialogShareController', function DialogShareController($scope, $mdDialog, playlistId) {
     $scope.pId = playlistId;
-    $scope.baseUrl = window.location.href;
+    $scope.baseUrl = window.location.host + window.location.pathname;
     $scope.buildUrl = function () {
       $scope.url = $scope.baseUrl + "?id=" + $scope.pId;
       if ($scope.autoplay) $scope.url += "&" + $scope.autoplay;
