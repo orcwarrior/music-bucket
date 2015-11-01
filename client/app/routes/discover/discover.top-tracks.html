@@ -1,4 +1,3 @@
-
 <div>
   <!-- artist top tracks -->
   <div class="artist-toptracks">
@@ -21,20 +20,23 @@
                radius="48"
                stroke="4"
                animation="easeInOutQuart"></div>
-          <div class="track-infos" ng-style="{'color' : artPalette().Vibrant.getHex()}">
-            #{{$index+1}}
-            <div>{{track.playcount | number}}</div>
-          </div>
+          <div ng-if="topTracks[$index].isLoading" class="progress" ng-style="{'background-color' : artPalette().Vibrant.getHex()}"></div>
+        </div>
+        <div class="track-infos" ng-style="{'color' : artPalette().Vibrant.getHex()}">
+          #{{$index+1}}
+          <div>{{track.playcount | number}}</div>
         </div>
         <div class="track-name" ng-style="{'color' : artPalette().Muted.getHex()}">{{track.name}}</div>
         <div class="track-controls" ng-style="{'color' : artPalette().Muted.getHex() }">
-            <span class="menu-item" ng-click="song.songAction('play', track.artist.name + ' - ' + track.name, $index)">
+            <span class="menu-item" ng-click="songAction('play', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-av-play-circle-fill"></span>
             </span>
-            <span class="menu-item" ng-click="song.songAction('play-next', track.artist.name + ' - ' + track.name, $index)">
+            <span class="menu-item"
+                  ng-click="songAction('play-next', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-content-redo"></span>
             </span>
-            <span class="menu-item" ng-click="song.songAction('enqueue', track.artist.name + ' - ' + track.name, $index)">
+            <span class="menu-item"
+                  ng-click="songAction('enqueue', track.artist.name + ' - ' + track.name, $index)">
               <span class="mdi-action-schedule"></span>
             </span>
         </div>

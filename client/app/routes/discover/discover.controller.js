@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .factory('discoverMetainfos', function ($log, $location, songBuilder, lastFmApi, mbPlayerEngine, musicbrainzApi) {
+  .factory('discoverMetainfos', function ($log, $location, songBuilder, lastFmApi, mbPlayerEngine, musicbrainzApi, discographyCollector) {
     var prevDiscoverMetainfos = undefined;
     var discoverMetainfosHistory = [];
 
     /* neat functions urls:
-    * Get release recordings (tracklist)
-    * http://musicbrainz.org/ws/2/release/40f32c34-097e-454d-aa4b-cb8347105689/?inc=recordings&gmt=json
-    * Get release with tracks by artist id
-    * http://musicbrainz.org/ws/2/release?artist=31dd3369-d9d7-42a4-a586-9029c0520ddd&inc=recordings
-    * */
+     * Get release recordings (tracklist)
+     * http://musicbrainz.org/ws/2/release/40f32c34-097e-454d-aa4b-cb8347105689/?inc=recordings&gmt=json
+     * Get release with tracks by artist id
+     * http://musicbrainz.org/ws/2/release?artist=31dd3369-d9d7-42a4-a586-9029c0520ddd&inc=recordings
+     * */
     function discoverMetainfosEntry(config, discoverInfos, palette) {
       this.config = config;
       this.discoverInfos = discoverInfos;
@@ -69,13 +69,9 @@ angular.module('musicBucketApp')
       this._observeCb = function (changes) {
         if (changes[0].name == "artist") {
           var artist = changes[0].object.artist;
-          if ( artist.mbid )
-          musicbrainzApi.search.release({ getParams : {artist : artist.mbid}}, 30, ['recordings'])
-            .then(function (response) {
-              discoverMetainfosInstance.discoverInfos.albumsMB = response.data;
-            });
+          discoverMetainfosInstance.tmpMetainfos.discography = new discographyCollector(artist.name, artist.mbid);
         }
-        if (changes[0].object.artist && changes[0].object.artistTopAlbums && changes[0].object.artistTopTracks) {
+        if (changes[0].object.artist && changes[0].object.discography && changes[0].object.artistTopTracks) {
           discoverMetainfosInstance.tmpMetainfos.allPrepared = true;
           discoverMetainfosInstance.discoverInfos = discoverMetainfosInstance.tmpMetainfos;
           discoverMetainfosInstance.updateUrlParams();
@@ -110,11 +106,13 @@ angular.module('musicBucketApp')
                 self.tmpMetainfos.artistTopTracks.maxplayscount = response.data.toptracks.track[0].playcount;
               }
             });
-          lastFmApi.artist.getTopAlbums(conf.artist)
-            .then(function (response) {
-              if (response.status == 200 && response.data.topalbums)
-                self.tmpMetainfos.artistTopAlbums = __processAlbums(response.data.topalbums.album);
-            });
+          /*
+           lastFmApi.artist.getTopAlbums(conf.artist)
+           .then(function (response) {
+           if (response.status == 200 && response.data.topalbums)
+           self.tmpMetainfos.artistTopAlbums = __processAlbums(response.data.topalbums.album);
+           });
+           */
         })();
         return this; // chaining
       };
@@ -147,29 +145,15 @@ angular.module('musicBucketApp')
       prevDiscoverMetainfos = this;
       return this;
     };
-    discoverMetainfos.prototype.songAction = function (action, query, idx, discoverProperty) {
-      // if (this.discoverInfos.artistTopTracks)
-      // // All visual stuff:
-      // $scope.artistTopTracks.track[idx].isLoading = true;
-      // storedPlaysCounts[idx] = $scope.artistTopTracks.track[idx].playcount;
-      // $scope.artistTopTracks.track[idx].circleValue = 0;
-      // $timeout(function () {
-      //   setTrackProgress(idx, 0.5);
-      // }, 100);
-      // $timeout(function () {
-      //   setTrackProgress(idx, 1);
-      // }, 500);
-      // $timeout(function () {
-      //   setTrackProgress(idx, 0);
-      // }, 1000);
-      // $timeout(function () {
-      //   setTrackProgress(idx, 1);
-      // }, 1600);
-
+    discoverMetainfos.prototype.songAction = function (action, query, trackIdx, scope) {
+      //scope.$apply(function () {
+      scope.topTracks[trackIdx] = {isLoading: true};
+      //});
       songBuilder.createSong(query)
         .then(function (song) {
-          // $scope.artistTopTracks.track[idx].circleValue = storedPlaysCounts[idx];
-          // $scope.artistTopTracks.track[idx].isLoading = false;
+          scope.$applyAsync(function () {
+            scope.topTracks[trackIdx].isLoading = false;
+          });
 
           switch (action) {
             case "play" :
@@ -213,6 +197,7 @@ angular.module('musicBucketApp')
     var storedPlaysCounts = [];
     var bioAlreadyLoaded = false;
 
+    $scope.topTracks = []; // for UI loading
     // Params metainfos:
     $scope.song = new discoverMetainfos().buildUrlParamsSongPlaceholder();
     $scope.song.requestInfos();
@@ -228,7 +213,8 @@ angular.module('musicBucketApp')
     if (!_.isUndefined($scope.curSong())) {
       $scope.song = new discoverMetainfos($scope.curSong());
       $scope.song.requestInfos();
-    };
+    }
+    ;
 
     $timeout(function paletteChangeHandler() {
       var img = document.querySelector('.artist-col-wrapper #artistImgPalette');
@@ -239,8 +225,8 @@ angular.module('musicBucketApp')
       });
     }, 100);
 
-    $scope.songAction = function (action, query, idx) {
-
+    $scope.songAction = function (action, query, trackObj) {
+      $scope.song.songAction(action, query, trackObj, $scope);
     };
     $scope.orderTopTracks = function (track) {
       var num = parseInt(track.playcount) * (-1);

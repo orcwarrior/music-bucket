@@ -1,6 +1,7 @@
 .discover-artist-col {
   position: relative;
-  height: 100%; min-height: 200px;
+  height: 100%;
+  min-height: 200px;
   //overflow-y: auto; overflow-x: hidden;
   overflow-y: hidden;
   transition: all 0.4s !important; /* COOL! */
@@ -17,7 +18,8 @@
     overflow-y: hidden;
   }
   .artist-col-wrapper {
-    width: 100%; min-height: 100%;
+    width: 100%;
+    min-height: 100%;
     .material-transition();
   }
   #artistImgPalette {
@@ -35,9 +37,11 @@
   }
   & .artist-btn-back-to-root {
     position: absolute;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     z-index: 3;
-    width: 42px; height: 42px;
+    width: 42px;
+    height: 42px;
     background-color: @mainThemeColor;
     & > span {
       color: @grey-200;
@@ -104,11 +108,14 @@
     }
   }
   & .artist-similars {
-    position: relative; top: -6px;
+    position: relative;
+    top: -6px;
     overflow: hidden;
     .material-transition();
-    & > div > img { width: 100%;
-      min-height: 50px;}
+    & > div > img {
+      width: 100%;
+      min-height: 50px;
+    }
     & .similar-name {
       width: 100%;
       overflow: hidden;
@@ -119,6 +126,7 @@
   }
 
 }
+
 .discover-label {
   text-align: right;
   font-size: @font-size-h5;
@@ -139,7 +147,8 @@
     width: 100%;
   }
   & .artist-toptracks-track {
-    position: relative; display: inline-block;
+    position: relative;
+    display: inline-block;
     padding: 2% 1% 0 1%; //4px 0;
     transition: all 0.3s !important;
 
@@ -148,6 +157,7 @@
       transition: all 0.3s !important;
     }
     & .artist-toptracks-circle > svg {
+      overflow: visible !important;
       & > circle {
         stroke: @grey-600;
       }
@@ -156,8 +166,10 @@
       }
     }
     & .track-infos {
-      display: block; position: absolute;
-      top: 50%; bottom: auto;
+      display: block;
+      position: absolute;
+      top: 40%;
+      bottom: auto;
       left: 50%;
       transform: translateY(-50%) translateX(-50%);
       font-size: @font-size-h3;
@@ -166,32 +178,82 @@
       opacity: 1;
       & > div {
         display: block;
-        text-align:center;
+        text-align: center;
         font-size: @font-size-h6;
         transition: all 0.4s !important; /* COOL! */
       }
     }
     & .track-name {
       font-size: @font-size-h6;
-      height: 30px; overflow: hidden;
-      width: 100%; text-align: center;
+      height: 30px;
+      overflow: hidden;
+      width: 100%;
+      text-align: center;
       text-transform: uppercase;
       margin-top: 4px;
     }
-    & .artist-toptracks-circle.loading {
-      animation:spin 5s cubic-bezier(.55,0,.1,1) infinite;
+    & .artist-toptracks-circle + .progress {
+      position: absolute;
+      left: 25%;
+      top: 25%;
+      background-color: @grey-600;
+      border-radius: 50%;
+      width: 50px; height: 50px;
+      animation: pulse 5.5s cubic-bezier(.55, 0, .1, 1) infinite;
+      transform: scale(0.01, 0.01);
+      opacity: 0;
     }
-    @keyframes spin
-    {
-      20% { transform:rotate(360deg); }
-      50% { transform:rotate(-360deg); }
-      75% { transform:rotate(-300eg); }
-      100% { transform:rotate(0deg); }
+    @keyframes pulse {
+      5% {
+        opacity: 0.1;
+        transform: scale(0.1, 0.1);
+      }
+      15% {
+        opacity: 0.9;
+        transform: scale(1.6, 1.6);
+      }
+      28% {
+        opacity: 0;
+        transform: scale(2.4, 2.4);
+      }
+      35% {
+        opacity: 0;
+        transform: scale(0.1, 0.1);
+      }
+      41% {
+        opacity: 0.5;
+        transform: scale(1.4, 1.4);
+      }
+      58% {
+        opacity: 0;
+        transform: scale(2.3, 2.3);
+      }
+      61% {
+        opacity: 0;
+        transform: scale(0.1, 0.1);
+      }
+      65% {
+          opacity: 0;
+          transform: scale(0.1, 0.1);
+        }
+      73% {
+        opacity: 0.9;
+        transform: scale(1.7, 1.7);
+      }
+      87% {
+        opacity: 0;
+        transform: scale(2.3, 2.3);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.1, 0.1);
+      }
     }
   }
   & .artist-toptracks-track .track-controls {
     position: absolute;
-    top: 42%; bottom: auto;
+    top: 42%;
+    bottom: auto;
     left: 50%;
     width: 80%;
     transform: translateY(-50%) translateX(-50%);
@@ -236,9 +298,11 @@
     // bottom: 0;
     // height: 100%;
   }
+
   .discover-album-col {
     height: 100%;
   }
+
   .discover-top-tracks-col {
     height: 100%;
   }
@@ -249,6 +313,7 @@
     overflow-y: hidden;
     height: auto;
   }
+
   .discover-album-col {
     overflow-y: hidden;
     height: auto;

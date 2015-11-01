@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine',
-                 ['ngResource', 'musicBucketAuth', 'LocalStorageModule'])
+                 ['ngResource', 'musicBucketAuth', 'LocalStorageModule', 'angularMoment'])
     .config(function ($httpProvider) {
               $httpProvider.interceptors.push('authInterceptor');
             })
