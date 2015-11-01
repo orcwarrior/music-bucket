@@ -190,6 +190,7 @@ angular.module('musicBucketEngine')
           dstPlayer.playVideo();
         else {
           dstPlayer.loadVideoById(videoId);
+          dstPlayer.mute(videoId);
           dstPlayer.__ytEngineUtils.onBufferCb = onBufferedCb || _.noop;
         }
       };
