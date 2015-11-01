@@ -29,8 +29,8 @@ module.exports = function(req, res) {
 
       // req.headers['Access-Control-Allow-Origin'] = req.headers['origin'];
       // req.headers['Access-Control-Allow-Credentials'] = "true";
-      res.setHeader('Access-Control-Allow-Origin', config.ip);
-      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      // res.setHeader('Access-Control-Allow-Origin', config.ip);
+      // res.setHeader('Access-Control-Allow-Credentials', 'true');
     try {
       proxy.web(req, res, { target: proxyHost });
     }

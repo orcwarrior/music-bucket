@@ -86,7 +86,7 @@
           if (isYoutubePlaylist(this)) {
             if (_.isUndefined(this.entries)) { // still not instanitated - recurency save'us
               _.delay(function () {
-                self.getNext()
+                self.getNext(options)
                   .then(function (next) {
                     ytPromise.resolve(next);
                   });
