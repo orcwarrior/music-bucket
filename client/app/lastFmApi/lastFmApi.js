@@ -126,7 +126,7 @@ angular.module('musicBucketEngine')
           };
           return new lastFmApiRequest(params).promise;
         },
-        getTopAlbums : function (artist, lang, autocorrect, page, limit) {
+        getTopAlbums : function (artist, mbid, lang, autocorrect, page, limit) {
           var params = {
             getParams: {
               'method': 'artist.getTopAlbums',
@@ -134,7 +134,8 @@ angular.module('musicBucketEngine')
               'lang': lang,
               'page' : page,
               'limit' : limit,
-              'autocorrect': autocorrect
+              'autocorrect': autocorrect,
+              'mbid' : mbid
             }
           };
           return new lastFmApiRequest(params).promise;
@@ -142,6 +143,22 @@ angular.module('musicBucketEngine')
         getSimilar: function () {
 
         }
+
+      },
+      album: {
+        getInfo : function (artist, album, mbid, lang, autocorrect) {
+      var params = {
+        getParams: {
+          'method': 'album.getInfo',
+          'artist': artist,
+          'album': album,
+          'lang': lang,
+          'autocorrect': autocorrect,
+          'mbid' : mbid
+        }
+      };
+      return new lastFmApiRequest(params).promise;
+    }
 
       }
     }
