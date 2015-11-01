@@ -7,7 +7,7 @@
     .factory('queueEntry', function () {
       return function queueEntry(song) {
         this.song = song;
-        this.song.preload();
+        // this.song.preload();
       };
     }
   );
