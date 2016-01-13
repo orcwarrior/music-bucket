@@ -18,6 +18,9 @@
           return res;
         }
         function updateMetainfosOnBuffered(event) {
+          // BUGFIX: Metainfos was sended and yt song was founded, not entered and valid metainfos was served
+          if (metainfos.__overwritenByPreparedMetainfos) return;
+
           var videoInfos = mbYoutubePlayer.getInfos(videoId);
           var data = songMetainfosYoutube.extractArtistAndTitle(videoInfos.title || videoInfos);
           metainfos.artist = data.artist;
