@@ -7,52 +7,80 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('virtualEntry', function ($rootScope, $q, entryCommons) {
+    .factory('virtualEntry', function ($rootScope, $q, entryCommons, entryBase) {
 
-      function s4() {
-        return Math.floor((1 + Math.random()
-          ) * 0x10000)
-          .toString(16)
-          .substring(1);
-      }
 
-      function commonInit(self) {
-        self.type = entryCommons.entryType.local;
-        self.songsCount = 1;
-        self.playedCount = 0;
-        self.id = "LFE-" + (function generateGUID() {
-            return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-              s4() + '-' + s4() + s4() + s4();
-          })();
+      var virtualEntryFunc = function virtualEntry(entryName, songs, nextOrder) {
+        var entryId;
+        this.shortDescription = entryName;
+        this.id = entryId = "VIR-" + this.shortDescription;
+        this.type = entryCommons.entryType.virtalPlaylist;
+        this.nextOrder = (nextOrder ? nextOrder : entryCommons.nextOrder.random);
+        this.entries = songs || [];
+        _.each(this.entries, function(song) {song.entryId = entryId; });
+        this.nonPlayedSongs = _.map(this.entries, function(e) {return e.id; });
 
-        self.getNext = function (options) {
-          var deferred = $q.defer();
+        this.getNext = function (options) {
+          var deferred = $q.defer(), song, songId;
           // TODO: Move to player (on-play, store reference to currenty playlist-entry)
-          this.playedCount++;
-          deferred.resolve(this.entries[0]);
-          if (_.isFunction(options.playlistCallback))
-            options.playlistCallback(this.entries[0]);
+          if (this.nextOrder === entryCommons.nextOrder.sequence) {
+            songId = this.nonPlayedSongs.shift();
+            song = _.find(this.entries, _.matcher({id : songId}));
+          } else {
+            songId = _.sample(this.nonPlayedSongs);
+            song = _.find(this.entries, _.matcher({id : songId}));
+            this.nonPlayedSongs = _.without(this.nonPlayedSongs, songId);
+          }
+          if (_.isFunction(song.resolve))
+            song.resolve(function (resolvedSong) {
+              deferred.resolve(resolvedSong);
+              if (!_.isUndefined(options.playlistCallback))
+                options.playlistCallback(resolvedSong);
+            });
+          else {
+            deferred.resolve(song);
+          }
           return deferred.promise;
         };
-        self.updateShortDescription = function () {
-          this.shortDescription = this.entries[0].metainfos.artist + " - " + this.entries[0].metainfos.title;
+        this.getPlayedCount = function () {
+          return this.getSongsCount() - this.nonPlayedSongs.length;
         };
-        self.getPlaylistDescription = function () {
-          self.updateShortDescription();
-          return this.shortDescription;
+        this.getSongsCount = function () {
+          return this.entries.length;
         };
-      } // commonInit
-
-      return function virtualEntry(entryName, songs) {
-        var self = this;
-        commonInit(this);
-        if (_.isUndefined(localSong)) return;
-
-        this.entries = [localSong];
-        // Temporary, pre warm-up name:
-        this.shortDescription = this.entries[0].metainfos.title;
-
-        localSong.entryId = this.id;
       };
+
+      virtualEntryFunc.prototype = new entryBase();
+      virtualEntryFunc.prototype.addSong = function(song) {
+        this.entries.push(song);
+        this.nonPlayedSongs.push(song.id);
+        song.entryId = this.id;
+      };
+      virtualEntryFunc.prototype.__models__ = {
+        db: {
+          base: "virtualEntry",
+          constructorArgs : ['shortDescription', 'entries', 'nextOrder'],
+          pickedFields: [
+            'id',
+            'type',
+            'shortDescription',
+            'nextOrder',
+            'entries']
+        },
+        cookies: {
+          base: "virtualEntry",
+          constructorArgs : ['shortDescription', 'entries', 'nextOrder'],
+          pickedFields: [
+            'id',
+            'type',
+            'shortDescription',
+            'entries',
+            'nextOrder',
+            'playedCount',
+            'nonPlayedSongs'
+          ]
+        }
+      };
+      return virtualEntryFunc;
     });
 })();
