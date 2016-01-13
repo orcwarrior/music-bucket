@@ -10,7 +10,7 @@ angular.module('musicBucketEngine')
     function musicbrainzApiRequestSingle(entity, id, params) {
       params.requestType = REQ_TYPE_SINGLE;
       params.entityId = id;
-      return new musibrainzApiRequestVirtual(entity, params);
+      return new musicbrainzApiRequestVirtual(entity, params);
     }
 
     function musicbrainzApiRequestSearch(entity, params) {
@@ -164,16 +164,22 @@ angular.module('musicBucketEngine')
           setDefaultOptions(queryOpt);
           return new musicbrainzApiRequestSearch("recording", queryOpt, limit).promise;
         },
-        release: function (query, limit, incEntities) {
+        release: function (query, limit, offset, incEntities) {
           setDefaultOptions(query);
-          query.getParams = _.extend(query.getParams, {'inc': incEntities.join('+')});
+          query.getParams = _.extend(query.getParams,
+            {'inc': (_.isUndefined(incEntities)) ? undefined : incEntities.join('+'),
+             'limit': limit,
+             'offset': offset}
+          );
           return new musicbrainzApiRequestSearch("release", query, limit).promise;
         }
       },
       get: {
         release: function (rId, incEntities) {
-          setDefaultOptions(queryOpt);
-          return new musicbrainzApiRequestSingle("release", {release: rId, getParams: {'inc': incEntities.join('+')}});
+          setDefaultOptions({});
+          return new musicbrainzApiRequestSingle("release", rId, {
+            getParams: {'inc': (_.isUndefined(incEntities)) ? undefined : incEntities.join('+')}},
+            {}).promise;
         }
       },
       helper: {
