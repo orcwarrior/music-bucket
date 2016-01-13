@@ -5,7 +5,7 @@
   angular.module('musicBucketEngine')
     .factory('playlistLocalStorage', function (playlistCookieFactory, localStorageService) {
 
-
+                // WEAK AS FUCK, REFACTOR LATER!
                  function storeInLocalstorage(playlist) {
                    localStorageService.clearAll();
                    localStorageService.set('playlist', JSON.stringify(playlistCookieFactory.convertTo(playlist)));
@@ -26,7 +26,7 @@
                    },
                    storeInLocalstorage : function () {
                      storeInLocalstorage(this);
-                     storeInLocalstorage(this);
+                     //storeInLocalstorage(this);
                    }
                 }
                })
