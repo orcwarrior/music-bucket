@@ -23,6 +23,8 @@ module.exports = function(app) {
   app.all('/coverartarchive-api/*', require('./proxy/coverartarchive-api'));
   app.all('/proxy/*', require('./proxy/generic'));
 
+  app.use('/api/songzaLurker/', require('./songzaLurker/test'));
+
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
    .get(errors[404]);
