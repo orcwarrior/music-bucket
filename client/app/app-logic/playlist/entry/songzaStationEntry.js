@@ -3,16 +3,18 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songzaStationEntry', function ($rootScope, $q, song, entryCommons, songCommons, songzaApi) {
-      function commonInit(self) {
-        self.type = entryCommons.entryType.songza;
-        self.entries = [];
-        self.playedCount = 0;
-        self.playedIDs = [];
+    .factory('songzaStationEntry', function ($rootScope, $q, song, entryBase, entryCommons, songCommons, songzaApi) {
 
-        self.init = function (stationId) {
+      var songzaStationFunc = function songzaStationEntry(station) {
+        this.type = entryCommons.entryType.songza;
+        this.entries = [];
+        this.playedCount = 0;
+        this.playedIDs = [];
+
+        this.init = function (stationId) {
           // $rootScope.songza.station.get(stationId)
           // $http.get('/songza-api/station/'+stationId)
+          var self = this;
           songzaApi.station.get(stationId)
             .then(function (response) {
               self.station = response.data;
@@ -23,60 +25,67 @@
         };
         // Returns promise of songSongza (based on base song object)
         function tryGetNewSong(songzaPromise, options) {
-          //$rootScope.songza.station.nextSong(self.id)
-          //$http.get('/songza-api/station/'+self.id+'/next')
+          var self = this;
           songzaApi.station.next(self.id)
             .then(function (response) {
               if (response.status !== 200) {
                 console.warn("Error trying get new songza song: " + response.data);
-                setInterval(tryGetNewSong(songzaPromise, playlistCallback), 1000);
+                setInterval(_.bind(tryGetNewSong, self, songzaPromise, options), 1000);
                 return;
               }
               response = response.data; // TEMPORARY!!!
-              if (_.some(self.playedIDs, function (pID) { return pID == response.song.id;})
-              || (options.forced && self.playedCount < self.songsCount)) {
+              if (_.some(self.playedIDs, function (pID) {
+                  return pID === response.song.id;
+                })
+                || (options.forced && self.playedCount < self.songsCount)) {
                 console.log("Song:", response, "already played!");
-                tryGetNewSong(songzaPromise, options);
+                songzaApi.station.notifyPlay(self.id, response.song.id, false);
+                options.requestsCnt = (options.requestsCnt) ? options.requestsCnt + 1 : 1;
+                console.log("request count: " + options.requestsCnt);
+                if (options.requestsCnt > 10) {
+                  songzaPromise.reject(response);
+                  return true;
+                }
+                _.bind(tryGetNewSong, self, songzaPromise, options)();
+
                 return false;
               }
               self.playedIDs.push(response.song.id);
               self.playedCount = self.playedIDs.length;
               self.updateShortDescription();
 
-              // TODO: As songUnresolved:
               var songSongza = new song(response, songCommons.songType.songza, self.id);
+              // Register event listener - for notifyPlay in songza services...
+              songSongza.engine.listen("onfinish", function (observable, eventType, data) {
+                songzaApi.station.notifyPlay(self.id, data.song.metainfos._songzaId);
+              });
+
               songzaPromise.resolve(songSongza);
               if (!_.isUndefined(options.playlistCallback))
                 options.playlistCallback(songSongza);
               return true;
             },
             /*error callback*/function (error) {
-              console.warn("Error trying get new songza song: " + error);
-              setInterval(tryGetNewSong(songzaPromise, options), 1000);
+              console.warn("Error trying get new songza song: ");
+              console.warn(error);
+              setInterval(_.bind(tryGetNewSong, self, songzaPromise, options), 1000);
             });
 
         }
-
         // options
         // playlistCallback
-        self.getNext = function (options) {
+        this.getNext = function (options) {
           var songzaPromise = $q.defer();
-          tryGetNewSong(songzaPromise, options);
+          _.bind(tryGetNewSong, this, songzaPromise, options)();
           return songzaPromise.promise;
-        }
-        self.updateShortDescription = function () {
+        };
+        this.updateShortDescription = function () {
           if (!_.isUndefined(this.station))
             this.shortDescription = this.station.name;
-          else
-            this.shortDescription = "???";
+        };
+        this.getPlayedCount = function () {
+          return this.playedIDs.length;
         }
-        self.getPlaylistDescription = function () {
-          return this.shortDescription + " (" + this.playedCount + "/" + this.songsCount + ")";
-        }
-      }
-
-      return function songzaStationEntry(station) {
-        commonInit(this);
 
         if (_.isUndefined(station)) return;
 
@@ -87,6 +96,33 @@
 
         this.updateShortDescription();
       };
-    });
+      songzaStationFunc.prototype = new entryBase();
+      songzaStationFunc.prototype.__models__ = {
+        db: {
+          base: "songzaStationEntry",
+          pickedFields: [
+            'id',
+            //'station',
+            'type',
+            'shortDescription',
+            'songsCount'
+            //'entries'
+          ]
+        },
+        cookies: {
+          base: "songzaStationEntry",
+          pickedFields: [
+            'id',
+            //'station',
+            'type',
+            'shortDescription',
+            'songsCount',
+            //'entries',
+            'playedIDs'
+          ]
+        }
+      };
+      return songzaStationFunc;
+    })
 })
 ();
