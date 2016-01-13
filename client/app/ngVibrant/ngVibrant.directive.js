@@ -58,12 +58,22 @@ angular.module('musicBucketApp')
           // DarkMutedAlt(ernative):
           palette.DarkMutedAlt = new Swatch(palette.DarkMuted.rgb, 0);
           palette.DarkMutedAlt.getHsl();
-          palette.DarkMutedAlt.hsl[2] *= 0.98;
           palette.DarkMutedAlt.hsl[1] *= 1.02;
+          palette.DarkMutedAlt.hsl[2] *= 0.98;
           palette.DarkMutedAlt.rgb = window.Vibrant.hslToRgb(
             palette.DarkMutedAlt.hsl[0],
             palette.DarkMutedAlt.hsl[1],
             palette.DarkMutedAlt.hsl[2]);
+
+          // Darker Muted:
+          palette.DarkerMuted = new Swatch(palette.DarkMuted.rgb, 0);
+          palette.DarkerMuted.getHsl();
+          palette.DarkerMuted.hsl[1] *= 1.2;
+          palette.DarkerMuted.hsl[2] *= 0.5;
+          palette.DarkerMuted.rgb = window.Vibrant.hslToRgb(
+            palette.DarkerMuted.hsl[0],
+            palette.DarkerMuted.hsl[1],
+            palette.DarkerMuted.hsl[2]);
 
           return palette;
         }
