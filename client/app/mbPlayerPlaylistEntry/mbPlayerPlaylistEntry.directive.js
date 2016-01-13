@@ -10,7 +10,7 @@ angular.module('musicBucketApp')
       }, // scope will be inherited from parent scope
       link: function (scope, element, attrs) {
         scope.isEntryActive = function(entry) {
-          return !_.isUndefined(mbPlayerEngine.getCurrentSong()) && entry.id === mbPlayerEngine.getCurrentSong().entryId;
+          return !_.isUndefined(mbPlayerEngine.getCurrentSong()) && entry && entry.id === mbPlayerEngine.getCurrentSong().entryId;
         };
         scope.menuAction = function(action) {
           scope.actionsToggled = false;
