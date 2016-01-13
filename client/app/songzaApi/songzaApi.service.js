@@ -60,7 +60,7 @@ angular.module('musicBucketEngine')
 
       /* Running request is debounced by time
        *  Always min. 500ms after last one */
-      var DEBOUNCE_TIME = 500;
+      var DEBOUNCE_TIME = 751;
 
       function debounceRequest() {
         var lastTimestamp = _.last(songzaApiRequestQueryTimestamps);
@@ -117,6 +117,8 @@ angular.module('musicBucketEngine')
         },
         situation: function (query, style) {
           style = "flat-220"
+          return new songzaApiRequest("/search/situation", {getParams: {'style': style, 'query': query, 'limit': limit}}).promise;
+
         },
         station: function (query, limit) {
           return new songzaApiRequest("/search/station", {getParams: {'query': query, 'limit': limit}}).promise;
@@ -182,7 +184,13 @@ angular.module('musicBucketEngine')
         update: undefined,
         addSong: undefined,
         stationSong: undefined,
-        release: undefined
+        release: undefined,
+        // http://songza.com/api/1/station/1708916/song/5419075/notify-play
+        notifyPlay  :function(stationId, songId, skip) {
+          return new songzaApiRequest("/station/:stationId/song/:songId/notify-play",
+            {'stationId': stationId, 'songId': songId, proxy: false,
+            getParams: { 'skip' : (skip ? 1 : undefined)}}).promise;
+        }
       },
       artist: function (artistId) {
 
