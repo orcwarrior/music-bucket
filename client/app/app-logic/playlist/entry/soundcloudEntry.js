@@ -4,10 +4,9 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('soundcloudEntry', function (entryCommons, song, songCommons, $q) {
+    .factory('soundcloudEntry', function (entryCommons, entryBase, song, songCommons, $q) {
 
-
-      return function soundcloudEntry(soundcloudTrackObj) {
+      var soundcloudEntryFunc = function soundcloudEntry(soundcloudTrackObj) {
         var self = this;
         this.id = soundcloudTrackObj.id;
         this.type = entryCommons.entryType.soundcloudTrack;
@@ -30,8 +29,31 @@
           this.playedCount = 1;
           return scPromise.promise;
         };
-      }
-    }
-  )
-  ;
+      };
+      soundcloudEntryFunc.prototype = new entryBase();
+      soundcloudEntryFunc.prototype.__models__ = {
+        db: {
+          base: "soundcloudEntry",
+          pickedFields: [
+            'id',
+            'type',
+            'shortDescription',
+            'songsCount',
+            'entries']
+        },
+        cookies: {
+          base: "soundcloudEntry",
+          pickedFields: [
+            'id',
+            'type',
+            'shortDescription',
+            'songsCount',
+            'entries',
+            'playedIDs'
+          ]
+        }
+      };
+
+      return soundcloudEntryFunc;
+    })
 })();
