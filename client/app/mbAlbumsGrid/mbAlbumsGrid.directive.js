@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .directive('mbAlbumsGrid', function ($log) {
+  .directive('mbAlbumsGrid', function ($log, albumEntryBuilder, mbPlayerEngine) {
     return {
       templateUrl: 'app/mbAlbumsGrid/mbAlbumsGrid.html',
       restrict: 'EA',
       scope: {
         albums: '=albums',
-        themeColor: '=themeColor'
+        themeColor: '=themeColor',
+        moreInfosAlbum: '=moreInfosAlbum'
       },
       link: function (scope, element, attrs) {
         scope.artBg = 'http://i.imgur.com/iTEi7Vn.png';
@@ -24,6 +25,13 @@ angular.module('musicBucketApp')
           $log.info("New albums arriven: ");
           $log.info(newVal);
         });
+        scope.$watch('moreInfosAlbum', function (newVal, oldVal) {
+
+          _.each(scope.albums, function (album, idx) {
+            album.__index = idx;
+          });
+
+        });
         scope.albumMoreInfos = function (evt, albumObj) {
           if (scope.selectedAlbum) return; // TODO: Link to an album
 
@@ -31,8 +39,10 @@ angular.module('musicBucketApp')
           var topAlbum = element[0].querySelector('#topAlbum');
           var moreInfosBG = element[0].querySelector('.mb-albums-more-infos-bg');
 
+          srcEl.style.height = srcEl.getBoundingClientRect().width + 'px';
           __resetOldSelectedAlbumStyle(scope.selectedAlbumEl);
 
+          albumObj.getInfos();
           scope.selectedAlbum = albumObj;
           if (scope.selectedAlbumEl !== srcEl) {
             __setAlbumArtStyle(evt.target, topAlbum);
@@ -49,6 +59,14 @@ angular.module('musicBucketApp')
           scope.selectedAlbum = undefined;
           scope.selectedAlbumEl = undefined;
         };
+        scope.openAlbumMoreInfos = function(album) {
+          scope.moreInfosAlbum = album.name;
+        };
+        scope.addAlbumToPlaylist = function(album) {
+          var albumEntry = new albumEntryBuilder(album);
+          mbPlayerEngine.getPlaylist().addEntry(albumEntry);
+        };
+        /* private */
         function __setAlbumArtStyle(albumEl, topAlbumEl) {
           // fix by margin-bottom:
           var marginFix = albumEl.getBoundingClientRect().height - topAlbumEl.getBoundingClientRect().height;
