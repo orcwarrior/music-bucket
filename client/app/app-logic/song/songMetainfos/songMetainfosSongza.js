@@ -14,6 +14,8 @@
         this.genere = src.song.genre;
         this.url = src.listen_url;
         this.getUrl = function () { return this.url;};
+
+        this._songzaId = src.song.id;
       }
       songMetainfosSongza.prototype = new songMetainfos();
       return songMetainfosSongza;
