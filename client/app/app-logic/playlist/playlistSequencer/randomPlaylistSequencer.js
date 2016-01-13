@@ -13,14 +13,17 @@
         var result = [0];
 
         for (var i = 0; i < entries.length; ++i) {
-          result.push((entries[i].songsCount - entries[i].playedCount) + _.last(result));
+          result.push((entries[i].getSongsCount() - entries[i].getPlayedCount()) + _.last(result));
         }
         result.shift();
         return result;
       };
       return {
         name: 'random',
-        iconClass: 'icon-shuffle',
+        iconClass: 'mdi-av-shuffle',
+        setup : function () {},
+        unset : function () {},
+        songChange : function () {},
         getNext: function (playlistEntries, entriesCount, options) {
           // random next entry (balanced):
           var entriesRanges = fillEntriesRanges(playlistEntries);

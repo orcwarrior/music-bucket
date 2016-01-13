@@ -11,7 +11,10 @@
           };
       return {
         name : 'default',
-        iconClass : 'icon-loop',
+        iconClass : 'mdi-av-repeat',
+        setup : function () {},
+        unset : function () {},
+        songChange : function () {},
         getNext : function (playlistEntries, entriesCount, options) {
           // play next from last multiple-entry?
           // if (!_.isNull(hlp.lastPlayedEntry)) {
