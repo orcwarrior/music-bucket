@@ -315,6 +315,10 @@ Flow.prototype = {
         _args.unshift( args_form_last_task );
       }
 
+      console.log("Parallel args: " + _args);
+      console.log("Last-Parallel args: " + args_form_last_task);
+      console.log("Parallel task: " + task);
+
       task.apply( self, _args );
     });
 
