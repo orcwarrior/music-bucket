@@ -19,11 +19,14 @@
       <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
       <link rel="stylesheet" href="bower_components/ng-scrollbar/dist/ng-scrollbar.css" />
       <!-- endbower -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" >
     <!-- endbuild -->
     <!-- build:css({.tmp,client}) app/app.css -->
     <link rel="stylesheet" href="app/app.css">
       <!-- injector:css -->
       <!-- endinjector -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet" async>
     <!-- endbuild -->
   </head>
   <body ng-app="musicBucketApp">
@@ -103,15 +106,18 @@
           <script src="app/app-logic/converters/db/playlistDBFactory.js"></script>
           <script src="app/app-logic/converters/db/playlistEntryDBFactory.js"></script>
           <script src="app/app-logic/converters/db/songDBFactory.js"></script>
+          <script src="app/app-logic/converters/modelConverter.js"></script>
+          <script src="app/app-logic/dataProcessors/discographyCollector.js"></script>
           <script src="app/app-logic/error/playbackError.js"></script>
           <script src="app/app-logic/helpers/angular-audio-metadata-parser/angular-audio-metadata-parser.js"></script>
+          <script src="app/app-logic/helpers/hashGenerator.js"></script>
           <script src="app/app-logic/helpers/node.flow.js"></script>
           <script src="app/app-logic/helpers/observable.js"></script>
           <script src="app/app-logic/helpers/youtubeApiHelper.js"></script>
-          <script src="app/app-logic/infosProcessors/discographyCollector.js"></script>
+          <script src="app/app-logic/playlist/entry/albumEntryBuilder.js"></script>
+          <script src="app/app-logic/playlist/entry/entryBase.js"></script>
           <script src="app/app-logic/playlist/entry/entryCommons.js"></script>
           <script src="app/app-logic/playlist/entry/localEntry.js"></script>
-          <script src="app/app-logic/playlist/entry/playlistEntryBase.js"></script>
           <script src="app/app-logic/playlist/entry/songzaStationEntry.js"></script>
           <script src="app/app-logic/playlist/entry/soundcloudEntry.js"></script>
           <script src="app/app-logic/playlist/entry/virtualEntry.js"></script>
@@ -121,6 +127,7 @@
           <script src="app/app-logic/playlist/playlistSequencer/defaultPlaylistSequencer.js"></script>
           <script src="app/app-logic/playlist/playlistSequencer/playlistSequencers.js"></script>
           <script src="app/app-logic/playlist/playlistSequencer/randomPlaylistSequencer.js"></script>
+          <script src="app/app-logic/playlist/playlistSequencer/repeatOnePlaylistSequencer.js"></script>
           <script src="app/app-logic/queue/queue.js"></script>
           <script src="app/app-logic/queue/queueEntry.js"></script>
           <script src="app/app-logic/smSoundConverter/SMSoundConverter.js"></script>
@@ -139,9 +146,12 @@
           <script src="app/app-logic/song/songMetainfos/songMetainfosSoundcloud.js"></script>
           <script src="app/app-logic/song/songMetainfos/songMetainfosYoutube.js"></script>
           <script src="app/app-logic/song/songSeeker.js"></script>
+          <script src="app/app-logic/song/songSeekerYoutube.js"></script>
           <script src="app/app-logic/song/songUnresolved.js"></script>
           <script src="app/app-logic/tracksHistory/tracksHistory.js"></script>
           <script src="app/app-logic/tracksHistory/tracksHistoryEntry.js"></script>
+          <script src="app/app-logic/utils/mbScoreUtils.js"></script>
+          <script src="app/app-logic/utils/mbStringUtils.js"></script>
           <script src="app/commons/decorators/logDecorator.js"></script>
           <script src="app/commons/directives/dragAndDrop.js"></script>
           <script src="app/commons/directives/moment.js"></script>
@@ -157,6 +167,7 @@
           <script src="app/commons/js/JavaScript-ID3-Reader/src/stringutils.js"></script>
           <script src="app/discover-toptrack/discover-toptrack.directive.js"></script>
           <script src="app/lastFmApi/lastFmApi.js"></script>
+          <script src="app/mbAlbumTrack/mbAlbumTrack.directive.js"></script>
           <script src="app/mbAlbumsGrid/mbAlbumsGrid.directive.js"></script>
           <script src="app/mbPictureMosaic/mbPictureMosaic.directive.js"></script>
           <script src="app/mbPlayer/mbPlayer.directive.js"></script>
