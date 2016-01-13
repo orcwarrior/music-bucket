@@ -4,25 +4,16 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('localEntry', function ($rootScope, $q, entryCommons) {
+    .factory('localEntry', function ($rootScope, $q, entryBase, entryCommons, hashGenerator) {
 
-      function s4() {
-        return Math.floor((1 + Math.random()
-        ) * 0x10000)
-          .toString(16)
-          .substring(1);
-      }
+      var localEntryFunc = function localEntry(localSong) {
+        var self = this;
+        this.type = entryCommons.entryType.local;
+        this.songsCount = 1;
+        this.playedCount = 0;
+        this.id = "LFE-" + hashGenerator.generateId();
 
-      function commonInit(self) {
-        self.type = entryCommons.entryType.local;
-        self.songsCount = 1;
-        self.playedCount = 0;
-        self.id = "LFE-" + (function generateGUID() {
-          return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-            s4() + '-' + s4() + s4() + s4();
-        })();
-
-        self.getNext = function (options) {
+        this.getNext = function (options) {
           var deferred = $q.defer();
           // TODO: Move to player (on-play, store reference to currenty playlist-entry)
           this.playedCount++;
@@ -31,18 +22,9 @@
             options.playlistCallback(this.entries[0]);
           return deferred.promise;
         };
-        self.updateShortDescription = function () {
+        this.updateShortDescription = function () {
           this.shortDescription = this.entries[0].metainfos.artist + " - " + this.entries[0].metainfos.title;
         };
-        self.getPlaylistDescription = function () {
-          self.updateShortDescription();
-          return this.shortDescription;
-        };
-      } // commonInit
-
-      return function localEntry(localSong) {
-        var self = this;
-        commonInit(this);
         if (_.isUndefined(localSong)) return;
 
         this.entries = [localSong];
@@ -51,5 +33,32 @@
 
         localSong.entryId = this.id;
       };
+      localEntryFunc.prototype = new entryBase();
+      localEntryFunc.__models__ = {
+        db: {
+          base: "localEntry",
+          pickedFields: [
+            'id',
+            'station',
+            'type',
+            'shortDescription',
+            'songsCount',
+            'entries']
+        },
+        cookies: {
+          base: "localEntry",
+          pickedFields: [
+            'id',
+            'station',
+            'type',
+            'shortDescription',
+            'songsCount',
+            'entries',
+            'playedIDs'
+          ]
+        }
+      };
+
+      return localEntryFunc;
     });
 })();
