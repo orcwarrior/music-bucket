@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('youtubeEntry', function (entryCommons, song, songCommons, youtubeApiHelper, $q) {
+    .factory('youtubeEntry', function (entryCommons, entryBase, song, songCommons, youtubeApiHelper, $q) {
 
       // NOTE: Strange bug, regex instances cannot be again matched:
       //var playlistRegex = /[?&]list=([\S?&]+)($|[?&])/g;
@@ -41,7 +41,7 @@
         return entry.url.match(playlistRegex()) !== null; // no playlist string, so it's single video
       }
 
-      return function youtubeEntry(url) {
+      var youtubeEntryFunc = function youtubeEntry(url) {
         var self = this;
         this.url = url;
         if (_.isObject(url)) {
@@ -59,8 +59,16 @@
         if (isYoutubePlaylist(this)) {
           youtubeApiHelper.getPlaylistEntries(this.id)
             .then(function (entries) {
-              self.entries = _.map(entries, function (entry) { return new song(entry.snippet.resourceId.videoId, songCommons.songType.youtube); });
+              self.entries = _.map(entries, function (entry) {
+                return new song(entry.snippet.resourceId.videoId, songCommons.songType.youtube);
+              });
               self.songsCount = entries.length;
+
+              if (_.isUndefined(self.shortDescription))
+                self.shortDescription = "Playlista youtube: " + self.id;
+              _.map(self.entries, function (song) {
+                song.entryId = self.id;
+              });
             });
           getShortDescription(this)
             .then(function (response) {
@@ -70,15 +78,10 @@
           this.entries = [new song(this.id, songCommons.songType.youtube, this.id)];
         }
 
-        this.shortDescription = "Playlista youtube: " + this.id;
-        _.map(this.entries, function (song) {
-          song.entryId = self.id;
-        });
-
         this.getPlaylistDescription = function () {
-          if (isYoutubePlaylist(this)) return this.shortDescription + "(" + this.playedCount + "/" + this.songsCount + ")";
+          if (isYoutubePlaylist(this)) return youtubeEntryFunc.prototype.getPlaylistDescription.call(this);
           else return this.entries[0].metainfos.getSongDescription();
-        }
+        };
         this.getNext = function (options) {
           var ytPromise = $q.defer();
           var selectedEntry;
@@ -93,15 +96,16 @@
               }, 500);
               return ytPromise.promise;
             }
-
             var idx = Math.round(Math.random() * this.entries.length);
             selectedEntry = this.entries[idx];
           } else {
             selectedEntry = this.entries[0];
           }
           // Already played?
-          if (_.some(this.playedIDs, function (pID) { return pID == selectedEntry.metainfos.id; })
-          && (!options.force && this.playedIDs.length !== this.songsCount)) {
+          if (_.some(this.playedIDs, function (pID) {
+              return pID == selectedEntry.metainfos.id;
+            })
+            && (!options.force && this.playedIDs.length !== this.songsCount)) {
             console.log("Video:", selectedEntry.metainfos.id, "already played!");
             if (this.playedIDs.length >= this.songsCount)
               ytPromise.reject();
@@ -117,7 +121,34 @@
             options.playlistCallback(selectedEntry);
           return ytPromise.promise;
         };
-      }
+      };
+
+      youtubeEntryFunc.prototype = new entryBase();
+      youtubeEntryFunc.prototype.__models__ = {
+        db: {
+          base: "youtubeEntry",
+          constructorArgs: ['url'],
+          pickedFields: [
+            'id',
+            'url',
+            'type',
+            'shortDescription',
+            'songsCount']
+        },
+        cookies: {
+          base: "youtubeEntry",
+          constructorArgs: ['url'],
+          pickedFields: [
+            'id',
+            'url',
+            'type',
+            'playedIDs',
+            'playedCount',
+            'shortDescription',
+            'songsCount']
+        }
+      };
+      return youtubeEntryFunc;
     }
   )
   ;
