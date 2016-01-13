@@ -11,7 +11,8 @@
           local: "typeLocal",
           spotify: "typeSpotify",
           youtube: "typeYoutube",
-          soundcloud: "typeSoundcloud"
+          soundcloud: "typeSoundcloud",
+          unresolved: "typeUnresolved"
         }
       };
     });
