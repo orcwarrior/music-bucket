@@ -1,5 +1,10 @@
 
-<div class="artist-col-wrapper"
+<div class="player-loading center-block" ng-show="!infosLoaded.artist">
+  <div class="loader" ng-style="{'border-color' : artPalette().Vibrant.getHex()}">
+    <div class="loader-inner" ng-style="{'background-color' : artPalette().Vibrant.getHex()}"></div>
+  </div>
+</div>
+<div class="artist-col-wrapper" ng-show="infosLoaded.artist"
      ng-style="{'background-color' : artPalette().DarkMuted.getHex()}">
   <!-- artist image-->
   <img id="artistImgPalette" ng-src="{{'/proxy/'+song.tmpMetainfos.artist.image[2]['#text']}}"
@@ -10,6 +15,11 @@
          ng-click="song.backToRootMetainfos()"
          ng-style="{'background-color' : artPalette().Vibrant.getHex()}">
       <span class="mdi-image-navigate-before"></span>
+    </div>
+    <div class="artist-btn-goto-remixer" ng-if="song.infos.remixer.artist"
+         ng-click="requestLinkedAristInfos(song.infos.remixer.artist, song.infos.remixer.title)"
+         ng-style="{'background-color' : artPalette().Vibrant.getHex()}">
+      <div>R</div>
     </div>
     <div class="artist-image"
          ng-style="{'background-image':'url(' + song.discoverInfos.artist.image[4]['#text'] + ')' }">
@@ -26,18 +36,18 @@
       {{song.discoverInfos.artist.stats.playcount | number}}
     </h4>
 
-    <div class="plays-label" ng-style="{'color' : artPalette().DarkMuted.getHex()}">plays</div>
+    <div class="plays-label" ng-style="{'color' : artPalette().DarkerMuted.getHex()}">plays</div>
 
     <div class="artist-generes" layout="row" layout-align="space-around center">
       <div ng-repeat="tag in song.discoverInfos.artist.tags.tag | limitTo:4"
-           ng-style="{'color' : artPalette().DarkVibrant.getHex()}">
+           ng-style="{'color' : artPalette().DarkerMuted.getHex()}">
         {{tag.name}}
       </div>
     </div>
 
   </div>
   <div class="artist-similars row">
-    <div class="col-xs-3 nopadding" ng-click="song.requestInfos({ 'artist' : art.name, 'album' : '', 'title' : ''})"
+    <div class="col-xs-3 nopadding" ng-click="requestLinkedAristInfos(art.name)"
          ng-repeat="art in song.discoverInfos.artist.similar.artist | limitTo: 4">
       <img ng-src="{{art.image[2]['#text']}}"/>
 
