@@ -7,10 +7,11 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('playlistSequencers', function (defaultPlaylistSequencer, randomPlaylistSequencer) {
+    .factory('playlistSequencers', function (defaultPlaylistSequencer, randomPlaylistSequencer, repeatOnePlaylistSequencer) {
                  return { 'default' : defaultPlaylistSequencer,
                           'random' : randomPlaylistSequencer,
-                           toArray : function() { return [defaultPlaylistSequencer, randomPlaylistSequencer];}
+                          'repeatOne' : repeatOnePlaylistSequencer,
+                           toArray : function() { return [defaultPlaylistSequencer, randomPlaylistSequencer, repeatOnePlaylistSequencer];}
                  };
 })
 })();
