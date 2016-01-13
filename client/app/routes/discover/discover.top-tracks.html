@@ -5,8 +5,8 @@
 
     <div class="artist-toptracks-tracks-wrapper"
          layout="row" layout-align="space-around center" layout-wrap>
-      <div class="artist-toptracks-track"
-           ng-repeat="track in song.discoverInfos.artistTopTracks.track | orderBy:orderTopTracks | limitTo: 12">
+      <div class="artist-toptracks-track" draggable="true"
+           ng-repeat="track in song.discoverInfos.artistTopTracks.track">
         <div style="position: relative">
           <div class="artist-toptracks-circle"
                ng-class="{'loading' : song.isLoading }"
@@ -28,15 +28,15 @@
         </div>
         <div class="track-name" ng-style="{'color' : artPalette().Muted.getHex()}">{{track.name}}</div>
         <div class="track-controls" ng-style="{'color' : artPalette().Muted.getHex() }">
-            <span class="menu-item" ng-click="songAction('play', track.artist.name + ' - ' + track.name, $index)">
+            <span class="menu-item" ng-click="songAction('play', track.name, $index)">
               <span class="mdi-av-play-circle-fill"></span>
             </span>
             <span class="menu-item"
-                  ng-click="songAction('play-next', track.artist.name + ' - ' + track.name, $index)">
+                  ng-click="songAction('play-next', track.name, $index)">
               <span class="mdi-content-redo"></span>
             </span>
             <span class="menu-item"
-                  ng-click="songAction('enqueue', track.artist.name + ' - ' + track.name, $index)">
+                  ng-click="songAction('enqueue', track.name, $index)">
               <span class="mdi-action-schedule"></span>
             </span>
         </div>

@@ -17,16 +17,54 @@
 
 <div class="col-md-6 col-sm-12 col-lg-4 discover-top-tracks-col"
      ng-style="{'background-color' : artPalette().DarkMutedAlt.getHex()}">
-  <div ng-include="'app/routes/discover/discover.top-tracks.html'">
+  <div class="player-loading center-block" ng-show="!infosLoaded.artistTopTracks">
+    <div class="loader" ng-style="{'border-color' : artPalette().Vibrant.getHex()}">
+      <div class="loader-inner" ng-style="{'background-color' : artPalette().Vibrant.getHex()}"></div>
+    </div>
+  </div>
+  <div ng-include="'app/routes/discover/discover.top-tracks.html'"
+    ng-show="infosLoaded.artistTopTracks">
   </div>
 </div>
 
-<div class="col-md-6 col-sm-12 col-lg-4 nopadding discover-album-col"
+<div class="col-md-12 col-sm-12 col-lg-4 nopadding discover-album-col"
      ng-style="{'background-color' : artPalette().DarkMuted.getHex()}">
-  <div class="artist-albums">
-    <div class="discover-label" ng-style="{'color' : artPalette().Vibrant.getHex()}">Albums</div>
 
-    <mb-albums-grid albums="song.discoverInfos.discography.albums"
-                    theme-color="artPalette().Vibrant.getHex()"></mb-albums-grid>
+  <div class="player-loading center-block" ng-show="!infosLoaded.discography">
+    <div class="loader" ng-style="{'border-color' : artPalette().Vibrant.getHex()}">
+      <div class="loader-inner" ng-style="{'background-color' : artPalette().Vibrant.getHex()}"></div>
+    </div>
+  </div>
+
+  <div class="artist-albums" ng-show="infosLoaded.discography">
+    <div class="discover-label" ng-style="{'color' : artPalette().Vibrant.getHex()}">Releases</div>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-6 col-lg-12 nopadding">
+        <mb-albums-grid albums="song.discoverInfos.discography.albums"
+                        more-infos-album="song.infos.selectedAlbum"
+                        theme-color="artPalette()"></mb-albums-grid>
+      </div>
+      <div class="col-sm-12 col-md-6 col-lg-12 nopadding" ng-show="song.infos.selectedAlbum">
+        <div class="album-title"
+             ng-style="{'background-color' : artPalette().Vibrant.getHex()}">
+          <h4 ng-style="{'color' : artPalette().DarkMuted.getHex()}">
+            {{song.infos.selectedAlbum}}
+          </h4>
+          <md-button ng-click="addAlbumToPlaylist(selectedAlbum)">
+            <md-tooltip md-direction="top">
+              Add album to playlist
+            </md-tooltip>
+            <span class="mdi mdi-av-playlist-add"></span>
+            Add
+          </md-button>
+          <div style="clear: both;"></div>
+        </div>
+        <div class="album-tracks">
+          <mb-album-track palette="artPalette" track="track" artist="{{song.discoverInfos.artist.name}}" album="{{song.infos.selectedAlbum}}"
+                          class="album-track" ng-repeat="track in selectedAlbum.tracks"></mb-album-track>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
