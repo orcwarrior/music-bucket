@@ -36,12 +36,13 @@ angular.module('musicBucketApp')
     }
 
     var mobileHTML5 = undefined;
+
     function _isMobileHTML5() {
       // based on SM2 functionality;
       if (!_.isUndefined(mobileHTML5)) return mobileHTML5;
       var ua = navigator.userAgent,
         is_iDevice = ua.match(/(ipad|iphone|ipod)/i), isAndroid = ua.match(/android/i), isIE = ua.match(/msie/i);
-        mobileHTML5 = (ua.match(/(mobile|pre\/|xoom)/i) || is_iDevice || isAndroid);
+      mobileHTML5 = (ua.match(/(mobile|pre\/|xoom)/i) || is_iDevice || isAndroid);
       return mobileHTML5;
     }
 
@@ -62,7 +63,12 @@ angular.module('musicBucketApp')
       this.tracksHistory = new tracksHistory();
 
       this.getSongById = function (id) {
-        return songsRegistry[id];
+        var curSong = this.getCurrentSong();
+        if (!_.isUndefined(curSong) && curSong.metainfos.id === id) return curSong;
+        var queueSong = this.queue.getSongById(id);
+        if (!_.isUndefined(queueSong)) return queueSong;
+        var historySong = this.tracksHistory.getSongById(id);
+        if (!_.isUndefined(historySong)) return historySong;
       };
       /*
        * Play
@@ -129,6 +135,8 @@ angular.module('musicBucketApp')
       this.nextTrack = function (saveToHistory) {
         $log.info('mbPlayerEngine: Next track...');
         var _player = this;
+        // run playlist sequence event:
+        this.playlist.playlistSequencer.songChange();
 
         // Get next song from queue:
         if (!this.queue.hasNext()) {
@@ -215,13 +223,13 @@ angular.module('musicBucketApp')
       this.queueSong = function (song) {
         $log.info('mbPlayerEngine: Queue: new song in queue!');
         $log.info(song);
-        songsRegistry[song.metainfos.id] = song;
+        // songsRegistry[song.metainfos.id] = song;
         this.queue.enqueue(song);
       };
       this.queueSongNext = function (song) {
         $log.info('mbPlayerEngine: Queue: new song in queue (play-next)!');
         $log.info(song);
-        songsRegistry[song.metainfos.id] = song;
+        // songsRegistry[song.metainfos.id] = song;
         this.queue.enqueueNext(song);
       };
       this.pushNextSongToQueue = function (onLoadCallback) {
@@ -291,6 +299,9 @@ angular.module('musicBucketApp')
       /* Helpers */
       this.moveCurrentSongToHistory = function (newSong, saveToHistory) {
         if (!_.isUndefined(this.getCurrentSong()) && this.getCurrentSong() !== newSong) {
+          // fire song "onfinish" event:
+          this.getCurrentSong().engine.fireEvent("onfinish", {song: this.getCurrentSong(), skipped: false});
+
           $log.info('mbPlayerEngine: stoping current track for playing new one (and add it to history)');
           if (_.isUndefined(saveToHistory) || saveToHistory === true)
             this.tracksHistory.storeSong(this.getCurrentSong());
@@ -441,6 +452,9 @@ angular.module('musicBucketApp')
           }
         },
         onfinish: function () {
+          // fire song "onfinish" event:
+          if (!_.isUndefined(mbPlayerEngineInstance.getCurrentSong()))
+            mbPlayerEngineInstance.getCurrentSong().engine.fireEvent("onfinish", {song: mbPlayerEngineInstance.getCurrentSong(), skipped: false});
           mbPlayerEngineInstance.nextTrack();
         }
       },
