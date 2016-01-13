@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('playlistCookieFactory', function (playlistSequencers, playlistEntryCookieFactory) {
+    .factory('playlistCookieFactory', function ($injector, playlistSequencers, playlistEntryCookieFactory, modelConverter) {
 
       var fromCookieModel = function (_playlist, cookie) {
         _playlist.id = cookie.id;
@@ -28,12 +28,12 @@
       }
       var toCookieModel = function (_playlist) {
         return {
-          id: _playlist.id,
-          author: _playlist.author,
-          authorName: _playlist.authorName,
-          name: _playlist.name,
-          songsCount: _playlist.songsCount,
-          sampleSongs: _playlist.sampleSongs,
+          id:               _playlist.id,
+          author:           _playlist.author,
+          authorName:       _playlist.authorName,
+          name:             _playlist.name,
+          songsCount:       _playlist.songsCount,
+          sampleSongs:      _playlist.sampleSongs,
           visibility      : _playlist.visibility,
           tags            : _playlist.tags,
           imageUrl        : _playlist.imageUrl,
@@ -47,12 +47,11 @@
 
       return {
         convertFrom: function (cookieModel) {
-          var _playlist = {};// new playlistFuncs();
-          fromCookieModel(_playlist, cookieModel);
-          return _playlist;
+          return modelConverter.convertFromModel(cookieModel, 'cookies');
         },
         convertTo: function (playlist) {
-          return toCookieModel(playlist);
+          return modelConverter.convertToModel(playlist, 'cookies');
+          //return toCookieModel(playlist);
         }
       };
     });
