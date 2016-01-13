@@ -1,0 +1,68 @@
+& .album-track {
+  position: relative;
+  display: block;
+  line-height: 2.5em;
+  width: 100%;
+  & > div {
+    vertical-align: top;
+    // display: table-cell;
+    opacity: 0.8;
+  }
+  & .track-nr {
+    height: 100%;
+    width: 1.5em;
+    text-align: right;
+    float: left;
+  }
+  & .track-name {
+    position:relative;
+    padding-left: 1em;
+    width: auto;
+    opacity: 1;
+    //position: absolute;
+    top: 0;
+    z-index: 10;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  & .track-dur {
+    float: right;
+    display: inline-block;
+    clear: none;
+    margin-right: 48px;
+  }
+  & .menu-wrapper {
+    position: absolute;
+    display: block;
+    overflow: hidden;
+    opacity: 1;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    & > .menu-circle-wrapper {
+      position: relative;
+      width: 100%; /* desired width */
+      & > .menu-circle {
+      }
+      & > .menu-circle.ng-enter,
+      & > .menu-circle.ng-leave.ng-leave-active {
+      }
+      & > .menu-circle.ng-enter.ng-enter-active,
+      & > .menu-circle.ng-leave {
+      }
+    }
+    & > .menu-circle-wrapper:before {
+      content: "";
+      display: block;
+      padding-top: 100%; /* initial ratio of 1:1*/
+    }
+    & .menu-items-wrapper {
+      margin-top: -3px;
+      & > .menu-item {
+      }
+    }
+  }
+
+}

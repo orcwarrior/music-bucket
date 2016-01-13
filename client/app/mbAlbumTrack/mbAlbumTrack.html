@@ -1,0 +1,52 @@
+<div ng-style="{'color' : palette().Muted.getHex()}">
+  <div class="track-dur">{{track.durationView}}</div>
+
+  <div class="track-nr" ng-if="isPlaying()" ng-style="{'color' : palette().Vibrant.getHex()}">
+                <span class="mdi mdi-av-play-arrow"
+                      ng-style="{'color' : palette().Vibrant.getHex()}">
+                </span>
+  </div>
+  <div class="track-nr" ng-if="!_isPlaying">{{track.index}}.</div>
+
+  <div class="track-name" ng-style="_isPlaying && {'color' : palette().Vibrant.getHex()}">{{track.name}}</div>
+
+  <div class="menu-wrapper">
+    <div class="menu-circle-wrapper">
+      <div class="menu-circle" ng-if="actionsToggled"
+           ng-style="{'background-color' : palette().DarkerMuted.getHex()}"></div>
+    </div>
+    <div class="menu-items-wrapper" ng-if="actionsToggled"
+         ng-style="{'background-color' : palette().DarkerMuted.getHex()}">
+                <span class="menu-item" ng-click="trackAction('play')">
+                  <md-tooltip md-direction="top">
+                    Play</md-tooltip>
+                <span class="mdi-av-play-circle-fill"
+                         ng-style="{'color' : palette().Muted.getHex()}">
+                </span>
+                </span>
+                <span class="menu-item" ng-click="trackAction('play-next')">
+                  <md-tooltip md-direction="top">
+                    Play next
+                  </md-tooltip>
+                <span class="mdi-content-redo"
+                         ng-style="{'color' : palette().Muted.getHex()}">
+                </span>
+                </span>
+                <span class="menu-item" ng-click="trackAction('queue')">
+                  <md-tooltip md-direction="top">
+                    Enqueue
+                  </md-tooltip>
+                <span class="mdi-action-schedule"
+                         ng-style="{'color' : palette().Muted.getHex()}">
+                </span>
+                </span>
+    </div>
+    <div dropdown is-open="playlistItemDropdown"
+         style="position: absolute; right: 1em; top: 0; z-index: 3; cursor: pointer">
+
+      <span class="mdi mdi-navigation-menu" ng-click="actionsToggled = !actionsToggled"
+               ng-style="{'color' : palette().Muted.getHex()}">
+      </span>
+    </div>
+  </div>
+</div>
