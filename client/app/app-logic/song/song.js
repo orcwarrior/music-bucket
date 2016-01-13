@@ -5,7 +5,7 @@
 (function () {
   "use strict";
   angular.module('musicBucketEngine')
-    .factory('song', function (songCommons, songMetainfosConstructor, songEngineConstructor, songCatalogueInfos, songAlternatives, songControllsInterface) {
+    .factory('song', function (songCommons, songMetainfosConstructor, songEngineConstructor, songCatalogueInfos, songAlternatives, songControllsInterface, hashGenerator) {
 
       var songDefaultConfig = {
           alternates : null
@@ -13,6 +13,7 @@
 
       var song = function song(response, type, myEntryId, alternates) {
         /* initialization */
+        this.id = hashGenerator.generateId();
         this.type = type;
         this.entryId = myEntryId; // Anti-circullar: id only
         // It's ugly :(
@@ -51,6 +52,27 @@
         this.getUsedEngine = function() {
           if (!_.isUndefined(this.usedAlt)) return this.usedAlt.engine;
           else return this.engine;
+        }
+      };
+
+      song.prototype.__models__ = {
+        db: {
+          base: "song",
+          constructorArgs : ['metainfos', 'type', 'entryId'],
+          pickedFields: [
+            'id',
+            'type',
+            'entryId',
+            'metainfos']
+        },
+        cookies: {
+          base: "song",
+          constructorArgs : ['metainfos', 'type', 'entryId'],
+          pickedFields: [
+            'id',
+            'type',
+            'entryId',
+            'metainfos']
         }
       };
       song.prototype = new songControllsInterface(function control() {
