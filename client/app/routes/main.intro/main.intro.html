@@ -9,11 +9,13 @@
     </a>
     <!-- Local -->
     <a class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.local">
-      <img class="img-in-col" alt="Local storage"  src="http://icons.iconarchive.com/icons/graphicloads/100-flat/256/folder-icon.png"/>
+      <img class="img-in-col" alt="Local storage"
+           src="http://icons.iconarchive.com/icons/graphicloads/100-flat/256/folder-icon.png"/>
     </a>
     <!-- YouTube -->
     <a class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.youtube">
-      <img class="img-in-col" alt="Youtube" src="https://cdn3.iconfinder.com/data/icons/leaf/256/youtube.png"/>
+      <img class="img-in-col" alt="Youtube"
+           src="http://i0.wp.com/www.mytechskool.com/wp-content/uploads/2013/08/YouTube-New-Logo.png?fit=1024%2C1024"/>
     </a>
     <!-- SoundCloud -->
     <a class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.soundcloud">
@@ -25,13 +27,81 @@
 </div>
 <div class="col-md-12">
   <hr>
-  Najnowsze poprawki <b>(06.10.2015)</b><br/>
+  <h4> UPDATE:(06.01.2016) <br/>
+    Songza Lurker Lurks!</h4>
+  Znaleziono <b>{{songzaLurkerStats.allStations | number}}</b> stacje songzy! <br/>
+  (Ukonczono: {{songzaLurkerStats.completedStations | number}}; Ukończono niepełnie:
+  {{songzaLurkerStats.abandonedStations | number}};
+  Nadal nie przetworzono: {{songzaLurkerStats.unresolvedStations | number}};
+  Obecnie przetwarzane: {{songzaLurkerStats.procStations}}; <br/>
+  Wymagało to do tej pory <b>{{songzaLurkerStats.lurkerRequests | number}}</b> zapytań do serwisu songzy, mamy obecnie
+  {{songzaLurkerStats.lurkerLoop}} iteracje lurkera. <br/>
+  Znaleziono także {{songzaLurkerStats.situationsCnt | number}} sytuacji songzy. <br/>
+  Natomiast razem odkryto <b>{{songzaLurkerStats.songsCnt | number}}</b> utworów. <br/>
+  A średni % odnalezionych utworów dla wszystkich stacji to: <b>{{songzaLurkerStats.avgProgress}}%</b> (dla czesciowo
+  przetworzonych: <b>{{songzaLurkerStats.avgAbandonedProgress}}%</b>)
+
+  <div class="row">
+    <div class="col-md-12 col-lg-8">
+      <span class="text-info" style="opacity: 0.55">(tydzien temu)</span>
+      <span class="text-info" style="opacity: 1">(przed wczoraj)</span>
+      <span class="text-primary" style="opacity: 0.55">(wczoraj)</span>
+      <span class="text-primary">(dziś)</span>
+      <span class="text-danger">(ostatnia aktualizacja)</span>
+
+    </div>
+    <div class=" col-md-12 col-lg-8 nopadding">
+      <div class="progress">
+        <div class="progress-bar progress-bar-info"
+             style="width: {{songzaLurkerStats.progressArchiveSteps.week}}%; opacity:0.35">
+          <span class="sr-only"></span>
+        </div>
+        <div class="progress-bar progress-bar-info"
+             style="width: {{songzaLurkerStats.progressArchiveSteps.daybefore}}%;">
+          <span class="sr-only"></span>
+        </div>
+        <div class="progress-bar progress-bar-default"
+             style="width: {{songzaLurkerStats.progressArchiveSteps.yesterday}}%; opacity:0.35">
+          <span class="sr-only"></span>
+        </div>
+        <div class="progress-bar progress-bar-default" style="width: {{songzaLurkerStats.progressArchiveSteps.today}}%">
+          <span class="sr-only"></span>
+        </div>
+        <div class="progress-bar progress-bar-danger" style="width: {{songzaLurkerStats.progressArchiveSteps.now}}%">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="float: right">
+    ({{songzaLurkerStats.resolvedSongs | number}} / {{songzaLurkerStats.allSongs | number}})
+  </div>
+  <div class="row">
+  </div>
+  <i>stan na: {{songzaLurkerStats.timestamp}}</i>
+  <br/>
+  <br/>
+  Najnowsze poprawki <b>(13.01.2016)</b><br/>
   <b>
-  * Poprawki drobnych błędów, discovery nadal WiP. <br/>
+  * Poprawienie wyszukiwania utworów po podstawowych informacjach (artysta - tytuł) na youtube - nowy algorytm, do testów
+    kolejno ujednolicenie systemu oceniania z tym z soundcloud oraz rozbudowa o ocenienianie dł. utworu.<br/>
   </b>
+  * Kolejne dużo drobnych poprawek (Zaznaczanie odtw. utworu w albumie; buforowanie kolejnego utworu; refaktoring
+  wpisów w playliscie)<br/>
+  * Kompletna przebudowa sposobu generowania modeli obiektów do zapisu (baza danych, cookiesy) - jeszcze nie wszystkie
+  typy wpisów na playliscie obsługiwane. <br/>
+  * Mnóstwo poprawek discovery (ładowanie odtw. albumu; loading paneli discovery; ładowanie disc. gdy ten sam artysta)
+  <br/>
+  * Dodawanie albumu w całości do playlisty (jako songUnresoved <3 ) <br/>
+  * Tryb odtwarzania: Powtarzanie jednego utworu. <br/>
+  * Poprawki discovery - albumy pobierane z 2 API (Last.fm i MB) - łączone mega zaawansowanym algorytmem. <br/>
+  * Discovery wyświetla tracklisty albumów, pozwala na odtworzenie wybranych utworów. <br/>
+
+  * Poprawki drobnych błędów, discovery nadal WiP. <br/>
   * SoundManager2 (odtwarzanie songza/soundcloud) - poprawka odtwarzania kolejnych utworów na mobilnym chrome *.* <br/>
   * Discover!!! (such feature wow) - WiP - (obecnie korekta kolorów i refaktoring mocno) <br/>
-  * Poprawki błedów: zapisywanie playlist (za 1 razem); odtwarzanie bezpośrednio z youtube; poprawki widoków wyszukiwań; <br/>
+  * Poprawki błedów: zapisywanie playlist (za 1 razem); odtwarzanie bezpośrednio z youtube; poprawki widoków wyszukiwań;
+  <br/>
 
   * Dodanie widoku szczegółów stacji songza (z możliwością szybkiego podejmowania akcji).<br/>
   * Dodanie podobnego widoku dla klipów z youtube'a. <br/>
@@ -75,6 +145,9 @@
   * Skróty klawiaturowe do aplikacji <br/>
   <hr/>
   Nastepne poprawki: <br/>
+  * "LoveBox"/Biblioteka ulubionych - możliwość zbierania ulubionych utworów z playlist - zapis do playlisty, podglad
+  itd. <br/>
+  * Obsługa spotify.<br/>
   * Bardziej zaawansowane zapisywanie obecnego stanu odtwarzacza w sesji lokalnej: zapamietywanie obecnego stanu
   kolejki, historii odtwarzanych, obecnego utworu i obecnie odtwarzanej sekundy(?) <br/>
   <hr/>
