@@ -13,9 +13,11 @@ angular.module('musicBucketApp')
           // console.log("Mouse moved: " + scope.volume); //console.log(ev);
           var vol = parseInt(thumbContainer.css("left"));
           // scope.volume = vol;
+          vol = vol * (vol/75);
+          vol = Math.min(vol, 100);
           mbPlayerEngine.setVolume(vol);
         })
-        scope.volume = mbPlayerEngine.getVolume() || 90;
+        scope.volume = mbPlayerEngine.getVolume() || 100;
 
       }
     };
