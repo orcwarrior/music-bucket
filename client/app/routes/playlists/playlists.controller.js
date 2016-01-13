@@ -12,6 +12,7 @@ angular.module('musicBucketApp')
     function _prepareSelectedPlaylist() {
       if (_.isUndefined(pickedPlaylist)) return;
       mbPlayerEngine.theaterMode.enabled = !_.isUndefined(theaterMode);
+      pickedPlaylist.id = pickedPlaylist._id;
       $scope.loadPlaylist(pickedPlaylist);
       if (autoplay) {
         mbPlayerEngine.clearQueue();
