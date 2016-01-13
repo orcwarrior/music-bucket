@@ -28,7 +28,8 @@
           }
           this.enqueue = function (song) {
             // create queueEntry, add to entries array
-            this.entries.push(new queueEntry(song));
+            if (!_.isUndefined(song))
+              this.entries.push(new queueEntry(song));
           }
           this.enqueueNext = function (song) {
             var head = new queueEntry(song);
@@ -42,11 +43,23 @@
               if (next.song.buffer()) console.log("Next song in queue buffered!", next.song.shared);
             }
           }
-          this.getLenght = function () { return this.entries.length;}
+          this.getLenght = function () {
+            return this.entries.length;
+          }
           this.removeBySongId = function (songId) {
-            this.entries = _.filter(this.entries, function (entry) { return entry.song.metainfos.id !== songId; });
+            this.entries = _.filter(this.entries, function (entry) {
+              return entry.song.metainfos.id !== songId;
+            });
           };
-          this.clear = function () { this.entries = []; }
+          this.getSongById = function (songId) {
+            var queueEntry = _.find(this.entries, function (entry) {
+              return entry.song.metainfos.id === songId;
+            });
+            return _.isUndefined(queueEntry) ? undefined : queueEntry.song;
+          };
+          this.clear = function () {
+            this.entries = [];
+          }
 
           return this;
         }
