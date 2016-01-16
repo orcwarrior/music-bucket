@@ -37,7 +37,7 @@
           var score = 0;
           if (nDescription.indexOf(metainfos.artist.toLowerCase()) > -1) score += 5;
           if (nDescription.indexOf(metainfos.title.toLowerCase()) > -1) score += 5;
-          if (nDescription.indexOf(metainfos.album.toLowerCase()) > -1) score += 10;
+          if (metainfos.album && nDescription.indexOf(metainfos.album.toLowerCase()) > -1) score += 10;
           return score;
         }
       }
