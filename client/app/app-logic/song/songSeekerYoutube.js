@@ -3,7 +3,7 @@
  */
 
 angular.module('musicBucketEngine')
-  .factory('songSeekerYoutube', function ($q, youtubeApi, mbScoreUtils, mbStringUtils, moment, song, songCommons) {
+  .factory('songSeekerYoutube', function ($q, youtubeApi, mbScoreUtils, mbStringUtils, moment, songCommons) {
 
 
     function _scoreYoutubeAddYearInfo(snippet) {
@@ -17,7 +17,6 @@ angular.module('musicBucketEngine')
         return 1.0;
       else
         return 0.8;
-
     }
 
     function _pickYoutubeEntry(entries, metainfos) {
@@ -30,7 +29,8 @@ angular.module('musicBucketEngine')
           val: (mbScoreUtils.scoreTitle(nTitle, metainfos)
           + mbScoreUtils.scoreDescription(nDescription, metainfos) / 2),
           key: entry.id.videoId,
-          'entry': entry
+          'entry': entry,
+          type: songCommons.songType.youtube
         };
         scoreMap.push(entryScore);
       });
@@ -42,7 +42,7 @@ angular.module('musicBucketEngine')
       // TODO: Grab some first entries based on val distribution, get them informations about duration
       // and compare it with metainfos duration, update score
       // additionaly try to
-      return highestScore.entry;
+      return highestScore;
     }
 
     return function songSeekerYoutube(metainfos, searchQuery) {
@@ -52,8 +52,7 @@ angular.module('musicBucketEngine')
         .then(function (response) {
           var pickedEntry = _pickYoutubeEntry(response.data.items, metainfos);
           if (pickedEntry) {
-            var ytSong = new song(pickedEntry, songCommons.songType.youtube);
-            deferred.resolve(ytSong);
+            deferred.resolve(pickedEntry);
           }
         });
       return deferred.promise;

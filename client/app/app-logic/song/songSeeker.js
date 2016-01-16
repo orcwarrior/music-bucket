@@ -3,7 +3,7 @@
  */
 
 angular.module('musicBucketEngine')
-  .factory('songSeeker', function ($injector, $q, songCommons, youtubeApi, soundcloudApi, songSeekerYoutube) {
+  .factory('songSeeker', function ($injector, $q, song, songCommons, youtubeApi, soundcloudApi, songSeekerYoutube, songSeekerSoundcloud) {
     function buildSearchQuery(metainfos) {
       if (!_.isUndefined(metainfos.artist)) {
         return metainfos.artist + " " + metainfos.title;
@@ -21,7 +21,13 @@ angular.module('musicBucketEngine')
         filterMetainfos(prepMetainfos));
       if (prepMetainfos.artist && prepMetainfos.title)
         song.metainfos.__overwritenByPreparedMetainfos = true;
+      return song;
+    }
 
+    function _pickBestSong(foundedSongs, prepMetainfos) {
+      var bestResult = _.chain(foundedSongs).sortBy('val').reverse().first().value();
+      var createdSong = new song(bestResult.entry,  bestResult.type);
+      return processFoundedSong(createdSong, prepMetainfos);
     }
 
     var SEEKING_SERVICES = 2;
@@ -33,29 +39,19 @@ angular.module('musicBucketEngine')
       var deferred = $q.defer();
 
       new songSeekerYoutube(metainfos, searchQuery)
-        .then(function (song) {
-          foundedSongs.push(song);
-          processFoundedSong(song, metainfos);
-          if (pickFirst) deferred.resolve(song);
+        .then(function (songResult) {
+          foundedSongs.push(songResult);
           if (++resolvedServices >= SEEKING_SERVICES)
-            deferred.resolve(foundedSongs);
+            deferred.resolve(_pickBestSong(foundedSongs, metainfos));
         });
-      soundcloudApi.search.track(searchQuery, 5)
-        .then(function (response) {
-          if (response.data.length > 0) {
-            var scSong = new song(response.data[0], songCommons.songType.soundcloud);
-            // scSong.metainfos = _.extend(scSong.metainfos,
-            //   filterMetainfos(metainfos));
-            foundedSongs.push(scSong);
 
-            if (pickFirst) deferred.resolve(scSong);
-          }
+      new songSeekerSoundcloud(metainfos, searchQuery)
+        .then(function (songResult) {
+          foundedSongs.push(songResult);
           if (++resolvedServices >= SEEKING_SERVICES)
-            deferred.resolve(foundedSongs);
+            deferred.resolve(_pickBestSong(foundedSongs, metainfos));
         });
 
       return deferred.promise;
     };
-  }
-)
-;
+  });
