@@ -214,7 +214,9 @@ angular.module('musicBucketApp')
         }
       };
       this.addToPlaylist = function (entry) {
-        this.getPlaylist().addEntry(entry)
+        if (_.isUndefined(entry) || _.isNull(entry))
+          return $log.warn("mbPlayerEngine: tried to add null/undef to playlist!");
+        this.getPlaylist().addEntry(entry);
         //broadcast playlist
         $rootScope.$broadcast('player=playlist', _playlist);
       };
@@ -393,10 +395,10 @@ angular.module('musicBucketApp')
         });
       },
       // Entry based controlls:
-      entryPlay: function (entry) {
+      entryPlay: function (entry, songId) {
         mbPlayerEngineInstance.setIsWorking(true);
         if (_.isFunction(entry.getNext)) {
-          entry.getNext({force: true})
+          entry.getNext({force: true, 'songId': songId})
             .then(function (song) {
               mbPlayerEngineInstance.playSong(song, true);
               mbPlayerEngineInstance.playlist.storeInLocalstorage();
@@ -406,10 +408,10 @@ angular.module('musicBucketApp')
             });
         }
       },
-      entryPlayNext: function (entry) {
+      entryPlayNext: function (entry, songId) {
         mbPlayerEngineInstance.setIsWorking(true);
         if (_.isFunction(entry.getNext)) {
-          entry.getNext({force: true})
+          entry.getNext({force: true, 'songId': songId})
             .then(function (song) {
               mbPlayerEngineInstance.queue.enqueueNext(song);
               mbPlayerEngineInstance.playlist.storeInLocalstorage();
@@ -417,10 +419,10 @@ angular.module('musicBucketApp')
             });
         }
       },
-      entryEnqueue: function (entry) {
+      entryEnqueue: function (entry, songId) {
         mbPlayerEngineInstance.setIsWorking(true);
         if (_.isFunction(entry.getNext)) {
-          entry.getNext({force: true})
+          entry.getNext({force: true, 'songId': songId})
             .then(function (song) {
               mbPlayerEngineInstance.queue.enqueue(song);
               mbPlayerEngineInstance.playlist.storeInLocalstorage();
