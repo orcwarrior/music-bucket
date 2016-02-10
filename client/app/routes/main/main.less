@@ -1,14 +1,19 @@
-body, html, .content-column{
-  overflow-x: hidden;
-}
 
+@player-1st-col-width: 380px;
+@player-width: @player-1st-col-width;
+@player-entry-details-width: 290px;
+@player-width-max: @player-width + @player-entry-details-width;
+body, html, .content-column {
+  overflow: hidden;
+}
 
 .footer {
-    text-align: center;
-    padding: 30px 0;
-    margin-top: 70px;
-    border-top: 1px solid #E5E5E5;
+  text-align: center;
+  padding: 30px 0;
+  margin-top: 70px;
+  border-top: 1px solid #E5E5E5;
 }
+
 .content-column {
   margin-top: @navbar-height;
   height: auto;
@@ -16,48 +21,95 @@ body, html, .content-column{
   bottom: 0;
   right: 0;
   top: 0;
-//  padding-left: 30px; padding-right: 30px;
+  //  padding-left: 30px; padding-right: 30px;
 }
-.nopadding {
-  padding-left: 0; padding-right: 0;
-}
-a {
-  cursor: pointer;
-  &:hover {
-  text-decoration: none;
-  }
-}
-img.img-in-col {
-  width: 100%; height: 100%;
 
+.nopadding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+img.img-in-col {
+  width: 100%;
+  height: 100%;
+
+}
+
+.mb {
+  height: 100%;
+}
+
+.mb-body {
+  padding-top: @navbar-height;
+  //top: @navbar-height;
+  height: 100%;
+  overflow-y: visible;
 }
 
 /* non-mobile screens: */
 .col-mb-player {
-  width: 380px;
+  position: relative;
+  float: left;
+  min-width: @player-width;
   overflow: hidden;
+  height: 100%;
+  min-height: 50px;
+  width: @player-width;
+  .material-transition();
+  &.details-opened {
+    width: @player-width-max;
+    .material-transition();
+  }
 }
 
 .col-offset-body {
-  left: 0px;
-  margin-left: 380px;
+  overflow: hidden;
   overflow-y: auto;
+  min-height: 50px;
+  height: 100%;
 }
+
 /* mobile screens */
 @media screen and (max-width: @screen-xs-max) {
+  body {
+    overflow-y: auto;
+  }
+
   .col-mb-player {
     width: 100%;
-    margin-top: @navbar-height;
+    height: auto; // height auto so it will base on playlist height
   }
 
   .col-offset-body {
     margin-left: 0;
-    // padding-left: 15px;
-    // padding-right: 15px;
+    clear: both;
+    width: 100%;
+    height: auto;
+    overflow-y: auto;
   }
+
   .content-column {
     position: static;
     margin-top: 0;
+  }
+}
+
+/* biger than mobile */
+@media screen and (min-width: @screen-sm-min) {
+  .col-offset-body {
+    position: relative;
+    top: 0; // w/o that offset will stay here after resizing to xs view
+  }
+
+  .col-offset-body > ui-view {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: auto;
+    bottom: 0;
+    top: 0;
+    // discovery view fix - otherwise wasn't scaled for height:
+    // http://stackoverflow.com/a/3050064
   }
 }
 
