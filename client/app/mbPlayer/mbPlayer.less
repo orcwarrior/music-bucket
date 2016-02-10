@@ -1,16 +1,11 @@
+
 #musicPlayerContainer {
-  position: fixed;
+  position: relative;
   background-color: @grey-900;
 //  top: 90px;
-  left: 0;
   /*bottom: 0;*/
-  padding-top: @navbar-height;
   height: 100%;
 
-  #musicPlayerContainer {
-    .transition(all 0.5s);
-    .transition-timing-function(ease-out);
-  }
   #musicPlayerBase.theatermode {
     position: fixed;
     left: 0; right: 0;
@@ -35,13 +30,40 @@
     height: @mainPlayerHeight;
   }
 
+  & .mb-playlist-scroll {
+    position: absolute !important;
+    display: block;
+    top: 365px;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    &.theatermode {
+      top: 0;
+      bottom: 6px;
+      &.playlist-closed {
+        visibility: hidden;
+      }
+      &.playlist-closed .ngsb-scrollbar {
+        display: none !important;
+      }
+      & .ngsb-container {
+        //height: 100%;
+      }
+    }
+  }
+  & mb-player-entry-details {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 0;
+    height: 100%;
+    .material-transition();
+    &.details-opened {
+      left: @player-width;
+      .material-transition();
+    }
+  }
 }
-
-#musicPlayerColumn {
-  bottom: 0;
-  top: 0;
-}
-
 
 #musicPlayerBase.theatermode.useridle .player-controls,
 #musicPlayerBase.theatermode.useridle player-progressbar
@@ -54,7 +76,7 @@
 /* NON PHONE SCREEN */
 @media screen and (min-width: @screen-sm-min) {
   #musicPlayerContainer {
-    width: 380px;
+    width: @player-width;
   }
 }
 
@@ -141,16 +163,36 @@
   }
 }
 
+.playlist-expander, .playlist-collapser {
+  position: absolute;
+  display: inline-block;
+  z-index: 100;
+  bottom: 6px;
+  & > span {
+    vertical-align: bottom;
+    color: white;
+    background-color: @mainThemeColorAlt;
+  }
+}
+.playlist-expander.ng-hide, .playlist-collapser.ng-hide {
+  bottom: -220px;
+}
+
 /* PHONE SCREEN */
 @media screen and (max-width: @screen-xs-max) {
   #musicPlayerContainer {
     padding: 0;
-    position: static;
+    height: auto;
     & .cur-track-info {
       width: 100% !important;
     }
     & .cur-track-innerwrapper {
       // bottom: 15px !important;
+    }
+    & .mb-playlist-scroll {
+      position: static !important;
+      min-height: 158px;
+      height: 316px;
     }
   }
   /*
