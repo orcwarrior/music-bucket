@@ -8,17 +8,24 @@
 
       var soundcloudEntryFunc = function soundcloudEntry(soundcloudTrackObj) {
         var self = this;
-        this.id = soundcloudTrackObj.id;
+          this.id = soundcloudTrackObj.id;
+        if (soundcloudTrackObj.type !== "eSoundcloudTrack") {
+          this.entries = [new song(soundcloudTrackObj, songCommons.songType.soundcloud, this.id)];
+        } else {
+          this.entries = [];
+        }
         this.type = entryCommons.entryType.soundcloudTrack;
         this.songsCount = 1;
         this.playedIDs = [];
         this.playedCount = 0;
         this._scObj = soundcloudTrackObj;
 
-        this.entries = [new song(soundcloudTrackObj, songCommons.songType.soundcloud, this.id)];
 
         this.getPlaylistDescription = function () {
           return this.entries[0].metainfos.getSongDescription();
+        };
+        this.getTitle = function () {
+          return this.shortDescription || this.entries[0].metainfos.getSongDescription();
         };
         this.getNext = function (options) {
           var scPromise = $q.defer();
@@ -34,6 +41,7 @@
       soundcloudEntryFunc.prototype.__models__ = {
         db: {
           base: "soundcloudEntry",
+          constructorArgs: ['$this'],
           pickedFields: [
             'id',
             'type',
@@ -43,6 +51,7 @@
         },
         cookies: {
           base: "soundcloudEntry",
+          constructorArgs: ['$this'],
           pickedFields: [
             'id',
             'type',
