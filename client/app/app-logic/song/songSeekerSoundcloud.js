@@ -9,18 +9,22 @@ angular.module('musicBucketEngine')
     function _pickSoundcloudEntry(entries, metainfos) {
       var scoreMap = [];
       var highestScore = {val: 0, entry: undefined};
+      var nMetaTitle = mbStringUtils.normalizeString(metainfos.title);
       _.each(entries, function (entry) {
         var nDescription = entry.description || "";
         var nTitle = entry.title || "";
         var entryScore = {
-          val: (mbScoreUtils.scoreTitle(nTitle, metainfos)
+          val: (mbScoreUtils.scoreTitle(nTitle, metainfos, 3)
           + mbScoreUtils.scoreDescription(nDescription, metainfos) / 2),
           key: entry.id,
           'entry': entry,
           type: songCommons.songType.soundcloud
         };
-        entryScore.val *= 1.4;
+        entryScore.val *= 1.2;
         entryScore.val += 10;
+        // remix fix:
+        if (nMetaTitle.indexOf("remix") == -1 && entry.track_type === "remix")
+          entryScore.val *= 0.5;
         scoreMap.push(entryScore);
       });
 

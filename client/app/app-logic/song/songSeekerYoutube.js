@@ -22,7 +22,7 @@ angular.module('musicBucketEngine')
     function _pickYoutubeEntry(entries, metainfos) {
       var scoreMap = [];
       var highestScore = {val: 0, entry: undefined};
-      _.each(entries, function (entry) {
+      _.each(entries, function (entry, idx) {
         var nDescription = entry.snippet.description;
         var nTitle = entry.snippet.title;
         var entryScore = {
@@ -32,11 +32,14 @@ angular.module('musicBucketEngine')
           'entry': entry,
           type: songCommons.songType.youtube
         };
+        entryScore.val *= 1 - (idx * 5 / entries.length);
         scoreMap.push(entryScore);
       });
 
       scoreMap = _.chain(scoreMap).sortBy('val').reverse().take(10).value();
-      highestScore = _.chain(scoreMap).each(function(score) {
+      console.log("Youtube scores: ");
+      console.warn(scoreMap);
+      highestScore = _.chain(scoreMap).each(function (score) {
         score.val *= _scoreYoutubeAddYearInfo(score.entry.snippet);
       }).sortBy('val').last().value();
       // TODO: Grab some first entries based on val distribution, get them informations about duration
