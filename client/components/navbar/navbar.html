@@ -23,7 +23,7 @@
       <ul class="nav navbar-nav navbar-right">
 
         <li><a ng-click="showCheatSheet()" class="mdi-hardware-keyboard"></a></li>
-        <li ng-class="{active: player.theaterMode.enabled}"ng-click="player.theaterMode.enabled = !player.theaterMode.enabled">
+        <li ng-class="{active: player.theaterMode.enabled}"ng-click="toggleTeatherMode()">
           <a class="mdi-hardware-tv">
             <md-tooltip md-direction="bottom">
               Theater mode
