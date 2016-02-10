@@ -10,13 +10,13 @@
       // Hacky o,O http://stackoverflow.com/a/1608546
       function construct(constructor, args) {
         /*
-        function dummyConstructor() {
-          return constructor.apply(this, args);
-        }
+         function dummyConstructor() {
+         return constructor.apply(this, args);
+         }
 
-        dummyConstructor.prototype = constructor.prototype;
-        return new dummyConstructor();
-        */
+         dummyConstructor.prototype = constructor.prototype;
+         return new dummyConstructor();
+         */
         // BUGFIX: Strange o,O
         if (_.isArray(args)) args.unshift(undefined);
         return new (Function.prototype.bind.apply(constructor, args));
@@ -31,11 +31,15 @@
         if (obj._base) { // is proper-store model, or just raw object?
           var constructor = $injector.get(obj._base);
           var conversionDef = constructor.prototype.__models__[modelName];
+
           convertedExt = _.pick(obj, conversionDef.pickedFields);
 
           // construct based on service name, with additional args (by fields) if present:
           if (conversionDef.base) {
             var args = _.map(conversionDef.constructorArgs, function (fieldName) {
+              // this arg special case:
+              if (fieldName === "$this")
+                return convertedExt;
               return convertedExt[fieldName];
             });
             if (args.length === 0) args = undefined;
@@ -55,7 +59,7 @@
             }
             else if (_.isObject(val))
               convertedExt[key] = convertFromModel(val, modelName);
-          })
+          });
           _.extendOwn(converted, convertedExt);
         } else {
           return obj; // return original
@@ -97,15 +101,15 @@
           this.modelName = modelName;
         },
         convertFromModel: function (model, modelName) {
-          console.log("convertFromModel");
+          console.info("convertFromModel");
           var obj = convertFromModel(model, modelName || this.modelName);
-          console.log(obj);
+          console.info(obj);
           return obj;
         },
         convertToModel: function (obj, modelName) {
-          console.log("convertToModel");
+          console.info("convertToModel");
           var model = convertToModel(obj, modelName || this.modelName);
-          console.log(model);
+          console.info(model);
           return model;
         }
       };
