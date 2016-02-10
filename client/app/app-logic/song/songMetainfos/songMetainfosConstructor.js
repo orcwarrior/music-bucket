@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songMetainfosConstructor', function (songCommons, songMetainfosSongza, songMetainfosYoutube, songMetainfosLocal, songMetainfosSoundcloud) {
+    .factory('songMetainfosConstructor', function (songCommons, songMetainfosSongza, songMetainfosYoutube, songMetainfosLocal, songMetainfosUnresolved, songMetainfosSoundcloud) {
 
       return function (response, type) {
         switch (type) {
@@ -16,6 +16,8 @@
             return new songMetainfosYoutube(response);
           case (songCommons.songType.soundcloud):
             return new songMetainfosSoundcloud(response);
+          case (songCommons.songType.unresolved):
+                return new songMetainfosUnresolved(response);
         }
       }
 
