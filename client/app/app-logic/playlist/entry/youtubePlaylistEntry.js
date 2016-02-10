@@ -4,11 +4,9 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('youtubeEntry', function (entryCommons, entryBase, song, songCommons, youtubeApiHelper, $q) {
+    .factory('youtubePlaylistEntry', function (entryCommons, entryBase, song, songCommons, youtubeApiHelper, $q) {
 
-      // NOTE: Strange bug, regex instances cannot be again matched:
-      //var playlistRegex = /[?&]list=([\S?&]+)($|[?&])/g;
-      //var videoRegex = /[?&]v=([\S?&]+)($|[?&])/g;
+
       function playlistRegex() {
         return /[?&]list=([\S?&#]+?)($|[?&#])/g;
       }
@@ -16,7 +14,6 @@
       function videoRegex() {
         return /[?&]v=([\S?&#]+?)($|[?&#])/g;
       }
-
       function extractIdFromUrl(url) {
         match = playlistRegex().exec(url);
         if (_.isNull(match)) {
@@ -32,16 +29,7 @@
         return youtubeApiHelper.getPlaylist(plEntry.id);
       }
 
-      function isYoutubePlaylist(entry) {
-        if (!_.isUndefined(entry.type)) {
-          if (entry.type === entryCommons.entryType.youtubePlaylist) return true;
-          else if (entry.type === entryCommons.entryType.youtubeVideo) return false;
-          else throw new Error("isYoutubePlaylist function called on non-yt entry!");
-        }
-        return entry.url.match(playlistRegex()) !== null; // no playlist string, so it's single video
-      }
-
-      var youtubeEntryFunc = function youtubeEntry(url) {
+      var youtubePlaylistEntryFunc = function youtubePlaylistEntry(url) {
         var self = this;
         this.url = url;
         if (_.isObject(url)) {
@@ -50,13 +38,12 @@
         }
         else {
           this.id = extractIdFromUrl(url);
-          this.type = isYoutubePlaylist(this) ? entryCommons.entryType.youtubePlaylist : entryCommons.entryType.youtubeVideo;
+          this.type = entryCommons.entryType.youtubePlaylist;
         }
         this.songsCount = 1; // TODO: Playlist case.
         this.playedIDs = [];
         this.playedCount = 0;
-
-        if (isYoutubePlaylist(this)) {
+        {
           youtubeApiHelper.getPlaylistEntries(this.id)
             .then(function (entries) {
               self.entries = _.map(entries, function (entry) {
@@ -74,33 +61,26 @@
             .then(function (response) {
               self.shortDescription = response.data.items[0].snippet.title;
             });
-        } else {
-          this.entries = [new song(this.id, songCommons.songType.youtube, this.id)];
         }
 
         this.getPlaylistDescription = function () {
-          if (isYoutubePlaylist(this)) return youtubeEntryFunc.prototype.getPlaylistDescription.call(this);
-          else return this.entries[0].metainfos.getSongDescription();
+          return youtubePlaylistEntryFunc.prototype.getPlaylistDescription.call(this);
         };
         this.getNext = function (options) {
           var ytPromise = $q.defer();
           var selectedEntry;
           // Resolve after metainfos gathered???
-          if (isYoutubePlaylist(this)) {
-            if (_.isUndefined(this.entries)) { // still not instanitated - recurency save'us
-              _.delay(function () {
-                self.getNext(options)
-                  .then(function (next) {
-                    ytPromise.resolve(next);
-                  });
-              }, 500);
-              return ytPromise.promise;
-            }
-            var idx = Math.round(Math.random() * this.entries.length);
-            selectedEntry = this.entries[idx];
-          } else {
-            selectedEntry = this.entries[0];
+          if (_.isUndefined(this.entries)) { // still not instanitated - recurency save'us
+            _.delay(function () {
+              self.getNext(options)
+                .then(function (next) {
+                  ytPromise.resolve(next);
+                });
+            }, 500);
+            return ytPromise.promise;
           }
+          var idx = Math.round(Math.random() * this.entries.length);
+          selectedEntry = this.entries[idx];
           // Already played?
           if (_.some(this.playedIDs, function (pID) {
               return pID == selectedEntry.metainfos.id;
@@ -123,10 +103,10 @@
         };
       };
 
-      youtubeEntryFunc.prototype = new entryBase();
-      youtubeEntryFunc.prototype.__models__ = {
+      youtubePlaylistEntryFunc.prototype = new entryBase();
+      youtubePlaylistEntryFunc.prototype.__models__ = {
         db: {
-          base: "youtubeEntry",
+          base: "youtubePlaylistEntry",
           constructorArgs: ['url'],
           pickedFields: [
             'id',
@@ -136,7 +116,7 @@
             'songsCount']
         },
         cookies: {
-          base: "youtubeEntry",
+          base: "youtubePlaylistEntry",
           constructorArgs: ['url'],
           pickedFields: [
             'id',
@@ -148,7 +128,7 @@
             'songsCount']
         }
       };
-      return youtubeEntryFunc;
+      return youtubePlaylistEntryFunc;
     }
   )
   ;

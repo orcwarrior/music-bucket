@@ -3,25 +3,34 @@
  */
 
 angular.module('musicBucketApp')
-  .controller('YTEntryDialogController', function ($mdDialog, $scope, entry, mbPlayerEngine, youtubeEntry) {
+  .controller('YTEntryDialogController', function ($mdDialog, $scope, entry, mbPlayerEngine, youtubeEntryBuilder) {
 
     $scope.entry = entry;
+    function getId(id) {
+      if (id.kind === "youtube#video")
+        return id.videoId;
+      else if (id.kind === "youtube#playlist")
+        return id.playlistId;
+    }
+
     $scope.doAction = function (action) {
-      var ytEntry = new youtubeEntry($scope.entry.id);
+      var ytEntry = new youtubeEntryBuilder($scope.entry.id);
       mbPlayerEngine.addToPlaylist(ytEntry);
+      var ytId = getId($scope.entry.id);
       switch (action) {
         case "add":
           break;
         case "play":
-          mbPlayerEngine.entryPlay(ytEntry);
+          mbPlayerEngine.entryPlay(ytEntry, ytId);
           break;
         case "play-next":
-          mbPlayerEngine.entryPlayNext(ytEntry);
+          mbPlayerEngine.entryPlayNext(ytEntry, ytId);
           break;
         case "queue":
-          mbPlayerEngine.entryEnqueue(ytEntry);
+          mbPlayerEngine.entryEnqueue(ytEntry, ytId);
           break;
-      };
+      }
+      ;
       $scope.cancel();
     };
     $scope.hide = function () {

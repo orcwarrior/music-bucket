@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .directive('youtubeEntry', function (mbPlayerEngine, youtubeEntry, $mdDialog) {
+  .directive('youtubeEntry', function (mbPlayerEngine, youtubeEntryBuilder, $mdDialog) {
     return {
       templateUrl: 'app/trackViews/youtubeEntry/youtubeEntry.html',
       restrict: 'EA',
@@ -10,7 +10,7 @@ angular.module('musicBucketApp')
       },
       link: function (scope, element, attrs) {
         scope.addToPlaylist = function (entry) {
-          var ytEntry = new youtubeEntry(entry.id);
+          var ytEntry = new youtubeEntryBuilder(entry.id);
           mbPlayerEngine.addToPlaylist(ytEntry);
         };
         scope.moreInfos = function (ev) {
