@@ -33,6 +33,11 @@ angular.module('musicBucketApp')
                 $scope.$on('track:id', function (event, data) {
                   mbPlayerEngine.getPlaylist().storeInLocalstorage();
                 });
+                $scope.toggleTeatherMode = function() {
+                  mbPlayerEngine.theaterMode.enabled = !mbPlayerEngine.theaterMode.enabled;
+                  $scope.$broadcast("theater:mode", mbPlayerEngine.theaterMode.enabled);
+                  $scope.$broadcast('playlist:modified', null);
+                };
 
                 // Initialize hotkeys:
                 hotkeys.bindTo($rootScope)
@@ -57,7 +62,7 @@ angular.module('musicBucketApp')
                   combo: ['t'],
                   description: 'Toggle Theater mode',
                   action: 'keydown',
-                  callback: _.bind(function() { mbPlayerEngine.theaterMode.enabled = !mbPlayerEngine.theaterMode.enabled; }, mbPlayerEngine)});
+                  callback: $scope.toggleTeatherMode});
 
                 // User Idle in theater mode:
                 $scope.$on('IdleStart', function() {
@@ -77,6 +82,10 @@ angular.module('musicBucketApp')
                   console.log("IDLE END!");
                 });
 
-                mbPlayerEngine.theaterMode.enabled = !_.isUndefined(theaterMode);
+                if (!_.isUndefined(theaterMode)) {
+                  mbPlayerEngine.theaterMode.enabled = true
+                  $scope.$broadcast("theater:mode", mbPlayerEngine.theaterMode.enabled);
+                  $scope.$broadcast('playlist:modified', null);
+                }
 
               });
