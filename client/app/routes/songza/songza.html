@@ -1,25 +1,37 @@
-<div>
+<div class="col-md-12 songza-tabs-wrapper">
   <md-tabs md-selected="selectedSongzaTab" md-border-bottom>
     <md-tab id="tab1" ui-sref=".concierge">
-      <md-tab-label><span class="mdi-action-favorite"/><md-tooltip>Advisor</md-tooltip></md-tab-label>
+      <md-tab-label><span class="mdi-action-favorite"/>
+        <md-tooltip>Advisor</md-tooltip>
+      </md-tab-label>
     </md-tab>
     <md-tab id="tab2" ui-sref=".activities">
-      <md-tab-label><span class="mdi-maps-directions-bike"/><md-tooltip>Stations by activity</md-tooltip></md-tab-label>
+      <md-tab-label><span class="mdi-maps-directions-bike"/>
+        <md-tooltip>Stations by activity</md-tooltip>
+      </md-tab-label>
     </md-tab>
     <md-tab id="tab3" ui-sref=".decades">
-      <md-tab-label><span class="mdi-action-history"/><md-tooltip>Stations by decades</md-tooltip></md-tab-label>
+      <md-tab-label><span class="mdi-action-history"/>
+        <md-tooltip>Stations by decades</md-tooltip>
+      </md-tab-label>
     </md-tab>
     <md-tab id="tab4" ui-sref=".genres">
-      <md-tab-label><span class="mdi-action-loyalty"/><md-tooltip>Stations by generes</md-tooltip></md-tab-label>
+      <md-tab-label><span class="mdi-action-loyalty"/>
+        <md-tooltip>Stations by generes</md-tooltip>
+      </md-tab-label>
     </md-tab>
     <md-tab id="tab4" ui-sref=".mood">
-      <md-tab-label><span class="mdi-social-mood"/><md-tooltip>Stations by mood</md-tooltip></md-tab-label>
+      <md-tab-label><span class="mdi-social-mood"/>
+        <md-tooltip>Stations by mood</md-tooltip>
+      </md-tab-label>
     </md-tab>
     <md-tab id="tab5" ui-sref=".search">
-      <md-tab-label><span class="mdi-action-search"/><md-tooltip>Search stations</md-tooltip></md-tab-label>
+      <md-tab-label><span class="mdi-action-search"/>
+        <md-tooltip>Search stations</md-tooltip>
+      </md-tab-label>
     </md-tab>
   </md-tabs>
-
-  <ui-view />
-
+</div>
+<div class="col-md-12">
+  <ui-view/>
 </div>
