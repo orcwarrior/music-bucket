@@ -67,12 +67,14 @@ function fetchWorker(stationId, songsFetcher) {
       })
       .catch(function (err) {
         self.consolePush("songzaNextSongProxy.error");
-        console.warn("Songza station end!");
-        if (err.error.code === 'end') {
+        if (!_.isUndefined(err))
+        console.warn("Songza station error!" +err.name + ", "+err.message);
+        if (err.error && err.error.code === 'end') {
           self.consolePush(".end");
           self.pickNextStation(stationId);
           fetchersCnt--;
         } else {
+          lastRequestsCnt[stationId]++;
           self._runDelayed(stationId);
         }
       })

@@ -4,6 +4,6 @@
 
 
 var exports = module.exports = {
-  maxProcessedStationsParallel: 35,
-  requestDelay: 15500
+  maxProcessedStationsParallel: 20,
+  requestDelay: 20 * 1000
 };

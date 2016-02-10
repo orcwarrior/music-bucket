@@ -10,14 +10,14 @@ var rp = require('request-promise');
 module.exports = exports = function songzaNextSongProxy(stationId) {
 
   // temporary disabled
- /*
-  if (process.env.HEROKU_PRODUCTION == "true") {
+
+  if (process.env.HEROKU_PRODUCTION === "true") {
     return songza.station.nextSong(stationId);
   }
   else {
-  */
+
     return proxySongza("/songza-api-proxy/api/1/station/" + stationId + "/next");
-  //}
+  }
 };
 
 function proxySongza(url) {

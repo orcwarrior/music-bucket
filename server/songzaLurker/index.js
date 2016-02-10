@@ -61,6 +61,8 @@ var exports = module.exports = {
       });
   },
   processSongzaRequest: function (req, res, resBody) {
+    return;
+
     var url = req.url;
     var config = this._composeConstructorConfig(req, res, resBody);
 
@@ -68,7 +70,7 @@ var exports = module.exports = {
       console.log("/situation/targeted");
       mongoose.model('songzaMetaDaytimeTarget').create(config, function (err, situation) {
       });
-    }
+    } /*
     else if (url.indexOf("/gallery/tag/") >= 0) {
       var regex = new RegExp('/gallery/tag/(.+)');
       console.log(url);
@@ -85,7 +87,7 @@ var exports = module.exports = {
 
         });
       });
-    }
+    } */
   },
   statsProgressArchive: [],
   archiveStats: function (stats) {
@@ -128,7 +130,7 @@ var exports = module.exports = {
       stats.progressArchiveSteps.daybefore = 0;
     // yesterday
     if (this.statsProgressArchive[1]) // step = yesterday - daybefore
-      stats.progressArchiveSteps.yesterday = this.statsProgressArchive[1].val - stats.progressArchiveSteps.daybefore;
+      stats.progressArchiveSteps.yesterday = this.statsProgressArchive[1].val - this.statsProgressArchive[2].val;
     else
       stats.progressArchiveSteps.yesterday = 0;
     // today
@@ -202,8 +204,8 @@ var exports = module.exports = {
     var self = this;
     this.getSongzaLurker().
       then(function (lurker) {
-        // TODO: Passing new processing if there's none
-        // songsFetcher.run(lurker);
+        // TODO: Passing new processing if there's none.
+        //   songsFetcher.run(lurker);
       });
     archiveStats.findOne({}, function (err, stats) {
       if (stats) {
@@ -214,8 +216,6 @@ var exports = module.exports = {
       setInterval(_.bind(self.calculateStats, self), 1000 * 30);
     });
   },
-
-
   test1: function (req, res) {
     songzaSituationTargeted.findOne({})
       .populate({
@@ -226,8 +226,7 @@ var exports = module.exports = {
       .exec(function (err, situationTargeted) {
         return res.json(200, situationTargeted);
       });
-  }
-  ,
+  },
   test2: function (req, res) {
     songzaSituation.find()
       .populate({
@@ -237,8 +236,7 @@ var exports = module.exports = {
       .exec(function (err, situationTargeted) {
         return res.json(200, situationTargeted);
       });
-  }
-  ,
+  },
   clear: function (req, res) {
     songzaSituation.remove({}, function (err, sit) {
       songzaSituationTargeted.remove({}, function (err) {
