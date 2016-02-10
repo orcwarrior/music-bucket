@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('playlistEntryDBFactory', function (songDBFactory, localEntry, youtubeEntry, songzaStationEntry, soundcloudEntry, entryCommons) {
+    .factory('playlistEntryDBFactory', function (songDBFactory, localEntry, youtubeEntryBuilder, songzaStationEntry, soundcloudEntry, entryCommons) {
 
       var localEntry_fromDBModel = function (db) {
         var locEntry = new localEntry(db.entries[0]);
@@ -24,8 +24,8 @@
           songzaStat.init(db.id); // grab proper station infos.
         return songzaStat;
       }
-      var youtubeEntry_fromDBModel = function (cookie) {
-        return new youtubeEntry(cookie.url);
+      var youtubeEntryBuilder_fromDBModel = function (cookie) {
+        return new youtubeEntryBuilder(cookie.url);
       };
       var soundcloudEntry_fromDBModel = function (db) {
         var entry = new soundcloudEntry(db.scObj);
@@ -52,7 +52,7 @@
           station: {name: songzaStat.station.name}
         };
       }
-      var youtubeEntry_toDBModel = function (youtube) {
+      var youtubeEntryBuilder_toDBModel = function (youtube) {
         return {
           url: youtube.url, // nothing else is needed :)
           type: youtube.type
@@ -84,7 +84,7 @@
               break;
             case (entryCommons.entryType.youtubePlaylist):
             case (entryCommons.entryType.youtubeVideo):
-              return new youtubeEntry_fromDBModel(dbModel);
+              return new youtubeEntryBuilder_fromDBModel(dbModel);
               break;
             case (entryCommons.entryType.soundcloudTrack) :
               return new soundcloudEntry_fromDBModel(dbModel);
@@ -101,7 +101,7 @@
               return new songzaStation_toDBModel(playlistEntry);
             case (entryCommons.entryType.youtubeVideo) :
             case (entryCommons.entryType.youtubePlaylist) :
-              return new youtubeEntry_toDBModel(playlistEntry);
+              return new youtubeEntryBuilder_toDBModel(playlistEntry);
               break;
             case (entryCommons.entryType.soundcloudTrack) :
               return new soundcloudEntry_toDBModel(playlistEntry);

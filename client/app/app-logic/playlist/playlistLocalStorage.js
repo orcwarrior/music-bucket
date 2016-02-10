@@ -5,15 +5,23 @@
   angular.module('musicBucketEngine')
     .factory('playlistLocalStorage', function (playlistCookieFactory, localStorageService) {
 
+                const localStorageVersion = "0.1.2";
                 // WEAK AS FUCK, REFACTOR LATER!
                  function storeInLocalstorage(playlist) {
-                   localStorageService.clearAll();
-                   localStorageService.set('playlist', JSON.stringify(playlistCookieFactory.convertTo(playlist)));
+                   localStorageService.remove('playlist');
+                   var lsPlaylist = playlistCookieFactory.convertTo(playlist)
+                   lsPlaylist.version = localStorageVersion;
+                   localStorageService.set('playlist', JSON.stringify(lsPlaylist));
                  }
 
                  function restoreFromLocalstorage() {
                    var lsPlaylist = localStorageService.get('playlist');
                    if (_.isNull(lsPlaylist)) return null;
+                   if (lsPlaylist.version !== localStorageVersion) {
+                     localStorageService.remove('playlist');
+                     alert("There was local storage version update, all unsaved playlist changes will be lost!");
+                     return null;
+                   }
 
                    var playlist = playlistCookieFactory.convertFrom(lsPlaylist);
                    return playlist;

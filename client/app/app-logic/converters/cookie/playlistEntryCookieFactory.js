@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('playlistEntryCookieFactory', function (songCookieFactory, localEntry, songzaStationEntry, youtubeEntry, soundcloudEntry, entryCommons) {
+    .factory('playlistEntryCookieFactory', function (songCookieFactory, localEntry, songzaStationEntry, youtubeEntryBuilder, soundcloudEntry, entryCommons) {
 
       var localEntry_fromCookieModel = function (cookie) {
         var locEntry = new localEntry();
@@ -35,8 +35,8 @@
           songzaStat.init(cookie.id); // grab proper station infos.
         return songzaStat;
       };
-      var youtubeEntry_fromCookieModel = function (cookie) {
-        var entry = new youtubeEntry(cookie.url);
+      var youtubeEntryBuilder_fromCookieModel = function (cookie) {
+        var entry = new youtubeEntryBuilder(cookie.url);
         entry.playedCount = cookie.playedCount;
         entry.playedIDs = cookie.playedIDs;
         return entry;
@@ -72,7 +72,7 @@
 
         };
       };
-      var youtubeEntry_toCookieModel = function (youtube) {
+      var youtubeEntryBuilder_toCookieModel = function (youtube) {
         return {
           url: youtube.url, // nothing else is needed :)
           type: youtube.type,
@@ -109,9 +109,9 @@
             ):
               return new songzaStation_fromCookieModel(cookieModel);
             case (entryCommons.entryType.youtubeVideo) :
-              return new youtubeEntry_fromCookieModel(cookieModel);
+              return new youtubeEntryBuilder_fromCookieModel(cookieModel);
             case (entryCommons.entryType.youtubePlaylist) :
-              return new youtubeEntry_fromCookieModel(cookieModel);
+              return new youtubeEntryBuilder_fromCookieModel(cookieModel);
             case (entryCommons.entryType.soundcloudTrack) :
               return new soundcloudEntry_fromCookieModel(cookieModel);
           }
@@ -125,9 +125,9 @@
             ):
               return new songzaStation_toCookieModel(playlistEntry);
             case (entryCommons.entryType.youtubeVideo) :
-              return new youtubeEntry_toCookieModel(playlistEntry);
+              return new youtubeEntryBuilder_toCookieModel(playlistEntry);
             case (entryCommons.entryType.youtubePlaylist) :
-              return new youtubeEntry_toCookieModel(playlistEntry);
+              return new youtubeEntryBuilder_toCookieModel(playlistEntry);
             case (entryCommons.entryType.soundcloudTrack) :
               return new soundcloudEntry_toCookieModel(playlistEntry);
           }
