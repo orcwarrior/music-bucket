@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songUnresolved', function (songControllsInterface, songCommons, songSeeker, songMetainfos, hashGenerator) {
+    .factory('songUnresolved', function (songControllsInterface, songMetainfosConstructor, songCommons, songSeeker, songMetainfos, hashGenerator) {
 
       var defaultResolveFunction = function (initData, resolveCb) {
         var self = this;
@@ -29,6 +29,8 @@
 
         if (initData instanceof songMetainfos)
           this.metainfos = initData;
+        else  //getSongDescription
+          this.metainfos = new songMetainfosConstructor(initData, this.type);
       }
       songUnresolved.prototype = new songControllsInterface(function () {
         if (this.type === songCommons.songType.unresolved) {
