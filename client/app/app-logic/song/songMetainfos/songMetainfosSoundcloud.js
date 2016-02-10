@@ -6,6 +6,9 @@
   angular.module('musicBucketEngine')
     .factory('songMetainfosSoundcloud', function (songMetainfos, soundcloudApi) {
       var songMetainfosSoundcloud = function songMetainfosSoundcloud(src) {
+        this.type = "audio/mp3";
+        if (_.isNull(src)) return;
+
         this.id = "SC-" + src.id;
 
         var splitedTitle = src.title.split('-');
@@ -22,8 +25,6 @@
           this.albumArt = src.artwork_url.replace('large.jpg', 'crop.jpg');
         this.genere = src.genre;
         this.url = soundcloudApi.track.streamUrl(src.id);
-        this.getUrl = function () { return this.url;};
-        this.type = "audio/mp3";
       };
       songMetainfosSoundcloud.prototype = new songMetainfos();
       return songMetainfosSoundcloud;
