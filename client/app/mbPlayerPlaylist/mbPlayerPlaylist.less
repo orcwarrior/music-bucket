@@ -2,13 +2,12 @@
   //overflow-y: auto;
   // height: 300px;
   position: relative;
-  left: 0px;
-  margin-bottom: 0px;
+  margin-bottom: 0; // listgrup fix
 }
 .playlistElementsContainer {
   position: relative;
   left: 0px;
-  width: 380px; height: 100%;
+  height: 100%;
   background-color: @grey-900;
   .transition(all 0.5s);
   .transition-timing-function(ease-out);
@@ -17,29 +16,14 @@
   left: -750px;
 }
 
-.playlist-expander, .playlist-collapser {
-  position: absolute;
-  display: inline-block;
-  z-index: 100;
-  bottom: 0px;
-  & > span {
-    vertical-align: bottom;
-    color: white;
-    background-color: @mainThemeColorAlt;
-  }
-}
-.playlist-expander.ng-hide, .playlist-collapser.ng-hide {
-  bottom: -220px;
-}
-
-mb-player-playlist { width: 380px; overflow-x: hidden }
+mb-player-playlist { width: 380px; overflow: visible; }
 // Theater mode:
 #musicPlayerBase.theatermode + * + mb-player-playlist {
   position: absolute;
   top: @navbar-height;
   bottom: 6px; // 0
   padding-bottom: 0px;
-  height: auto !important; // overridde calculated by directive
+  height: 100%;
 }
 #musicPlayerBase.theatermode + * + mb-player-playlist {
   // height: 100% !important;

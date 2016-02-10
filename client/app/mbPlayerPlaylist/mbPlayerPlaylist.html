@@ -8,10 +8,3 @@
     </div>
   </div>
 </div>
-
-<div ng-show="player.theaterMode.enabled && !player.theaterMode.playlistMenuToggled && !player.theaterMode.userIdle" class="playlist-expander">
-  <span class="mdi-navigation-menu" ng-click="togglePlaylistMenu(true)"></span>
-</div>
-<div ng-show="player.theaterMode.enabled && player.theaterMode.playlistMenuToggled && !player.theaterMode.userIdle" class="playlist-collapser">
-  <span class="mdi-navigation-close" ng-click="togglePlaylistMenu(false)"></span>
-</div>
