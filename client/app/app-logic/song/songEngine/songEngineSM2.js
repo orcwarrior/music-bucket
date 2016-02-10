@@ -20,7 +20,7 @@
         }
         return soundManager.createSound({
           id: metainfos.id,
-          url: metainfos.getUrl(),
+          url: metainfos.getSrc(),
           /* events cb */
           onload: _.bind(function (e) {
             if (_.isFunction(this.onload)) this.onload(e);
@@ -84,7 +84,7 @@
           return [this.SM2Sound.bytesLoaded / this.SM2Sound.bytesTotal, this.SM2Sound.bytesLoaded, this.SM2Sound.bytesTotal];
         };
         this.getCurrentPosition = function getCurrentPosition() {
-          return [this.SM2Sound.position / this._getDuration(), this.SM2Sound.position, this.getDuration()];
+          return [this.SM2Sound.position / this._getDuration(), this.SM2Sound.position, this._getDuration()];
         };
 
         // Wrap methods with function error-checking function:
