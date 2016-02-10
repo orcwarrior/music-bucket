@@ -7,7 +7,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('virtualEntry', function ($rootScope, $q, entryCommons, entryBase) {
+    .factory('virtualEntry', function ($rootScope, $q, $log, $injector, entryCommons, entryBase) {
 
 
       var virtualEntryFunc = function virtualEntry(entryName, songs, nextOrder) {
@@ -17,20 +17,29 @@
         this.type = entryCommons.entryType.virtalPlaylist;
         this.nextOrder = (nextOrder ? nextOrder : entryCommons.nextOrder.random);
         this.entries = songs || [];
-        _.each(this.entries, function(song) {song.entryId = entryId; });
-        this.nonPlayedSongs = _.map(this.entries, function(e) {return e.id; });
+        _.each(this.entries, function (song) {
+          song.entryId = entryId;
+        });
+        this.nonPlayedSongs = _.map(this.entries, function (e) {
+          return e.id;
+        });
 
         this.getNext = function (options) {
           var deferred = $q.defer(), song, songId;
           // TODO: Move to player (on-play, store reference to currenty playlist-entry)
-          if (this.nextOrder === entryCommons.nextOrder.sequence) {
+          if (!_.isUndefined(options.songId)) {
+            song = _.find(this.entries, _.matcher({id: options.songId}));
+            this.nonPlayedSongs = _.without(this.nonPlayedSongs, options.songId);
+          }
+          else if (this.nextOrder === entryCommons.nextOrder.sequence) {
             songId = this.nonPlayedSongs.shift();
-            song = _.find(this.entries, _.matcher({id : songId}));
+            song = _.find(this.entries, _.matcher({id: songId}));
           } else {
             songId = _.sample(this.nonPlayedSongs);
-            song = _.find(this.entries, _.matcher({id : songId}));
+            song = _.find(this.entries, _.matcher({id: songId}));
             this.nonPlayedSongs = _.without(this.nonPlayedSongs, songId);
           }
+
           if (_.isFunction(song.resolve))
             song.resolve(function (resolvedSong) {
               deferred.resolve(resolvedSong);
@@ -51,15 +60,21 @@
       };
 
       virtualEntryFunc.prototype = new entryBase();
-      virtualEntryFunc.prototype.addSong = function(song) {
+      virtualEntryFunc.prototype.addSong = function (song) {
+        var sameId = _.find(this.entries, function (entry) {
+          return entry.id === song.id;
+        });
+        if (!_.isUndefined(sameId)) return $log.info("There is already song with same id!");
         this.entries.push(song);
         this.nonPlayedSongs.push(song.id);
         song.entryId = this.id;
+        var mbPlayerEngine = $injector.get('mbPlayerEngine');
+        mbPlayerEngine.getPlaylist().alter();
       };
       virtualEntryFunc.prototype.__models__ = {
         db: {
           base: "virtualEntry",
-          constructorArgs : ['shortDescription', 'entries', 'nextOrder'],
+          constructorArgs: ['shortDescription', 'entries', 'nextOrder'],
           pickedFields: [
             'id',
             'type',
@@ -69,7 +84,7 @@
         },
         cookies: {
           base: "virtualEntry",
-          constructorArgs : ['shortDescription', 'entries', 'nextOrder'],
+          constructorArgs: ['shortDescription', 'entries', 'nextOrder'],
           pickedFields: [
             'id',
             'type',
