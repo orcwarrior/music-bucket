@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('playlist', function (playlistLocalStorage, playlistSequencers, playlistService) {
+    .factory('playlist', function (playlistLocalStorage, playlistSequencers, $log, $rootScope) {
 
       function rewriteBase(base) {
         if (!_.isUndefined(base)) {
@@ -71,12 +71,26 @@
           putSongToSampler(self, song);
         };
         this.addEntry = function (entry) {
+          var sameId = _.find(this.entries, function (pE) {
+            return (pE.id === entry.id);
+          });
+          if (sameId) return $log.warn("There is already entry with id: " + entry.id);
+
           this.entries.push(entry);
           this.alter();
         };
         this.removeEntry = function (entryId) {
           this.entries = _.reject(this.entries, function (entry) {
             return entry.id == entryId;
+          });
+          this.alter();
+        };
+        this.findEntry = function (entryMask) {
+          return _.find(this.entries, _.matcher(entryMask));
+        };
+        this.resetPlayedSongs = function () {
+          _.each(this.entries, function(entry) {
+            entry.resetPlayedSongs();
           });
           this.alter();
         };
@@ -87,6 +101,8 @@
           this.sampleSongs.splice(Math.round(this.sampleSongs.length * Math.random()), 1);
           this.recalculateSongsCount();
           this.storeInLocalstorage();
+
+          $rootScope.$broadcast('playlist:modified', this);
         };
         this.recalculateSongsCount = function () {
           this.songsCount = 0;
