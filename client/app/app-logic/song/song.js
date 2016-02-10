@@ -8,22 +8,39 @@
     .factory('song', function (songCommons, songMetainfosConstructor, songEngineConstructor, songCatalogueInfos, songAlternatives, songControllsInterface, hashGenerator) {
 
       var songDefaultConfig = {
-          alternates : null
+        alternates: null
       };
+
+      function getIdByType(response, type) {
+        if (type === songCommons.songType.youtube) {
+          if (response) {
+            if (response.id) {
+              if (response.id.videoId)
+                return response.id.videoId;
+              else
+                return response.id;
+            } else return response;
+          }
+        }
+        else
+          return undefined;
+      }
 
       var song = function song(response, type, myEntryId, alternates) {
         /* initialization */
-        this.id = hashGenerator.generateId();
+        var self = this;
+        this.id = getIdByType(response, type) || hashGenerator.generateId();
         this.type = type;
         this.entryId = myEntryId; // Anti-circullar: id only
         // It's ugly :(
-        if (response.metainfosAsResponse)
-          this.metainfos = response;
+        if (response && response.metainfosAsResponse) {
+          this.metainfos = new songMetainfosConstructor(null, type);
+          this.metainfos = _.extend(this.metainfos, response);
+        }
         else
           this.metainfos = new songMetainfosConstructor(response, type);
 
         this.engine = new songEngineConstructor(this.metainfos, type);
-        this.metainfos.getDuration();
 
         this.alternatives = alternates;
         var self = this;
@@ -36,8 +53,8 @@
           return _.keys(typeObj)[0];
         };
         /* called when song is preparing to play
-        *  (now it means when it's added to queue */
-        this.preload = function() {
+         *  (now it means when it's added to queue */
+        this.preload = function () {
 
           new songCatalogueInfos(this.metainfos)
             .then(function (catalogueInfos) {
@@ -49,32 +66,12 @@
             });
 
         }
-        this.getUsedEngine = function() {
+        this.getUsedEngine = function () {
           if (!_.isUndefined(this.usedAlt)) return this.usedAlt.engine;
           else return this.engine;
         }
       };
 
-      song.prototype.__models__ = {
-        db: {
-          base: "song",
-          constructorArgs : ['metainfos', 'type', 'entryId'],
-          pickedFields: [
-            'id',
-            'type',
-            'entryId',
-            'metainfos']
-        },
-        cookies: {
-          base: "song",
-          constructorArgs : ['metainfos', 'type', 'entryId'],
-          pickedFields: [
-            'id',
-            'type',
-            'entryId',
-            'metainfos']
-        }
-      };
       song.prototype = new songControllsInterface(function control() {
         var ret, dstMethod = _.last(arguments);
         /* Calling priority
@@ -87,25 +84,47 @@
           ret = this.engine[dstMethod](arguments);
 
         /* TMP DISABLED ALTERNATIVES
-        if (ret.error) {
-          if (!_.isUndefined(this.alternatives)) {
-            this.usedAlt = this.alternatives.getAlternative();
-          } else {
-            this.alternatives = new songAlternatives(this.metainfos, undefined, this.catalogueInfos);
-          }
-          if (_.isUndefined(this.usedAlt)) {
-            this.alternatives.alternativesPromise
-              .then(function(alts) {
-                self.usedAlt = self.alternatives.getAlternative();
-                ret = self.usedAlt[dstMethod](arguments);
-              });
-          } else {
-            ret = this.usedAlt[dstMethod](arguments);
-          }
-        }
-        */
+         if (ret.error) {
+         if (!_.isUndefined(this.alternatives)) {
+         this.usedAlt = this.alternatives.getAlternative();
+         } else {
+         this.alternatives = new songAlternatives(this.metainfos, undefined, this.catalogueInfos);
+         }
+         if (_.isUndefined(this.usedAlt)) {
+         this.alternatives.alternativesPromise
+         .then(function(alts) {
+         self.usedAlt = self.alternatives.getAlternative();
+         ret = self.usedAlt[dstMethod](arguments);
+         });
+         } else {
+         ret = this.usedAlt[dstMethod](arguments);
+         }
+         }
+         */
         return ret.result;
       });
+
+      song.prototype.__models__ = {
+        db: {
+          base: "song",
+          constructorArgs: ['metainfos', 'type', 'entryId'],
+          pickedFields: [
+            'id',
+            'type',
+            'entryId',
+            'metainfos']
+        },
+        cookies: {
+          base: "song",
+          constructorArgs: ['metainfos', 'type', 'entryId'],
+          pickedFields: [
+            'id',
+            'type',
+            'entryId',
+            'metainfos']
+        }
+      };
+
       return song;
     });
 })();
