@@ -23,6 +23,14 @@
             return this.shortDescription + " (" + this.getPlayedCount() + "/" + this.getSongsCount() + ")";
           else
             return this.shortDescription;
+        },
+        getTitle: function () {
+          return this.shortDescription;
+        },
+        resetPlayedSongs: function () {
+          if (this.playedCount) this.playedCount = 0;
+          if (this.playedIDs) this.playedIDs = [];
+          if (this.nonPlayedSongs) this.nonPlayedSongs = _.map(this.entries, function(e) {return e.id; });
         }
 
       };
