@@ -14,6 +14,9 @@ angular.module('musicBucketApp')
         var MAINCONTROLL_HEIGHT = 360; // TODO: From where playerMainControlls Height should be taken???
         scope.player = mbPlayerEngine;
 
+        scope.isEntrySelected = function(entry) {
+          return scope.player.selectedDetailsEntry === entry;
+        };
       } // link
     };
   });

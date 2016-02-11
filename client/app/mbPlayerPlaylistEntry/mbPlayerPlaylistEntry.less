@@ -1,4 +1,12 @@
-.playlistEntry {
+
+
+.playlist-entry-wrapper {
+  position: relative; top: 0px;
+  overflow: hidden;
+  .material-transition();
+  opacity: 1;
+}
+.playlist-entry {
   text-align: left;
   background-color: transparent;
   color: @gray-lighter;
@@ -7,7 +15,7 @@
   border-bottom: 1px solid mix(@gray-dark, @gray-darker, 50%) !important;
   overflow: hidden;
 
-  & > .entryDescription {
+  & > .entry-description {
     display: inline-block;
     color: @gray-lighter;
     width: 100%;
@@ -39,11 +47,6 @@
 .active-playlist-entry {
   color: @mainThemeColorAlt !important;
   //background-color: mix(@mainThemeColorAlt, rgba(50, 50, 50, 0), 20%);
-}
-
-.playlist-entry-wrapper {
-  position: relative;
-  overflow: hidden;
 }
 
 .menu-circle {
