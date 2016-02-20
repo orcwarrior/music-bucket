@@ -5,7 +5,7 @@
   angular.module('musicBucketEngine')
     .factory('playlistLocalStorage', function (playlistCookieFactory, localStorageService) {
 
-                const localStorageVersion = "0.1.2";
+                const localStorageVersion = "0.1.4";
                 // WEAK AS FUCK, REFACTOR LATER!
                  function storeInLocalstorage(playlist) {
                    localStorageService.remove('playlist');
