@@ -12,6 +12,8 @@ module.exports = function(app) {
   app.use('/api/playlist', require('./api/playlist'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
+  // Lurker routes:
+  require('./api/lurker')(app);
 
   app.use('/auth', require('./auth'));
 
