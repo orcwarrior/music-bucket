@@ -209,7 +209,6 @@ var exports = module.exports = {
       });
     archiveStats.findOne({}, function (err, stats) {
       if (stats) {
-        console.log("gotStats:" + stats);
         self.statsProgressArchive = stats.archiveProgresses;
       }
       self.calculateStats();
