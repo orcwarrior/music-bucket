@@ -69,6 +69,12 @@
         this.getNext = function (options) {
           var ytPromise = $q.defer();
           var selectedEntry;
+          // has some concrete ID to play?
+          if (!_.isUndefined(options.songId)) {
+            ytPromise.resolve(_.find(this.entries, _.matcher({id: options.songId})));
+            return ytPromise.promise;
+          }
+
           // Resolve after metainfos gathered???
           if (_.isUndefined(this.entries)) { // still not instanitated - recurency save'us
             _.delay(function () {
