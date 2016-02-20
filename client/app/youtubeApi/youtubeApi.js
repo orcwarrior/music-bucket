@@ -80,7 +80,9 @@ angular.module('musicBucketEngine')
             }, function (error) {
               deffered.reject(error);
             });
-          youtubeApiRequestQueryTimestamps = _.reject(youtubeApiRequestQueryTimestamps, function (timestamp) { return timestamp == params.timestamp;})
+          youtubeApiRequestQueryTimestamps = _.reject(youtubeApiRequestQueryTimestamps, function (timestamp) {
+            return timestamp == params.timestamp;
+          })
         }, waitTime);
       }
 
@@ -109,7 +111,16 @@ angular.module('musicBucketEngine')
       },
       video: {
         get: function (videoId) {
-          // nope
+          var params = {};
+          // if (!_.isUndefined(additionalFilters)) params.getParams = additionalFilters;
+          params.getParams = {
+            id: videoId,
+            part: 'snippet'
+          };
+          if (params.getParams.type === 'video')
+            params.getParams.videoEmbeddable = true;
+
+          return new youtubeApiRequest("/videos", params).promise;
         }
       },
       playlist: {
