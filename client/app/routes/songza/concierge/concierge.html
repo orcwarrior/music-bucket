@@ -7,21 +7,21 @@
   </div>
   <!-- main situations -->
   <div layout="row" layout-align="space-around center" layout-wrap class="songza-tiles-row" ng-class="{ 'shrinked' : selectedSituation }">
-    <div class="songza-situation-wrapper"  ng-repeat="situation in concierge" ng-click="selectSituation(situation)"
+    <div class="songza-situation-wrapper"  ng-repeat="situation in concierge.situations" ng-click="selectSituation(situation)"
          ng-class="{ 'faded-out' : !isVisibleSituation(situation)}">
       <div class="songza-situation-icon" ng-style="{'background-image':'url('+ situation.image_url + ')' }"></div>
-      <div class="songza-situation-caption">{{ situation.title }}</div>
+      <div class="songza-situation-caption">{{ situation.name }}</div>
     </div>
   </div>
   <!-- situations -->
   <div ng-show="selectedSituation">
-    <h3>{{ selectedSituation.selected_message }}</h3>
+    <h3>{{ selectedSituation.description }}</h3>
 
     <div layout="row" layout-align="space-around center" layout-wrap class="songza-tiles-row" ng-class="{ 'shrinked' : selectedConcreteSituation }">
       <div class="songza-situation-wrapper" ng-repeat="concreteSituation in selectedSituation.situations track by $index"
            ng-click="selectConcreteSituation(concreteSituation)"
            ng-class="{ 'faded-out' : !isVisibleConcreteSituation(concreteSituation)}">
-        <div class="songza-situation-big-caption">{{ concreteSituation.title }}</div>
+        <div class="songza-situation-big-caption">{{ concreteSituation.name }}</div>
       </div>
     </div>
   </div>

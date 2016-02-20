@@ -6,7 +6,7 @@ angular.module('musicBucketApp')
     if (_.isUndefined($scope.decades))
     songzaApi.decades()
       .then(function (activities) {
-        $scope.decades = activities.data;
+        $scope.decades = activities.data.galleries;
         if ($location.search().slug) {
           $scope.selectedDecade = _.find($scope.decades, function (act) {
             return act.slug === $location.search().slug;
@@ -17,7 +17,7 @@ angular.module('musicBucketApp')
       });
     function loadDecadeStations() {
       $scope.stations = null;
-      songzaApi.station.multi($scope.selectedDecade.station_ids)
+      songzaApi.station.multi($scope.selectedDecade.stations)
         .then(function (response) {
           $scope.stations = response.data;
           $location.replace();

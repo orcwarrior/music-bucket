@@ -6,7 +6,7 @@ angular.module('musicBucketApp')
     if (_.isUndefined($scope.genres))
     songzaApi.genres()
       .then(function (genres) {
-        $scope.genres = genres.data;
+        $scope.genres = genres.data.galleries;
         if ($location.search().slug) {
           $scope.selectedGenere = _.find($scope.genres, function (act) {
             return act.slug === $location.search().slug;
@@ -17,7 +17,7 @@ angular.module('musicBucketApp')
       });
     function loadGenereStations() {
       $scope.stations = null;
-      songzaApi.station.multi($scope.selectedGenere.station_ids)
+      songzaApi.station.multi($scope.selectedGenere.stations)
         .then(function (response) {
           $scope.stations = response.data;
           $location.replace();

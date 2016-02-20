@@ -27,28 +27,9 @@ angular.module('musicBucketApp')
     $scope.$watch('selectedConcreteSituation', function (newValue, oldValue) {
       if (newValue == null) return;
 
-      songzaApi.station.multi(newValue.station_ids)
+      songzaApi.station.multi(newValue.stations)
         .then(function(response) {
           $scope.concreteSituationsStationsInfos = response.data;
-        });
-
-      // var deffered = $q.defer();
-//
-      // var stationsCnt = 0;
-      // _.each(newValue.station_ids, function (id) {
-      //   $scope.concreteSituationsStationsInfos.push(songzaApi.helpers.createStationLoader(id))
-      //   songzaApi.station.get(id)
-      //     .then(function (station) {
-      //       station = station.data;
-      //       for (var i = 0; i < $scope.concreteSituationsStationsInfos.length; i++) {
-      //         if ($scope.concreteSituationsStationsInfos[i].id === station.id) $scope.concreteSituationsStationsInfos[i] = station;
-      //       }
-      //     });
-      // });
-
-      deffered.promise
-        .then(function (stations) {
-
         });
     });
     $scope.concreteSituationsStationsInfos = [];

@@ -6,7 +6,7 @@ angular.module('musicBucketApp')
     if (_.isUndefined($scope.moods))
     songzaApi.moods()
       .then(function (moods) {
-        $scope.moods = moods.data;
+        $scope.moods = moods.data.galleries;
         if ($location.search().slug) {
           $scope.selectedMood = _.find($scope.moods, function (act) {
             return act.slug === $location.search().slug;
