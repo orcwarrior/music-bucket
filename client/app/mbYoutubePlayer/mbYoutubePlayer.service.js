@@ -20,6 +20,7 @@ angular.module('musicBucketEngine')
         "BUFFERING": 3,
         "VIDEO_CUED": 5
       };
+
       function stateIdToName(id) {
         var key;
         _.each(_.keys(PLAYER_STATES), function (k) {
@@ -81,8 +82,16 @@ angular.module('musicBucketEngine')
             if (state === PLAYER_STATES.VIDEO_CUED || state == PLAYER_STATES.PAUSED)
               selectedPlayer = player;
           });
-        }
-        ;
+        };
+        if (_.isUndefined(selectedPlayer)) {
+          _.each(players, function (player) {
+            var state;
+            if (_.isFunction(player.getPlayerState))
+              state = player.getPlayerState();
+            if (state === PLAYER_STATES.BUFFERING)
+              selectedPlayer = player;
+          });
+        };
         return selectedPlayer;
       }
 
@@ -95,6 +104,8 @@ angular.module('musicBucketEngine')
         var player = getPlayerWithVideo(videoId);
         if (_.isUndefined(player))
           player = getFreePlayer();
+        if (_.isUndefined(player))
+          $log.error("No player for vid: " + videoId);
 
         // filter all videos that used just picked player (except just added videoId)
         videoToPlayerMap[videoId] = player;
@@ -104,7 +115,7 @@ angular.module('musicBucketEngine')
             filteredMap[key] = val;
         });
         videoToPlayerMap = filteredMap;
-        $log.info(buildLogMsg(player, " picked for: "+videoId));
+        $log.info(buildLogMsg(player, " picked for: " + videoId));
 
         return player;
       }
@@ -135,6 +146,8 @@ angular.module('musicBucketEngine')
             isPrebuffering: false,
             callPlayAfterPrebuffering: false,
             isBuffered: false,
+            stoppedByUserFix: false, // there could occur situation when player still initializing (buffering) and user
+            // already calls another player to start play music, so this flag forces player to not start playong videoclip
             onBufferCb: _.noop,
             additionalOnStateChangeCallback: _.noop,
             lastLoadedFraction: 0,
@@ -167,7 +180,7 @@ angular.module('musicBucketEngine')
 
       function buildLogMsg(player, msg) {
         if (_.isUndefined(player) || _.isUndefined(player[playerProperty].id)) return "YTPlayer(UNKNOWN): UNKNOWN " + msg;
-        return "YTPlayer(" + player[playerProperty].id+ "): " + getPlayerVideoId(player) + " " + msg;
+        return "YTPlayer(" + player[playerProperty].id + "): " + getPlayerVideoId(player) + " " + msg;
       }
 
       /* Public */
@@ -188,15 +201,17 @@ angular.module('musicBucketEngine')
           dstPlayer.__ytEngineUtils.callPlayAfterPrebuffering = true;
         else if (this.isBuffered(videoId))
           dstPlayer.playVideo();
-        else {
+        else { // start buffering
           dstPlayer.loadVideoById(videoId);
           dstPlayer.mute(videoId);
           dstPlayer.__ytEngineUtils.onBufferCb = onBufferedCb || _.noop;
         }
+        if (dstPlayer && dstPlayer.__ytEngineUtils) // bugfix
+          dstPlayer.__ytEngineUtils.stoppedByUserFix = false;
       };
       this.isBuffered = function (videoId) {
         var result = false, dstPlayer = undefined;
-        _.each(players, function(player) {
+        _.each(players, function (player) {
           if (player.__ytEngineUtils.isBuffered === videoId) {
             result = true;
             dstPlayer = player;
@@ -211,9 +226,12 @@ angular.module('musicBucketEngine')
           return;
         }
         var dstPlayer = selectPlayer(videoId);
-        $log.info(buildLogMsg(dstPlayer, "buffer: "+videoId));
+        $log.info(buildLogMsg(dstPlayer, "buffer: " + videoId));
         if (_.isUndefined(dstPlayer)
-          || dstPlayer.__ytEngineUtils.isPrebuffering) return;
+          || dstPlayer.__ytEngineUtils.isPrebuffering) {
+          $log.warn(buildLogMsg(dstPlayer, "no buffering cause there is no able player for vidId: " + videoId));
+          return;
+        }
         dstPlayer.loadVideoById(videoId);
         dstPlayer.mute(); // BUGFIX: Calling mute on this, when videoID isn'y still there, calls mute on another player :(
         dstPlayer.__ytEngineUtils.reinit();
@@ -225,10 +243,12 @@ angular.module('musicBucketEngine')
       this.stop = function (videoId) {
         var dstPlayer = selectPlayer(videoId);
         $log.info(buildLogMsg(dstPlayer, "stop"));
-        // bugfix: stop only when player is actually in playing state:
-        if (dstPlayer.getPlayerState() === PLAYER_STATES.PLAYING) {
+        // bugfix: stop only when player is actually in playing/buffering state:
+        if (dstPlayer && (dstPlayer.getPlayerState() === PLAYER_STATES.PLAYING
+                          ||dstPlayer.getPlayerState() === PLAYER_STATES.BUFFERING)) {
           dstPlayer.pauseVideo();
           this.seek(videoId, 0);
+          dstPlayer.__ytEngineUtils.stoppedByUserFix = true;
         }
       };
       this.pause = function (videoId) {
@@ -308,7 +328,7 @@ angular.module('musicBucketEngine')
       };
 
       this.addPlayer = function (player) {
-        $log.info("YTPlayer: added player: "+player[playerProperty].id);
+        $log.info("YTPlayer: added player: " + player[playerProperty].id);
         extendPlayerByEngineUtils(player);
         players.push(player);
         playersReady[player[playerProperty].id] = false; // change when onready called
@@ -327,6 +347,13 @@ angular.module('musicBucketEngine')
         mbPlayerEngine.events.onerror(new playbackError(playbackErrorTypes.youtube, getPlayerVideoId(player), event.data));
       };
       this.onplay = function (player, event) {
+        // Check if it's not simunatolesly playing video:
+        console.log(player.__ytEngineUtils.stoppedByUserFix);
+        if (player.__ytEngineUtils.stoppedByUserFix) {
+          this.stop(getPlayerVideoId(player));
+          player.__ytEngineUtils.stoppedByUserFix = false;
+          console.warn(buildLogMsg(player, "stop playback between 2 clips starts to play at same time"));
+        }
         // Call buffer callback if video wasn't prebuffered (just played)
         if (event.target.__ytEngineUtils.isBuffered) return;
 
