@@ -31,14 +31,6 @@ angular.module('musicBucketApp')
           scope.$broadcast('playerProgressbar:update', scope.playerProgress);
 
         });
-        var scrollInited = false;
-        scope.initPlaylistScroll = function () {
-          if (!scrollInited) {
-            scope.$broadcast('playlist:modified', null);
-            scrollInited = true;
-          }
-          scope.playlistScroll = true;
-        }
         scope.togglePlaylistMenu = function (opened) {
           mbPlayerEngine.theaterMode.playlistMenuToggled = opened;
         }
