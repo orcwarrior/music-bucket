@@ -36,7 +36,7 @@
 
 
     <!-- Add your site or application content here -->
-    <div ui-view=""></div>
+    <div class="mb" ui-view=""></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -118,10 +118,12 @@
           <script src="app/app-logic/playlist/entry/entryBase.js"></script>
           <script src="app/app-logic/playlist/entry/entryCommons.js"></script>
           <script src="app/app-logic/playlist/entry/localEntry.js"></script>
+          <script src="app/app-logic/playlist/entry/songzaEntryBuilder.js"></script>
           <script src="app/app-logic/playlist/entry/songzaStationEntry.js"></script>
           <script src="app/app-logic/playlist/entry/soundcloudEntry.js"></script>
           <script src="app/app-logic/playlist/entry/virtualEntry.js"></script>
-          <script src="app/app-logic/playlist/entry/youtubeEntry.js"></script>
+          <script src="app/app-logic/playlist/entry/youtubeEntryBuilder.js"></script>
+          <script src="app/app-logic/playlist/entry/youtubePlaylistEntry.js"></script>
           <script src="app/app-logic/playlist/playlist.js"></script>
           <script src="app/app-logic/playlist/playlistLocalStorage.js"></script>
           <script src="app/app-logic/playlist/playlistSequencer/defaultPlaylistSequencer.js"></script>
@@ -144,14 +146,17 @@
           <script src="app/app-logic/song/songMetainfos/songMetainfosLocal.js"></script>
           <script src="app/app-logic/song/songMetainfos/songMetainfosSongza.js"></script>
           <script src="app/app-logic/song/songMetainfos/songMetainfosSoundcloud.js"></script>
+          <script src="app/app-logic/song/songMetainfos/songMetainfosUnresolved.js"></script>
           <script src="app/app-logic/song/songMetainfos/songMetainfosYoutube.js"></script>
           <script src="app/app-logic/song/songSeeker.js"></script>
+          <script src="app/app-logic/song/songSeekerSoundcloud.js"></script>
           <script src="app/app-logic/song/songSeekerYoutube.js"></script>
           <script src="app/app-logic/song/songUnresolved.js"></script>
           <script src="app/app-logic/tracksHistory/tracksHistory.js"></script>
           <script src="app/app-logic/tracksHistory/tracksHistoryEntry.js"></script>
           <script src="app/app-logic/utils/mbScoreUtils.js"></script>
           <script src="app/app-logic/utils/mbStringUtils.js"></script>
+          <script src="app/app-logic/utils/underscorePlugins.js"></script>
           <script src="app/commons/decorators/logDecorator.js"></script>
           <script src="app/commons/directives/dragAndDrop.js"></script>
           <script src="app/commons/directives/moment.js"></script>
@@ -172,11 +177,13 @@
           <script src="app/mbPictureMosaic/mbPictureMosaic.directive.js"></script>
           <script src="app/mbPlayer/mbPlayer.directive.js"></script>
           <script src="app/mbPlayerEngine/mbPlayerEngine.service.js"></script>
+          <script src="app/mbPlayerList/mbPlayerList.directive.js"></script>
+          <script src="app/mbPlayerListContainer/mbPlayerListContainer.directive.js"></script>
+          <script src="app/mbPlayerListHeader/mbPlayerListHeader.directive.js"></script>
           <script src="app/mbPlayerMainControls/mbPlayerMainControls.directive.js"></script>
-          <script src="app/mbPlayerPlaylist/mbPlayerPlaylist.directive.js"></script>
-          <script src="app/mbPlayerPlaylistEntry/mbPlayerPlaylistEntry.directive.js"></script>
           <script src="app/mbPlayerSm2Controls/mbPlayerSm2Controls.directive.js"></script>
           <script src="app/mbPlayerToolbars/mbPlayerToolItemClearPlaylist/mbPlayerToolItemClearPlaylist.directive.js"></script>
+          <script src="app/mbPlayerToolbars/mbPlayerToolItemClearPlaylistPlayed/mbPlayerToolItemClearPlaylistPlayed.directive.js"></script>
           <script src="app/mbPlayerToolbars/mbPlayerToolItemPlayOrder/mbPlayerToolItemPlayOrder.directive.js"></script>
           <script src="app/mbPlayerToolbars/mbPlayerToolItemSavePlaylist/mbPlayerToolItemSavePlaylist.directive.js"></script>
           <script src="app/mbPlayerToolbars/mbPlayerToolItemVolume/mbPlayerToolItemVolume.directive.js"></script>
@@ -231,13 +238,15 @@
           <script src="app/trackViews/songzaStation/songzaStation.directive.js"></script>
           <script src="app/trackViews/soundcloudTrack/soundcloudTrack.directive.js"></script>
           <script src="app/trackViews/youtubeEntry/youtubeEntry.directive.js"></script>
+          <script src="app/ui-logic/mbPlayerListManager.js"></script>
+          <script src="app/ui-logic/mbPlayerListProviders/entryListProvider.js"></script>
+          <script src="app/ui-logic/mbPlayerListProviders/playlistListProvider.js"></script>
           <script src="app/youtubeApi/youtubeApi.js"></script>
           <script src="components/auth/musicBucket.auth.js"></script>
           <script src="components/auth/services/auth.service.js"></script>
           <script src="components/auth/services/user.service.js"></script>
           <script src="components/modal/modal.service.js"></script>
           <script src="components/mongoose-error/mongoose-error.directive.js"></script>
-          <script src="components/music-player/music-player.controller.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>
           <script src="components/socket/socket.service.js"></script>
           <!-- endinjector -->
