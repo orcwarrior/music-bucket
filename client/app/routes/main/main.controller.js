@@ -14,6 +14,7 @@ angular.module('musicBucketApp')
                   if (!_.isNull(lsPlaylist)) {
                     console.log("LS Playlist:"); console.log(lsPlaylist);
                     mbPlayerEngine.setPlaylist(new playlist(lsPlaylist));
+                    $scope.$broadcast('list-scroll:update', null);
                   }
                 });
 
@@ -36,7 +37,7 @@ angular.module('musicBucketApp')
                 $scope.toggleTeatherMode = function() {
                   mbPlayerEngine.theaterMode.enabled = !mbPlayerEngine.theaterMode.enabled;
                   $scope.$broadcast("theater:mode", mbPlayerEngine.theaterMode.enabled);
-                  $scope.$broadcast('playlist:modified', null);
+                  $scope.$broadcast('list-scroll:update', null);
                 };
 
                 // Initialize hotkeys:
@@ -85,7 +86,7 @@ angular.module('musicBucketApp')
                 if (!_.isUndefined(theaterMode)) {
                   mbPlayerEngine.theaterMode.enabled = true
                   $scope.$broadcast("theater:mode", mbPlayerEngine.theaterMode.enabled);
-                  $scope.$broadcast('playlist:modified', null);
+                  $scope.$broadcast('list-scroll:update', null);
                 }
 
               });
