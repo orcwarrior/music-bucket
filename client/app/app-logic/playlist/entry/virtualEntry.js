@@ -20,25 +20,36 @@
         _.each(this.entries, function (song) {
           song.entryId = entryId;
         });
-        this.nonPlayedSongs = _.map(this.entries, function (e) {
-          return e.id;
-        });
+        this.playedIDs = [];
 
         this.getNext = function (options) {
           var deferred = $q.defer(), song, songId;
           // TODO: Move to player (on-play, store reference to currenty playlist-entry)
           if (!_.isUndefined(options.songId)) {
             song = _.find(this.entries, _.matcher({id: options.songId}));
-            this.nonPlayedSongs = _.without(this.nonPlayedSongs, options.songId);
           }
           else if (this.nextOrder === entryCommons.nextOrder.sequence) {
-            songId = this.nonPlayedSongs.shift();
-            song = _.find(this.entries, _.matcher({id: songId}));
+            var lastPlayed = _.last(this.playedIDs);
+            if (_.isUndefined(lastPlayed)) {
+              song = this.entries[0];
+            } else {
+              song = _.reduce(this.entries, function (memo, val, idx, list) {
+                if (val.id === lastPlayed)
+                  memo = list[idx + 1];
+                return memo;
+              }, undefined);
+            }
+            songId = song.id;
           } else {
-            songId = _.sample(this.nonPlayedSongs);
+            var allSongsIDs = _.map(this.entries, function (s) {
+              return s.id;
+            });
+            var nonPlayed = _.difference(allSongsIDs, this.playedIDs);
+            songId = _.sample(nonPlayed);
             song = _.find(this.entries, _.matcher({id: songId}));
-            this.nonPlayedSongs = _.without(this.nonPlayedSongs, songId);
           }
+          if (_.isUndefined(options.songId)) // play song on demand don't match it as played
+            this.playedIDs.push(songId);
 
           if (_.isFunction(song.resolve))
             song.resolve(function (resolvedSong) {
@@ -52,7 +63,7 @@
           return deferred.promise;
         };
         this.getPlayedCount = function () {
-          return this.getSongsCount() - this.nonPlayedSongs.length;
+          return this.playedIDs.length;
         };
         this.getSongsCount = function () {
           return this.entries.length;
@@ -66,7 +77,6 @@
         });
         if (!_.isUndefined(sameId)) return $log.info("There is already song with same id!");
         this.entries.push(song);
-        this.nonPlayedSongs.push(song.id);
         song.entryId = this.id;
         var mbPlayerEngine = $injector.get('mbPlayerEngine');
         mbPlayerEngine.getPlaylist().alter();
@@ -91,8 +101,7 @@
             'shortDescription',
             'entries',
             'nextOrder',
-            'playedCount',
-            'nonPlayedSongs'
+            'playedIDs'
           ]
         }
       };
