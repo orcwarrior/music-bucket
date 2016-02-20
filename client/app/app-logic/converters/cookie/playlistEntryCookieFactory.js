@@ -117,19 +117,19 @@
           }
         },
         convertTo: function (playlistEntry) {
-          switch (playlistEntry.type) {
+          switch (listEntry.type) {
             case (entryCommons.entryType.local
             ):
-              return new localEntry_toCookieModel(playlistEntry);
+              return new localEntry_toCookieModel(listEntry);
             case (entryCommons.entryType.songza
             ):
-              return new songzaStation_toCookieModel(playlistEntry);
+              return new songzaStation_toCookieModel(listEntry);
             case (entryCommons.entryType.youtubeVideo) :
-              return new youtubeEntryBuilder_toCookieModel(playlistEntry);
+              return new youtubeEntryBuilder_toCookieModel(listEntry);
             case (entryCommons.entryType.youtubePlaylist) :
-              return new youtubeEntryBuilder_toCookieModel(playlistEntry);
+              return new youtubeEntryBuilder_toCookieModel(listEntry);
             case (entryCommons.entryType.soundcloudTrack) :
-              return new soundcloudEntry_toCookieModel(playlistEntry);
+              return new soundcloudEntry_toCookieModel(listEntry);
           }
         }
       };
