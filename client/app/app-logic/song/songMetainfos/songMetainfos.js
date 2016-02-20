@@ -21,7 +21,10 @@
           if (this.artist === '' || _.isUndefined(this.artist))
             return this.title;
           else return this.artist + ' - ' + this.title;
-        }
+        };
+        this.resolve =function() {
+          return;
+        };
         // this hacky-fix will cause restoring from db/cookie model to create proper metainfos otrue;
         // (see song.js)
         this.metainfosAsResponse = true;

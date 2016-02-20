@@ -3,7 +3,7 @@
  */
 (function () {
   angular.module('musicBucketEngine')
-    .factory('songMetainfosYoutube', function (songMetainfos) {
+    .factory('songMetainfosYoutube', function (songMetainfos, youtubeApi) {
 
       var songMetainfosYoutube = function songMetainfosYoutube(providedInfos) {
         if (_.isObject(providedInfos)) {
@@ -19,14 +19,52 @@
         this.url = "http://youtube.com/?watch=" + this.id;
         this.getUrl = function () { return this.url; };
       };
-      songMetainfosYoutube.extractArtistAndTitle = function(videoTitle) {
+      songMetainfosYoutube.prototype = new songMetainfos();
+
+      songMetainfosYoutube.prototype.extractArtistAndTitle = function(videoTitle) {
         var res = {artist:'', title:''};
-        res.artist = videoTitle.split(' -')[0].trim();
-        if (videoTitle.split(' -')[1])
-        res.title = videoTitle.split(' -')[1].trim();
+        var split = videoTitle.split(' -');
+        if (split.length === 1) {// man w/e
+          split = videoTitle.split(' ');
+          split = [split[0], videoTitle.substr(split[0].length+1)]
+        } else
+          split[1] = videoTitle.substr(split[0].length+3);
+        res.artist = split[0].trim();
+        res.title = split[1].trim();
         return res;
       };
-      songMetainfosYoutube.prototype = new songMetainfos();
+      songMetainfosYoutube.prototype.isResolved = function() {
+        return !((_.isUndefined(this.artist) || this.artist === "") && (_.isUndefined(this.title) || this.title === ""));
+      };
+      songMetainfosYoutube.prototype.resolve = function() {
+        var self = this;
+        if (!this.isResolved()) {
+          youtubeApi.video.get(this.id)
+            .then(function(response) {
+              var snippet = response.data.items[0].snippet;
+              var info = self.extractArtistAndTitle(snippet.title);
+              _.extendOwn(self, info);
+            });
+        }
+      };
+      songMetainfosYoutube.prototype.__models__ = {
+        db: {
+          base: "songMetainfosYoutube",
+          pickedFields: [
+            'id',
+            'artist',
+            'title',
+            'url']
+        },
+        cookies: {
+          base: "songMetainfosYoutube",
+          pickedFields: [
+            'id',
+            'artist',
+            'title',
+            'url']
+        }
+      };
       return songMetainfosYoutube;
     });
 })();
