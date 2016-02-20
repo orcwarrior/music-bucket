@@ -24,21 +24,17 @@
   </div>
 
   <!-- Playlist -->
-  <div class="row">
-    <div ng-scrollbar is-bar-shown="playlistScroll" rebuild-on-resize
-         ng-class="{ 'theatermode' : player.theaterMode.enabled, 'playlist-closed': !player.theaterMode.playlistMenuToggled}"
-         ng-mouseleave="playlistScroll=false" ng-mouseover="initPlaylistScroll()"
-         rebuild-on="playlist:modified" class="mb-playlist-scroll scrollme">
-      <mb-player-playlist playlist="player.getPlaylist()">
-      </mb-player-playlist>
-    </div>
-    <div ng-show="player.theaterMode.enabled && !player.theaterMode.playlistMenuToggled && !player.theaterMode.userIdle"
-         class="playlist-expander">
-      <span class="mdi-navigation-menu" ng-click="togglePlaylistMenu(true)"></span>
-    </div>
-    <div ng-show="player.theaterMode.enabled && player.theaterMode.playlistMenuToggled && !player.theaterMode.userIdle"
-         class="playlist-collapser">
-      <span class="mdi-navigation-close" ng-click="togglePlaylistMenu(false)"></span>
-    </div>
+  <mb-player-list
+    ng-class="{ 'theatermode' : player.theaterMode.enabled,
+    'playlist-closed': !player.theaterMode.playlistMenuToggled}"
+    ></mb-player-list>
+  <!-- toggle list buttons -->
+  <div ng-show="player.theaterMode.enabled && !player.theaterMode.playlistMenuToggled && !player.theaterMode.userIdle"
+       class="playlist-expander">
+    <span class="mdi-navigation-menu" ng-click="togglePlaylistMenu(true)"></span>
+  </div>
+  <div ng-show="player.theaterMode.enabled && player.theaterMode.playlistMenuToggled && !player.theaterMode.userIdle"
+       class="playlist-collapser">
+    <span class="mdi-navigation-close" ng-click="togglePlaylistMenu(false)"></span>
   </div>
 </div>

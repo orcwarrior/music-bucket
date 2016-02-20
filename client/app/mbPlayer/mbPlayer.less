@@ -2,13 +2,14 @@
 #musicPlayerContainer {
   position: relative;
   background-color: @grey-900;
-//  top: 90px;
+  //  top: 90px;
   /*bottom: 0;*/
   height: 100%;
 
   #musicPlayerBase.theatermode {
     position: fixed;
-    left: 0; right: 0;
+    left: 0;
+    right: 0;
     top: @navbar-height; // @navbar-height
     bottom: 0;
     .transition(all 0.5s);
@@ -28,28 +29,6 @@
 
   #musicPlayerBase:not(.theatermode) mb-player-main-controls {
     height: @mainPlayerHeight;
-  }
-
-  & .mb-playlist-scroll {
-    position: absolute !important;
-    display: block;
-    top: 365px;
-    bottom: 0;
-    width: 100%;
-    overflow: hidden;
-    &.theatermode {
-      top: 0;
-      bottom: 6px;
-      &.playlist-closed {
-        visibility: hidden;
-      }
-      &.playlist-closed .ngsb-scrollbar {
-        display: none !important;
-      }
-      & .ngsb-container {
-        //height: 100%;
-      }
-    }
   }
 }
 
@@ -177,10 +156,11 @@
     & .cur-track-innerwrapper {
       // bottom: 15px !important;
     }
-    & .mb-playlist-scroll {
+    & mb-player-list {
       position: static !important;
+      top: 0;
       min-height: 158px;
-      height: 316px;
+      height: 266px;
     }
   }
   /*
@@ -188,4 +168,22 @@
     display: none;
   }*/
 
+}
+
+/* Screens in width <= 1366 */
+@media screen and (min-width: @screen-sm-min) and (max-width: 1366px)
+{
+
+  .col-mb-player {
+    width: 300px !important;
+    & #musicPlayerContainer {
+      width: 300px;
+      & #musicPlayerBase:not(.theatermode)  mb-player-main-controls {
+        height: 280px;
+      }
+      & mb-player-list {
+        top: 283px;
+      }
+    }
+  }
 }
