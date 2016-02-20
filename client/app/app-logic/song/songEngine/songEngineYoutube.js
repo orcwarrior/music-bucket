@@ -19,10 +19,11 @@
         }
         function updateMetainfosOnBuffered(event) {
           // BUGFIX: Metainfos was sended and yt song was founded, not entered and valid metainfos was served
-          if (metainfos.__overwritenByPreparedMetainfos) return;
+          if (metainfos.__overwritenByPreparedMetainfos
+            || metainfos.isResolved()) return;
 
           var videoInfos = mbYoutubePlayer.getInfos(videoId);
-          var data = songMetainfosYoutube.extractArtistAndTitle(videoInfos.title || videoInfos);
+          var data = metainfos.extractArtistAndTitle(videoInfos.title || videoInfos);
           metainfos.artist = data.artist;
           metainfos.title = data.title;
           console.log("YTPlayer: Metainfos updated: "+videoInfos.title);
@@ -33,12 +34,15 @@
           return mbYoutubePlayer.isBuffered(this.videoId);
         };
         this.buffer = function () {
+          $log.info("mbYTEngine: buffer " + this.videoId);
           return mbYoutubePlayer.buffer(this.videoId, updateMetainfosOnBuffered);
         };
         this.play = function play() {
+          $log.info("mbYTEngine: play " + this.videoId);
           return mbYoutubePlayer.play(this.videoId, updateMetainfosOnBuffered);
         };
         this.stop = function stop() {
+          $log.info("mbYTEngine: stop " + this.videoId);
           return mbYoutubePlayer.stop(this.videoId);
         };
         this.pause = function pause() {
