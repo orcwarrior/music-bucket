@@ -1,0 +1,24 @@
+.list-header {
+  position: relative;
+  display: block;
+  height: auto;
+  background-color: @grey-A200;
+  overflow: hidden;
+  & .captions {
+    display: block;
+    padding: 0.5em 10px;
+    margin-right: 26px;
+    font-size: @font-size-h4;
+    font-weight: 200;
+    color: @grey-A700;
+  }
+  & .close-details {
+    position: absolute;
+    right: 0; top: 0.2em;
+    width: 26px; height: 26px;
+    //background-color: @grey-900;
+    & > * {
+      color: @grey-900;
+    }
+  }
+}
