@@ -85,11 +85,24 @@
 
 .material-transition(@time: 300ms, @prop: all) {
 
-  -webkit-transition: @prop @time cubic-bezier(.55, 0, .1, 1);
-  -moz-transition: @prop @time cubic-bezier(.55, 0, .1, 1);
-  -ms-transition: @prop @time cubic-bezier(.55, 0, .1, 1);
-  -o-transition: @prop @time cubic-bezier(.55, 0, .1, 1);
-  transition: @prop @time cubic-bezier(.55, 0, .1, 1);
+  transition-property: @prop;
+  -webkit-transition-property: @prop;
+  -moz-transition-property: @prop;
+  -ms-transition-property: @prop;
+  -o-transition-property: @prop;
+
+  transition-duration: @time;
+  -webkit-transition-duration: @time;
+  -moz-transition-duration: @time;
+  -ms-transition-duration: @time;
+  -o-transition-duration: @time;
+
+  transition-timing-function: cubic-bezier(.55, 0, .1, 1);
+  -webkit-transition-timing-function: cubic-bezier(.55, 0, .1, 1);
+  -moz-transition-timing-function: cubic-bezier(.55, 0, .1, 1);
+  -ms-transition-timing-function: cubic-bezier(.55, 0, .1, 1);
+  -o-transition-timing-function: cubic-bezier(.55, 0, .1, 1);
+
 }
 
 .row-no-padding {
