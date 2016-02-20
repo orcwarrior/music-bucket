@@ -38,9 +38,15 @@ angular.module('musicBucketEngine')
           _.each(params.getParams, function (value, key) {
             if (!_.isUndefined(value)) {
               getParams += (getParams == "") ? "?" : "&";
-              getParams += key + "=" + value;
-            }
-            ;
+              if (_.isArray(value)) {
+                getParams += _.reduce(value, function (chain, val) {
+                  return chain + key + "=" + val + "&";
+                }, "");
+                getParams.slice(0, -1); // remove last '&'
+              }
+              else
+                getParams += key + "=" + value;
+            };
           });
         }
         return getParams;
@@ -51,6 +57,7 @@ angular.module('musicBucketEngine')
       }
 
       function getBaseUrl() {
+        return "/api/lurker";
         if (params.proxy && (window.location.href.indexOf("localhost") != -1
           || window.location.href.indexOf("192.168.0.") != -1))
           return "http://" + window.location.host + "/songza-api-proxy/api/1";
@@ -60,7 +67,7 @@ angular.module('musicBucketEngine')
 
       /* Running request is debounced by time
        *  Always min. 500ms after last one */
-      var DEBOUNCE_TIME = 751;
+      var DEBOUNCE_TIME = 200;
 
       function debounceRequest() {
         var lastTimestamp = _.last(songzaApiRequestQueryTimestamps);
@@ -115,16 +122,19 @@ angular.module('musicBucketEngine')
       search: {
         artist: function (query, limit) {
         },
-        situation: function (query, style) {
-          style = "flat-220"
-          return new songzaApiRequest("/search/situation", {getParams: {'style': style, 'query': query, 'limit': limit}}).promise;
-
+        situation: function (query, limit) {
+          return new songzaApiRequest("/situation/search", {
+            getParams: {
+              'query': query,
+              'limit': limit
+            }
+          }).promise;
         },
         station: function (query, limit) {
-          return new songzaApiRequest("/search/station", {getParams: {'query': query, 'limit': limit}}).promise;
+          return new songzaApiRequest("/station/search", {getParams: {'q': query, 'limit': limit}}).promise;
         },
         song: function (query, limit) {
-        },
+        }
       },
       station: {
         get: function (stationId) {
@@ -134,49 +144,12 @@ angular.module('musicBucketEngine')
           return new songzaApiRequest("/station/:stationId/next", {'stationId': stationId, proxy: true}).promise;
         },
         multi: function (stationIds) {
-          // Multi request?
-          var CHUNK_SIZE = 150;
-          var mainDeferred = $q.defer();
-          var promises = [];
-          var stationChunks = _.groupBy(stationIds, function (el, index) {
-            return Math.floor(index / CHUNK_SIZE);
-          });
+          console.log("Multi station request, count: " + stationIds.length + ".");
 
-          console.log("Multi station request, count: " + stationIds.length + ", chunks: " + stationChunks.length);
-
-          // Setup requests
-          var requestCnt = _.size(stationChunks);
-          _.each(stationChunks, function (chunk) {
-            var stationsChain;
-            if (window.location.href.indexOf("localhost") != -1)
-              stationsChain = chunk.join();
-            else {
-              stationsChain = chunk.join("&id=");
-              stationsChain += "&app=mb";
-            }
-            promises.push(new songzaApiRequest("/station/multi", {
-              getParams: {id: stationsChain},
-              proxy: true
-            }).promise);
-
-          });
-
-          // Handle promises
-          var allStations = [];
-          _.each(promises, function (promise) {
-            promise.then(function (response) {
-              requestCnt--;
-              allStations = _.union(allStations, response.data);
-              // BUGFIX: Strange behaviour - multi duplicates stations somehow, let them be unique.
-              allStations = _.uniq(allStations, false, function (station) {
-                return station.id;
-              });
-              if (!requestCnt)
-                mainDeferred.$$resolve({data: allStations});
-            });
-          });
-
-          return mainDeferred.promise;
+          return new songzaApiRequest("/station/search", {
+            getParams: {id: stationIds},
+            proxy: true
+          }).promise;
         },
         downvote: undefined,
         upvote: undefined,
@@ -186,45 +159,47 @@ angular.module('musicBucketEngine')
         stationSong: undefined,
         release: undefined,
         // http://songza.com/api/1/station/1708916/song/5419075/notify-play
-        notifyPlay  :function(stationId, songId, skip) {
+        notifyPlay: function (stationId, songId, skip) {
           return new songzaApiRequest("/station/:stationId/song/:songId/notify-play",
-            {'stationId': stationId, 'songId': songId, proxy: false,
-            getParams: { 'skip' : (skip ? 1 : undefined)}}).promise;
+            {
+              'stationId': stationId, 'songId': songId, proxy: false,
+              getParams: {'skip': (skip ? 1 : undefined)}
+            }).promise;
         }
       },
       artist: function (artistId) {
 
       },
       situation: {
-        targeted: function (maxSituations, maxStations) {
+        targeted: function (maxSituations, maxStations, day, time) {
           var curDate = new Date();
-          return new songzaApiRequest("/situation/targeted", {
+          return new songzaApiRequest("/advisor", {
             getParams: {
-              'current_date': encodeURIComponent(moment().format()), // ISO 8601
-              'day': moment().day(),
+              //'current_date': encodeURIComponent(moment().format()), // ISO 8601
+              'day': day || moment().day(),
               'period': songzaHlpGetDayPeriod(curDate).value,
-              'device': 'web',
-              'site': 'songza',
-              'optimizer': 'default',
-              'max_situations': maxSituations || 5,
-              'max_stations': maxStations || 5,
-              'style': "flat-220"
+              //'device': 'web',
+              //'site': 'songza',
+              //'optimizer': 'default',
+              //'max_situations': maxSituations || 5,
+              //'max_stations': maxStations || 5,
+              //'style': "flat-220"
             }
           }).promise;
           // situation/targeted?current_date=2015-04-10T14%3A46%3A44-02%3A240&day=5&period=2&device=web&site=songza&optimizer=default&max_situations=5&max_stations=3&style=flat-220
         }
       },
       activities: function () {
-        return new songzaApiRequest("/gallery/tag/activities", {}).promise;
+        return new songzaApiRequest("/gallery/type/activities", {}).promise;
       },
       decades: function () {
-        return new songzaApiRequest("/gallery/tag/decades", {}).promise;
+        return new songzaApiRequest("/gallery/type/decades", {}).promise;
       },
       genres: function () {
-        return new songzaApiRequest("/gallery/tag/genres", {}).promise;
+        return new songzaApiRequest("/gallery/type/genres", {}).promise;
       },
       moods: function () {
-        return new songzaApiRequest("/gallery/tag/moods", {}).promise;
+        return new songzaApiRequest("/gallery/type/moods", {}).promise;
       },
       user: {}
       ,
