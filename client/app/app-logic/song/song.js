@@ -34,8 +34,12 @@
         this.entryId = myEntryId; // Anti-circullar: id only
         // It's ugly :(
         if (response && response.metainfosAsResponse) {
+          var metaProto;
+          var clone = _.clone(response);
           this.metainfos = new songMetainfosConstructor(null, type);
-          this.metainfos = _.extend(this.metainfos, response);
+          metaProto = this.metainfos.__proto__;
+          this.metainfos = _.extend(this.metainfos, clone);
+          //this.metainfos.__proto__ = metaProto;
         }
         else
           this.metainfos = new songMetainfosConstructor(response, type);
