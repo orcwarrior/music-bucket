@@ -1,0 +1,56 @@
+mb-player-list.theatermode {
+  top: 0px !important;
+  bottom: 6px;
+}
+mb-player-list.playlist-closed {
+  left: -500px;
+
+  .material-transition(300ms, all);
+  &-add, &-remove {
+    left: 0;
+    .material-transition(300ms, all);
+  }
+  &-add-active {
+    left: -500px;
+    .material-transition(300ms, all);
+  }
+}
+mb-player-list {
+  position: absolute;
+  display: block;
+  top: 365px;
+  overflow: hidden;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  & .list-scroll {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  & .player-list-swapper {
+    @transform-prop: transform, opacity;
+    overflow: hidden;
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    opacity: 0;
+    transform: translate(0, 0) scale(0, 0);
+    background-color: @grey-A200;
+    .material-transition(300ms, @transform-prop);
+    &.starting-add, &.starting-remove-active {
+      opacity: 0.5;
+      transform: translate(0, 0) scale(0.2, 0.2);
+      .material-transition(300ms, @transform-prop);
+    }
+    &.starting-add-active  {
+      opacity: 1;
+      transform: translate(0, 0) scale(45, 45);
+      .material-transition(300ms, @transform-prop);
+    }
+  }
+}
+

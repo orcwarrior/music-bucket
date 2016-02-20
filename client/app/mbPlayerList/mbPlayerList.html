@@ -1,0 +1,11 @@
+<div ng-class="manager.getHeaderClass()" mb-player-list-header class="list-header"
+     header="manager.activeList.header"
+  ng-if="manager.activeList.header"></div>
+<div
+  ng-scrollbar is-bar-shown="playlistScroll" rebuild-on-resize ng-mouseleave="playlistScroll=false" ng-mouseover="initPlaylistScroll()"
+  rebuild-on="list-scroll:update" class="list-scroll scrollme">
+  <div ng-class="manager.getContainerClass()" mb-player-list-container
+       container="manager.activeList.container"></div>
+</div>
+<div class="player-list-swapper"
+     ng-class="{'starting' : manager.ui.swapper.state == 'start'}"></div>
