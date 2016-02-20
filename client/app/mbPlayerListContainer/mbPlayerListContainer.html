@@ -1,0 +1,27 @@
+<div ng-repeat="listEntry in container.entries track by listEntry.id" class="list-entry-wrapper"
+     ng-click="container.actions.click && container.actions.click($event, listEntry)"
+     ng-dblclick="container.actions.dblclick && container.actions.dblclick($event, listEntry)">
+  <div class="list-entry">
+    <div class="entry-description" ng-class="{ 'active-list-entry' : container.isActive(listEntry)}"
+      ng-mouseover="container.resolve(listEntry)">
+      {{container.getEntryDescription(listEntry)}}
+    </div>
+
+
+    <div class="menu-circle" ng-if="actionsToggled[$index]"></div>
+    <div class="menu-items-wrapper" ng-if="actionsToggled[$index]"
+         ng-click="">
+      <span class="menu-item" ng-repeat="(actionName, action) in container.menuActions"
+            ng-click="action.on(listEntry) || toggleActions('none')">
+        <md-tooltip md-direction="top">
+          {{action.description}}
+        </md-tooltip>
+        <span class="mdi-{{action.icon}}"></span>
+      </span>
+    </div>
+
+    <div ng-if="container.menuActions" class="list-item-dropdown">
+      <span class="mdi-navigation-menu" style="z-index: 0" ng-click="toggleActions($index)"></span>
+    </div>
+  </div>
+</div>
