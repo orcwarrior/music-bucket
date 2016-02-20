@@ -71,4 +71,31 @@ situationSchema.methods.mapper = function (situationObj) {
   });
 }
 
+situationSchema.statics.findByQueryString = function (queryString) {
+  var query;
+  if (queryString.name) queryString.name = new RegExp(queryString.name, "i");
+  if (queryString._id && queryString._id.length) queryString._id = {$in: queryString._id};
+  if (queryString.q) {
+    var query = queryString.q;
+    delete queryString.q;
+    queryString.$text = {$search: query};
+    query = this.find(queryString, { score: { $meta: "textScore" }}).sort({score: {$meta: "textScore"}});
+  }
+
+  if (!query) query = this.find(queryString);
+  console.log("Updated queryString: ");
+  console.log(queryString);
+  return query;
+};
+
+
+// Text index
+situationSchema.index({name: "text", description: "text"}, {
+  name: "best_match_index",
+  weights: {
+    name: 4,
+    description: 1
+  }
+});
+
 module.exports = mongoose.model('songzaSituation', situationSchema);

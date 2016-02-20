@@ -65,6 +65,26 @@ station.statics.create = function (songzaObj, cb) {
 
   // console.log("station.methods.create." + createdStation._id);
 };
+
+station.statics.findByQueryString = function (queryString) {
+  var query;
+  if (queryString.name) queryString.name = new RegExp(queryString.name, "i");
+  if (queryString.id && queryString.id.length) {
+    queryString._id = {$in: queryString.id};
+    delete queryString.id;
+  }
+  if (queryString.q) {
+    var query = queryString.q;
+    delete queryString.q;
+    queryString.$text = {$search: query};
+    query = this.find(queryString, { score: { $meta: "textScore" }}).sort({score: {$meta: "textScore"}});
+  }
+
+  if (!query) query = this.find(queryString);
+  console.log("Updated queryString: ");
+  console.log(queryString);
+  return query;
+};
 // hooks pre-validate (changed from pre save) if (it's not resolved for even a little
 // - grab station infos.
 station.pre('validate', function (next) {
@@ -90,4 +110,15 @@ station.post('findOneAndUpdate', function (station) {
 
 station.post('save', function () {
 });
+
+// Text index
+station.index({name: "text", description: "text", featuredArtist: "text"}, {
+  name: "best_match_index",
+  weights: {
+    name: 3,
+    description: 1,
+    featuredArtist: 1
+  }
+});
+
 module.exports = mongoose.model('songzaStation', station);
