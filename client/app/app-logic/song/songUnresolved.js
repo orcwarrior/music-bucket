@@ -10,6 +10,7 @@
         var self = this;
         new songSeeker(initData, true)
           .then(function (song) {
+            song.id = self.id;
             song.entryId = self.entryId; // rewrite old entryId;
             self = song;
             //_.extendOwn(self, song);
