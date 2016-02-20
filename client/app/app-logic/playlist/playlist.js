@@ -79,9 +79,9 @@
           this.entries.push(entry);
           this.alter();
         };
-        this.removeEntry = function (entryId) {
-          this.entries = _.reject(this.entries, function (entry) {
-            return entry.id == entryId;
+        this.removeEntry = function (entry) {
+          this.entries = _.reject(this.entries, function (e) {
+            return e.id == entry.id;
           });
           this.alter();
         };
@@ -102,7 +102,8 @@
           this.recalculateSongsCount();
           this.storeInLocalstorage();
 
-          $rootScope.$broadcast('playlist:modified', this);
+          $rootScope.$broadcast('list-scroll:update', this);
+          $rootScope.$broadcast('playlist:update', this);
         };
         this.recalculateSongsCount = function () {
           this.songsCount = 0;
