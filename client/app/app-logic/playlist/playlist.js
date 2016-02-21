@@ -34,7 +34,7 @@
 
         function init() {
           self.name = '';
-          self.entries = [];
+          self.entries = {};
           self.description = '';
           self.sampleSongs = [];
           self.isAltered = false;
@@ -61,28 +61,24 @@
 
         // methods:
         this.isEmpty = function () {
-          return !this.entries.length;
+          return !_.allKeys(this.entries).length;
         };
         this.getNext = function () {
-          return this.playlistSequencer.getNext(this.entries, this.songsCount, {playlistCallback: this.getNextCallback});
+          return this.playlistSequencer.getNext(_.values(this.entries), this.songsCount, {playlistCallback: this.getNextCallback});
           /* an promise*/
         };
         this.getNextCallback = function (song) {
           putSongToSampler(self, song);
         };
         this.addEntry = function (entry) {
-          var sameId = _.find(this.entries, function (pE) {
-            return (pE.id === entry.id);
-          });
-          if (sameId) return $log.warn("There is already entry with id: " + entry.id);
+          if (!_.isUndefined(this.entries[entry.id])) return $log.warn("There is already entry with id: " + entry.id);
 
-          this.entries.push(entry);
+          this.entries[entry.id] = entry;
           this.alter();
         };
         this.removeEntry = function (entry) {
-          this.entries = _.reject(this.entries, function (e) {
-            return e.id == entry.id;
-          });
+          if (!_.isUndefined(this.entries[entry.id])) return $log.warn("There is no entry with id: " + entry.id);
+          delete this.entries[entry.id];
           this.alter();
         };
         this.findEntry = function (entryMask) {
