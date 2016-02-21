@@ -379,23 +379,24 @@ angular.module("musicBucketEngine")
             mbResponse = mbResponse.concat(response.data.releases);
             $log.info("discographyCollector: MB albums: " + mbResponse['release-count']);
             reportApiResponse();
+            // Is there more?
+            if (response.data.releases.length === 100) {
+              musicbrainzApi.search.release({getParams: {artist: artistMbid}}, 100, 100, ['recordings', 'release-groups'])
+                .then(function (response) {
+                  reportApiResponse();
+                  mbResponse = mbResponse.concat(response.data.releases);
+                  $log.info("discographyCollector: MB albums: " + mbResponse['release-count']);
+                });
+            }
+            else { // there is no more to look for:
+              reportApiResponse();
+            }
           });
       }
       else { /* some artist are so hipster - they don't even have they mbid*/
         reportApiResponse();
       }
 
-      if (artistMbid) {
-        musicbrainzApi.search.release({getParams: {artist: artistMbid}}, 100, 100, ['recordings', 'release-groups'])
-          .then(function (response) {
-            mbResponse = mbResponse.concat(response.data.releases);
-            $log.info("discographyCollector: MB albums: " + mbResponse['release-count']);
-            reportApiResponse();
-          });
-      }
-      else { /* some artist are so hipster - they don't even have they mbid*/
-        reportApiResponse();
-      }
 
       function reportApiResponse() {
         apiResponsesCnt++;
