@@ -12,22 +12,11 @@ angular.module('musicBucketEngine')
       }
     }
 
-    function filterMetainfos(metainfos) {
-      return _.pick(metainfos, 'album', 'artist', 'title', 'albumArt', 'genere');
-    }
-
-    function processFoundedSong(song, prepMetainfos) {
-      song.metainfos = _.extend(song.metainfos,
-        filterMetainfos(prepMetainfos));
-      if (prepMetainfos.artist && prepMetainfos.title)
-        song.metainfos.__overwritenByPreparedMetainfos = true;
-      return song;
-    }
 
     function _pickBestSong(foundedSongs, prepMetainfos) {
       var bestResult = _.chain(foundedSongs).sortBy('val').reverse().first().value();
       var createdSong = new song(bestResult.entry,  bestResult.type);
-      return processFoundedSong(createdSong, prepMetainfos);
+      return createdSong;
     }
 
     var SEEKING_SERVICES = 2;

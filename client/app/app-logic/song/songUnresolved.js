@@ -6,15 +6,28 @@
   angular.module('musicBucketEngine')
     .factory('songUnresolved', function (songControllsInterface, songMetainfosConstructor, songCommons, songSeeker, songMetainfos, hashGenerator) {
 
+
+      function filterMetainfos(metainfos) {
+        return _.pick(metainfos, 'album', 'artist', 'title', 'albumArt', 'genere', 'trackNo');
+      }
+
+      function processFoundedSong(song, prepMetainfos) {
+        song.metainfos = _.extend(song.metainfos,
+          filterMetainfos(prepMetainfos));
+        if (prepMetainfos.artist && prepMetainfos.title)
+          song.metainfos.__overwritenByPreparedMetainfos = true;
+        return song;
+      }
+
       var defaultResolveFunction = function (initData, resolveCb) {
         var self = this;
         new songSeeker(initData, true)
           .then(function (song) {
             song.id = self.id;
             song.entryId = self.entryId; // rewrite old entryId;
-            self = song;
-            //_.extendOwn(self, song);
             self.resolve = undefined;
+            processFoundedSong(song, self.metainfos);
+            self = song;
             if (!_.isUndefined(resolveCb))
               resolveCb(self);
           });
@@ -22,6 +35,7 @@
 
       var songUnresolved = function songUnresolved (initData, resolveFunction, entryId) {
         this.id = hashGenerator.generateId();
+        if (initData.trackNo) this.id = initData.trackNo + this.id;
         this.resolveFunction = resolveFunction;
         this.initData = initData;
         this.resolve = _.bind(this.resolveFunction || defaultResolveFunction, this, initData || this.initData);
