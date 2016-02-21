@@ -6,7 +6,7 @@
   angular.module('musicBucketEngine')
     .factory('albumEntryBuilder', function ($q, entryCommons, virtualEntry, songMetainfos, songUnresolved) {
       return function albumEntryBuilder(albumInfos) {
-        var albumEntry = new virtualEntry((albumInfos.artist || albumInfos.__artistName) + " - " + albumInfos.name, [], entryCommons.nextOrder.sequence);
+        var albumEntry = new virtualEntry((albumInfos.artist || albumInfos.__artistName) + " - " + albumInfos.name, undefined, entryCommons.nextOrder.sequence);
         _.each(albumInfos.tracks, function (track) {
           albumEntry.addSong(new songUnresolved(
             new songMetainfos({artist: albumInfos.artist || albumInfos.__artistName,
