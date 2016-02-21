@@ -61,7 +61,14 @@
               convertedExt[key] = convertFromModel(val, modelName);
           });
           _.extendOwn(converted, convertedExt);
-        } else {
+        }
+        // bugfix: not all object in-dept-line has to have conversion properties
+        else if (_.isObject(obj)) {
+          return _.mapObject(obj, function(prop) {
+            return convertFromModel(prop, modelName)
+          });
+        }
+        else {
           return obj; // return original
           //_.extendOwn(converted, obj);
         }
@@ -89,6 +96,12 @@
             else if (_.isObject(val))
               converted[key] = convertToModel(val, modelName);
           })
+        }
+        // bugfix: not all object in-dept-line has to have conversion properties
+        else if (_.isObject(obj)) {
+          converted = _.mapObject(obj, function(val) {
+            return convertToModel(val, modelName)
+          });
         } else {
           return obj; // return original ???
         }
