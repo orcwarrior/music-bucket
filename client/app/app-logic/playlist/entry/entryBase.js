@@ -48,9 +48,11 @@
             return this.getPlaylistDescription();
         },
         removeSong: function(song) {
-          this.entries = _.reject(this.entries, _.matcher(song));
+          if (_.isUndefined(this.entries[song.id])) return $log.warn("There is no song with id: " + song.id);
+          delete this.entries[entry.id];
+
           if (this.playedIDs) {
-            var altered = _.without(this.playedIDs, song);
+            var altered = _.without(this.playedIDs, song.id);
             if (altered.length !== this.playedIDs.length)
               this.playedCount--;
             this.playedIDs = altered;

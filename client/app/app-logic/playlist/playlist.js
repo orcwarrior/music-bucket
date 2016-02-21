@@ -77,7 +77,7 @@
           this.alter();
         };
         this.removeEntry = function (entry) {
-          if (!_.isUndefined(this.entries[entry.id])) return $log.warn("There is no entry with id: " + entry.id);
+          if (_.isUndefined(this.entries[entry.id])) return $log.warn("There is no entry with id: " + entry.id);
           delete this.entries[entry.id];
           this.alter();
         };
