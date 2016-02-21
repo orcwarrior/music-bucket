@@ -11,6 +11,7 @@ angular.module('musicBucketApp')
       // this.manager will be autolinked by manager
       this.header = undefined; // no header right now.
       this.container = {
+        entryRef: playlist,
         entries: playlist.entries,
         actions: {
           dblclick: function ($event, listEntry) {
