@@ -14,6 +14,7 @@
       function videoRegex() {
         return /[?&]v=([\S?&#]+?)($|[?&#])/g;
       }
+
       function extractIdFromUrl(url) {
         match = playlistRegex().exec(url);
         if (_.isNull(match)) {
@@ -46,16 +47,16 @@
         {
           youtubeApiHelper.getPlaylistEntries(this.id)
             .then(function (entries) {
-              self.entries = _.map(entries, function (entry) {
-                return new song(entry.snippet.resourceId.videoId, songCommons.songType.youtube);
+              self.entries = {};
+              _.each(entries, function (entry) {
+                var _song = new song(entry.snippet.resourceId.videoId, songCommons.songType.youtube);
+                _song.entryId = self.id;
+                self.entries[_song.id] = _song;
               });
               self.songsCount = entries.length;
 
               if (_.isUndefined(self.shortDescription))
                 self.shortDescription = "Playlista youtube: " + self.id;
-              _.map(self.entries, function (song) {
-                song.entryId = self.id;
-              });
             });
           getShortDescription(this)
             .then(function (response) {
@@ -85,8 +86,7 @@
             }, 500);
             return ytPromise.promise;
           }
-          var idx = Math.round(Math.random() * this.entries.length);
-          selectedEntry = this.entries[idx];
+          selectedEntry = _.sample(this.entries);
           // Already played?
           if (_.some(this.playedIDs, function (pID) {
               return pID == selectedEntry.metainfos.id;
