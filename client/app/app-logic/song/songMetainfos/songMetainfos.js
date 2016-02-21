@@ -6,13 +6,18 @@
   angular.module('musicBucketEngine')
     .factory('songMetainfos', function () {
       var songMetainfosFunc = function songMetainfos(srcMetainfos) {
-      //  this.id = undefined;
-      //  this.artist = "";
-      //  this.title = "";
-      //  this.album = undefined;
-      //  this.albumArt = undefined;
-      //  this.genere = "";
-        this.getSrc =  function () {
+        if (!_.isUndefined(srcMetainfos)) {
+          this.id = srcMetainfos.id;
+          this.artist = srcMetainfos.artist;
+          this.title = srcMetainfos.title;
+          this.album = srcMetainfos.album;
+          this.albumArt = srcMetainfos.albumArt;
+          this.genere = srcMetainfos.genere;
+          this.title = srcMetainfos.title;
+          this.trackNo = srcMetainfos.trackNo;
+        }
+
+        this.getSrc = function () {
           return this.url;
         };
         this.getSongDescription = function () {
@@ -22,7 +27,7 @@
             return this.title;
           else return this.artist + ' - ' + this.title;
         };
-        this.resolve =function() {
+        this.resolve = function () {
           return;
         };
         // this hacky-fix will cause restoring from db/cookie model to create proper metainfos otrue;
@@ -46,6 +51,7 @@
             'albumArt',
             'genere',
             'url',
+            'trackNo',
             'metainfosAsResponse']
         },
         cookies: {
@@ -58,6 +64,7 @@
             'albumArt',
             'genere',
             'url',
+            'trackNo',
             'metainfosAsResponse']
         }
       };

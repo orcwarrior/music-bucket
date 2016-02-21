@@ -57,6 +57,7 @@
             'album',
             'title',
             'url',
+            'trackNo',
             'metainfosAsResponse']
         },
         cookies: {
@@ -67,6 +68,7 @@
             'album',
             'title',
             'url',
+            'trackNo',
             'metainfosAsResponse']
         }
       };
