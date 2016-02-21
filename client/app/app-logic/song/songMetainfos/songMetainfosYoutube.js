@@ -18,6 +18,7 @@
         this.albumArt = "http://img.youtube.com/vi/"+this.id+"/hqdefault.jpg";
         this.url = "http://youtube.com/?watch=" + this.id;
         this.getUrl = function () { return this.url; };
+        this.metainfosAsResponse = true;
       };
       songMetainfosYoutube.prototype = new songMetainfos();
 
@@ -53,16 +54,20 @@
           pickedFields: [
             'id',
             'artist',
+            'album',
             'title',
-            'url']
+            'url',
+            'metainfosAsResponse']
         },
         cookies: {
           base: "songMetainfosYoutube",
           pickedFields: [
             'id',
             'artist',
+            'album',
             'title',
-            'url']
+            'url',
+            'metainfosAsResponse']
         }
       };
       return songMetainfosYoutube;
