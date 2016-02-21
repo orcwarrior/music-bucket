@@ -9,10 +9,13 @@
         var albumEntry = new virtualEntry((albumInfos.artist || albumInfos.__artistName) + " - " + albumInfos.name, undefined, entryCommons.nextOrder.sequence);
         _.each(albumInfos.tracks, function (track) {
           albumEntry.addSong(new songUnresolved(
-            new songMetainfos({artist: albumInfos.artist || albumInfos.__artistName,
-                album: albumInfos.name,
-                albumArt: albumInfos.albumArt,
-                title: track.name})
+            new songMetainfos({
+              artist: albumInfos.artist || albumInfos.__artistName,
+              album: albumInfos.name,
+              albumArt: albumInfos.albumArt,
+              title: track.name,
+              trackNo: track.index
+            })
             /*,resolveFunction (use default)*/
           ));
         });
