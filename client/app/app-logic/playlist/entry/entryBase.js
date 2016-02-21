@@ -57,6 +57,9 @@
               this.playedCount--;
             this.playedIDs = altered;
           }
+        },
+        sort : function (entries) {
+          return entries;
         }
       };
       return entryBase;

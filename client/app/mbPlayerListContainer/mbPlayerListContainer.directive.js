@@ -6,7 +6,7 @@ angular.module('musicBucketApp')
       templateUrl: 'app/mbPlayerListContainer/mbPlayerListContainer.html',
       restrict: 'EAC',
       scope: {
-        container : "=container"
+        container: "=container"
       },
       link: function (scope, element, attrs) {
         scope.actionsToggled = [];
@@ -15,13 +15,20 @@ angular.module('musicBucketApp')
           scope.actionsToggled = [];
           scope.actionsToggled[$index] = !oldState;
         };
-        scope.$watch('container', function() {
+        scope.$watch('container', function () {
           $rootScope.$broadcast('list-scroll:update', null);
-          $timeout(function() {
+          $timeout(function () {
             var container = angular.element(element[0].parentElement);
             $rootScope.$broadcast('list-scroll:update', null);
           }, 1000, true);
         });
       }
     };
+  })
+  .filter('mbPlayerListFilter', function () {
+    return function (items, entry) {
+      var sortedItems = (entry && entry.sort && entry.sort(items));
+      if (!sortedItems) sortedItems = items;
+      return sortedItems;
+    }
   });

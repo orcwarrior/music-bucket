@@ -33,7 +33,8 @@
             if (_.isUndefined(lastPlayed)) {
               song = _.values(this.entries)[0];
             } else {
-              song = _.omit(this.entries, this.playedIDs)[0];
+              song = _.omit(this.entries, _.values(this.playedIDs));
+              song = song[_.keys(song)[0]]; // doesn't look too good
             }
           } else { // random
             var nonPlayed = _.omit(this.entries, this.playedIDs);
@@ -70,6 +71,17 @@
         song.entryId = this.id;
         var mbPlayerEngine = $injector.get('mbPlayerEngine');
         mbPlayerEngine.getPlaylist().alter();
+      };
+      virtualEntryFunc.prototype.sort = function (entries) {
+        var idx=0;
+        if (this.nextOrder == entryCommons.nextOrder.sequence)
+          return _.sortBy(entries, function (song) {
+            return parseInt(song.metainfos.trackNo + "0" + idx++);
+          });
+        else
+          return _.sortBy(entries, function (song, idx) {
+            return song.metainfos.getSongDescription();
+          });
       };
       virtualEntryFunc.prototype.__models__ = {
         db: {

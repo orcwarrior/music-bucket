@@ -1,4 +1,4 @@
-<div ng-repeat="listEntry in container.entries track by listEntry.id" class="list-entry-wrapper"
+<div ng-repeat="(listEntryId, listEntry) in container.entries | mbPlayerListFilter:container.entryRef" class="list-entry-wrapper"
      ng-click="container.actions.click && container.actions.click($event, listEntry)"
      ng-dblclick="container.actions.dblclick && container.actions.dblclick($event, listEntry)">
   <div class="list-entry">
