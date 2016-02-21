@@ -15,8 +15,8 @@
         this.shortDescription = entryName;
         this.id = entryId = "VIR-" + this.shortDescription;
         this.type = entryCommons.entryType.virtalPlaylist;
-        this.nextOrder = (nextOrder ? nextOrder : entryCommons.nextOrder.random);
-        this.entries = songs || [];
+        this.nextOrder = nextOrder || entryCommons.nextOrder.random;
+        this.entries = songs || {};
         _.each(this.entries, function (song) {
           song.entryId = entryId;
         });
@@ -31,25 +31,16 @@
           else if (this.nextOrder === entryCommons.nextOrder.sequence) {
             var lastPlayed = _.last(this.playedIDs);
             if (_.isUndefined(lastPlayed)) {
-              song = this.entries[0];
+              song = _.values(this.entries)[0];
             } else {
-              song = _.reduce(this.entries, function (memo, val, idx, list) {
-                if (val.id === lastPlayed)
-                  memo = list[idx + 1];
-                return memo;
-              }, undefined);
+              song = _.omit(this.entries, this.playedIDs)[0];
             }
-            songId = song.id;
-          } else {
-            var allSongsIDs = _.map(this.entries, function (s) {
-              return s.id;
-            });
-            var nonPlayed = _.difference(allSongsIDs, this.playedIDs);
-            songId = _.sample(nonPlayed);
-            song = _.find(this.entries, _.matcher({id: songId}));
+          } else { // random
+            var nonPlayed = _.omit(this.entries, this.playedIDs);
+            song = _.sample(nonPlayed);
           }
           if (_.isUndefined(options.songId)) // play song on demand don't match it as played
-            this.playedIDs.push(songId);
+            this.playedIDs.push(song.id);
 
           if (_.isFunction(song.resolve))
             song.resolve(function (resolvedSong) {
@@ -66,17 +57,16 @@
           return this.playedIDs.length;
         };
         this.getSongsCount = function () {
-          return this.entries.length;
+          if (!this.songsCount)
+            this.songsCount = _.keys(this.entries).length;
+          return this.songsCount
         };
       };
 
       virtualEntryFunc.prototype = new entryBase();
       virtualEntryFunc.prototype.addSong = function (song) {
-        var sameId = _.find(this.entries, function (entry) {
-          return entry.id === song.id;
-        });
-        if (!_.isUndefined(sameId)) return $log.info("There is already song with same id!");
-        this.entries.push(song);
+        if (!_.isUndefined(this.entries[song.id])) return $log.info("There is already song with same id!");
+        this.entries[song.id] = song;
         song.entryId = this.id;
         var mbPlayerEngine = $injector.get('mbPlayerEngine');
         mbPlayerEngine.getPlaylist().alter();
