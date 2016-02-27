@@ -8,8 +8,12 @@
 
 
       function filterMetainfos(metainfos) {
-        return _.pick(metainfos, 'album', 'artist', 'title', 'albumArt', 'genere', 'trackNo');
-      }
+        var filteredMeta = {};
+        _.each(_.pick(metainfos, 'album', 'artist', 'title', 'albumArt', 'genere', 'trackNo'), function (val, key) {
+          if (!_.isUndefined(val)) filteredMeta[key] = val;
+        });
+        return filteredMeta;
+      };
 
       function processFoundedSong(song, prepMetainfos) {
         song.metainfos = _.extend(song.metainfos,
@@ -33,9 +37,12 @@
           });
       };
 
-      var songUnresolved = function songUnresolved (initData, resolveFunction, entryId) {
-        this.id = hashGenerator.generateId();
-        if (initData.trackNo) this.id = initData.trackNo + this.id;
+      function getSongId(initData) {
+        return s.dasherize((initData.trackNo || "") + (initData.artist || "") + (initData.album || "") + (initData.title || ""));
+      }
+
+      var songUnresolved = function songUnresolved(initData, resolveFunction, entryId) {
+        this.id = getSongId(initData);
         this.resolveFunction = resolveFunction;
         this.initData = initData;
         this.resolve = _.bind(this.resolveFunction || defaultResolveFunction, this, initData || this.initData);
@@ -59,7 +66,7 @@
       songUnresolved.prototype.__models__ = {
         db: {
           base: "songUnresolved",
-          constructorArgs : ['initData', 'resolveFunction', 'entryId'],
+          constructorArgs: ['initData', 'resolveFunction', 'entryId'],
           pickedFields: [
             'id',
             'resolveFunction',
@@ -69,7 +76,7 @@
         },
         cookies: {
           base: "songUnresolved",
-          constructorArgs : ['initData', 'resolveFunction', 'entryId'],
+          constructorArgs: ['initData', 'resolveFunction', 'entryId'],
           pickedFields: [
             'id',
             'resolveFunction',
