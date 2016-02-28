@@ -59,7 +59,9 @@
           }
         },
         sort : function (entries) {
-          return entries;
+          return _.sortBy(entries, function (song, idx) {
+            return song.metainfos.getSongDescription();
+          });
         }
       };
       return entryBase;
