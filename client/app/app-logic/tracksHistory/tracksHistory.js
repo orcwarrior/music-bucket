@@ -28,10 +28,10 @@
           this.history.unshift(song);
         };
         this.getSongById = function (songId) {
-          var historyEntry = _.find(this.history, function (entry) {
-            return entry.song.metainfos.id === songId;
+          var historyEntry = _.find(this.history, function (song) {
+            return song.metainfos.id === songId;
           });
-          return _.isUndefined(historyEntry) ? undefined : historyEntry.song;
+          return _.isUndefined(historyEntry) ? undefined : historyEntry;
         };
 
         return this;
