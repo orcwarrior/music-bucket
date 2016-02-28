@@ -242,7 +242,7 @@ angular.module('musicBucketApp')
     };
 
     $scope.addAlbumToPlaylist = function (album) {
-      var albumEntry = new albumEntryBuilder(album);
+      var albumEntry = albumEntryBuilder.build(album);
       mbPlayerEngine.getPlaylist().addEntry(albumEntry);
     };
     $scope.$watch('song.infos.selectedAlbum', function (newVal, oldVal) {
