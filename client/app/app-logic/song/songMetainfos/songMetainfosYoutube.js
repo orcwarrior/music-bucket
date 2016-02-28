@@ -15,33 +15,39 @@
         } else {
           this.id = providedInfos;
         }
-        this.albumArt = "http://img.youtube.com/vi/"+this.id+"/hqdefault.jpg";
+        this.albumArt = "http://img.youtube.com/vi/" + this.id + "/hqdefault.jpg";
         this.url = "http://youtube.com/?watch=" + this.id;
-        this.getUrl = function () { return this.url; };
+        this.getUrl = function () {
+          return this.url;
+        };
         this.metainfosAsResponse = true;
       };
       songMetainfosYoutube.prototype = new songMetainfos();
 
-      songMetainfosYoutube.prototype.extractArtistAndTitle = function(videoTitle) {
-        var res = {artist:'', title:''};
+      songMetainfosYoutube.prototype.extractArtistAndTitle = function (videoTitle) {
+        var res = {artist: '', title: ''};
         var split = videoTitle.split(' -');
         if (split.length === 1) {// man w/e
           split = videoTitle.split(' ');
-          split = [split[0], videoTitle.substr(split[0].length+1)]
+          split = [split[0], videoTitle.substr(split[0].length + 1)]
         } else
-          split[1] = videoTitle.substr(split[0].length+3);
+          split[1] = videoTitle.substr(split[0].length + 3);
         res.artist = split[0].trim();
         res.title = split[1].trim();
         return res;
       };
-      songMetainfosYoutube.prototype.isResolved = function() {
-        return !((_.isUndefined(this.artist) || this.artist === "") && (_.isUndefined(this.title) || this.title === ""));
+      songMetainfosYoutube.prototype.isResolved = function () {
+        return this.cannotResolve || !((_.isUndefined(this.artist) || this.artist === "") && (_.isUndefined(this.title) || this.title === ""));
       };
-      songMetainfosYoutube.prototype.resolve = function() {
+      songMetainfosYoutube.prototype.resolve = function () {
         var self = this;
         if (!this.isResolved()) {
           youtubeApi.video.get(this.id)
-            .then(function(response) {
+            .then(function (response) {
+              if (response.data.items.length == 0) {
+                self.cannotResolve = true;
+                return;
+              }
               var snippet = response.data.items[0].snippet;
               var info = self.extractArtistAndTitle(snippet.title);
               _.extendOwn(self, info);
@@ -57,7 +63,6 @@
             'album',
             'title',
             'url',
-            'trackNo',
             'metainfosAsResponse']
         },
         cookies: {
@@ -68,7 +73,6 @@
             'album',
             'title',
             'url',
-            'trackNo',
             'metainfosAsResponse']
         }
       };
