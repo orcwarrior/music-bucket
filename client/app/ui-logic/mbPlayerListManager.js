@@ -26,7 +26,7 @@ angular.module('musicBucketApp')
         if (!_.isUndefined($event)) {
           this.ui.swapper.state = 'start';
           this.ui.swapper.element.css('top', $event.pageY - 420);
-          this.ui.swapper.element.css('left', $event.screenX);
+          this.ui.swapper.element.css('left', $event.pageX);
         }
         oldList = self.activeList;
         self.activeList = {};
