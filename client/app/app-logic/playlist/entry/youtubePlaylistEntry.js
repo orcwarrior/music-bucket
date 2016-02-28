@@ -33,6 +33,8 @@
       var youtubePlaylistEntryFunc = function youtubePlaylistEntry(url) {
         var self = this;
         this.url = url;
+        var entriesDeffered = $q.defer();
+        this.__entriesPromise = entriesDeffered.promise;
         if (_.isObject(url)) {
           this.id = url.videoId || url.playlistId;
           this.type = (url.kind === "youtube#video") ? entryCommons.entryType.youtubeVideo : entryCommons.entryType.youtubePlaylist;
@@ -57,6 +59,7 @@
 
               if (_.isUndefined(self.shortDescription))
                 self.shortDescription = "Playlista youtube: " + self.id;
+              entriesDeffered.resolve(self.entries);
             });
           getShortDescription(this)
             .then(function (response) {
