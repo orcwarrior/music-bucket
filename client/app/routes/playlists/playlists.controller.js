@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .controller('PlaylistsCtrl', function ($scope, $log, $http, $location, $mdDialog, mbPlayerEngine, Auth, playlistDBFactory, playlistService) {
+  .controller('PlaylistsCtrl', function ($scope, $log, $http, $location, $mdDialog, mbPlayerEngine, Auth, playlistService) {
 
     var selectedPlaylistId = $location.search().id;
     var autoplay = $location.search().autoplay;
@@ -60,7 +60,7 @@ angular.module('musicBucketApp')
     getPlaylists();
 
     $scope.loadPlaylist = function (playlist) {
-      var loadedPlaylist = playlistDBFactory.convertFrom(playlist);
+      //var loadedPlaylist = playlistDBFactory.convertFrom(playlist);
       loadedPlaylist.storeInLocalstorage();
       mbPlayerEngine.setPlaylist(loadedPlaylist);
     };
