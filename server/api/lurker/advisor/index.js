@@ -34,18 +34,20 @@ module.exports = function (req, res) {
     })
     .exec(function (err, daytimeTargets) {
       console.log(daytimeTargets);
-      if (!daytimeTargets.length) {
+      if (!daytimeTargets.length && req.query.day) {
         // Try again without concrete day:
         delete req.query.day;
         return module.exports(req, res)
+      } else if (!daytimeTargets.length) {
+        return res.json(404, {err: "this period sitatuions not found"});
       }
       var masterDaytime = _.reduce(daytimeTargets, function (master, cur) {
         master.stations.concat(cur.stations);
         master.situations.concat(cur.situations);
         return master;
-       });
-       masterDaytime.stations = _.compact(masterDaytime.stations);
-       masterDaytime.situations = _.compact(masterDaytime.situations);
+      });
+      masterDaytime.stations = _.compact(masterDaytime.stations);
+      masterDaytime.situations = _.compact(masterDaytime.situations);
 
       console.log(masterDaytime);
       return res.json(200, masterDaytime);
