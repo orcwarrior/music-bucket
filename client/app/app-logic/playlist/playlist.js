@@ -32,7 +32,7 @@
       var playlistFunc = function playlist(base) {
         var self = this;
 
-        function init() {
+        function init(self) {
           self.name = '';
           self.entries = {};
           self.description = '';
@@ -40,10 +40,15 @@
           self.isAltered = false;
         }
 
-        init();
+        init(this);
 
         this.clear = function () {
           init();
+
+          $rootScope.$broadcast('list-scroll:update', this);
+          $rootScope.$broadcast('playlist:update', this);
+          this.recalculateSongsCount();
+          this.storeInLocalstorage();
         }
 
         this.playlistSequencer = playlistSequencers['random'];
