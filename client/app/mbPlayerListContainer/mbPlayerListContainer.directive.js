@@ -22,6 +22,10 @@ angular.module('musicBucketApp')
             $rootScope.$broadcast('list-scroll:update', null);
           }, 1000, true);
         });
+        scope.$on('playlist:update', function (event, playlist) {
+          scope.container.entryRef = playlist;
+          scope.container.entries = playlist.entries;
+        });
       }
     };
   })
