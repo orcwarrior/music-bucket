@@ -3,7 +3,7 @@
  */
 
 angular.module('musicBucketApp')
-  .controller('YTEntryDialogController', function ($mdDialog, $scope, entry, mbPlayerEngine, youtubeEntryBuilder) {
+  .controller('YTEntryDialogController', function ($q, $mdDialog, $scope, entry, mbPlayerEngine, youtubeEntryBuilder) {
 
     $scope.entry = entry;
     function getId(id) {
@@ -14,23 +14,26 @@ angular.module('musicBucketApp')
     }
 
     $scope.doAction = function (action) {
-      var ytEntry = new youtubeEntryBuilder($scope.entry.id);
-      mbPlayerEngine.addToPlaylist(ytEntry);
-      var ytId = getId($scope.entry.id);
-      switch (action) {
-        case "add":
-          break;
-        case "play":
-          mbPlayerEngine.entryPlay(ytEntry, ytId);
-          break;
-        case "play-next":
-          mbPlayerEngine.entryPlayNext(ytEntry, ytId);
-          break;
-        case "queue":
-          mbPlayerEngine.entryEnqueue(ytEntry, ytId);
-          break;
-      }
-      ;
+      var ytEntry = youtubeEntryBuilder.build($scope.entry.id);
+      $q.when(ytEntry, function (buildedEntry) {
+        if (mbPlayerEngine.getPlaylist().findEntry(buildedEntry) != buildedEntry)
+          mbPlayerEngine.addToPlaylist(buildedEntry);
+        var ytId = getId($scope.entry.id);
+        switch (action) {
+          case "add":
+            break;
+          case "play":
+            mbPlayerEngine.entryPlay(buildedEntry, ytId);
+            break;
+          case "play-next":
+            mbPlayerEngine.entryPlayNext(buildedEntry, ytId);
+            break;
+          case "queue":
+            mbPlayerEngine.entryEnqueue(buildedEntry, ytId);
+            break;
+        }
+        mbPlayerEngine.getPlaylist().alter();
+      });
       $scope.cancel();
     };
     $scope.hide = function () {

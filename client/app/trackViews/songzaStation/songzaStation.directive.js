@@ -1,14 +1,16 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .directive('songzaStation', function ($mdDialog, mbPlayerEngine, songzaStationEntry) {
+  .directive('songzaStation', function ($mdDialog, mbPlayerEngine, songzaEntryBuilder) {
     return {
       templateUrl: 'app/trackViews/songzaStation/songzaStation.html',
       restrict: 'EA',
       link: function (scope, element, attrs) {
         scope.addToPlaylist = function (station) {
-          var stationEntry = new songzaStationEntry(station);
-          mbPlayerEngine.addToPlaylist(stationEntry);
+          var stationEntry = songzaEntryBuilder.build(station)
+            .then(function(stationEntry) {
+              mbPlayerEngine.addToPlaylist(stationEntry);
+            });
         };
         scope.moreInfos = function (ev) {
           $mdDialog.show({
