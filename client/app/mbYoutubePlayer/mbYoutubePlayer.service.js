@@ -179,7 +179,8 @@ angular.module('musicBucketEngine')
       }
 
       function buildLogMsg(player, msg) {
-        if (_.isUndefined(player) || _.isUndefined(player[playerProperty].id)) return "YTPlayer(UNKNOWN): UNKNOWN " + msg;
+        if (_.isUndefined(player) || _.isUndefined(player[playerProperty]) || _.isUndefined(player[playerProperty].id))
+          return "YTPlayer(UNKNOWN): UNKNOWN " + msg;
         return "YTPlayer(" + player[playerProperty].id + "): " + getPlayerVideoId(player) + " " + msg;
       }
 
