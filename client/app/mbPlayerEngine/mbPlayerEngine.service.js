@@ -136,7 +136,7 @@ angular.module('musicBucketApp')
         $log.info('mbPlayerEngine: Next track...');
         var _player = this;
         // run playlist sequence event:
-        this.playlist.playlistSequencer.songChange();
+        this.getPlaylist().playlistSequencer.songChange();
 
         // Get next song from queue:
         if (!this.queue.hasNext()) {
@@ -153,7 +153,7 @@ angular.module('musicBucketApp')
         }
 
         // store playlist cookie:
-        this.playlist.storeInLocalstorage();
+        this.getPlaylist().storeInLocalstorage();
       };
       /*
        * prevTrack
