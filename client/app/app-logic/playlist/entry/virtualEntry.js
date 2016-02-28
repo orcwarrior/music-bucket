@@ -58,8 +58,7 @@
           return this.playedIDs.length;
         };
         this.getSongsCount = function () {
-          if (!this.songsCount)
-            this.songsCount = _.keys(this.entries).length;
+          this.songsCount = _.keys(this.entries).length;
           return this.songsCount
         };
       };
@@ -69,11 +68,12 @@
         if (!_.isUndefined(this.entries[song.id])) return $log.info("There is already song with same id!");
         this.entries[song.id] = song;
         song.entryId = this.id;
-        var mbPlayerEngine = $injector.get('mbPlayerEngine');
-        mbPlayerEngine.getPlaylist().alter();
+        // var mbPlayerEngine = $injector.get('mbPlayerEngine');
+        // if (mbPlayerEngine)
+        //   mbPlayerEngine.getPlaylist().alter();
       };
       virtualEntryFunc.prototype.sort = function (entries) {
-        var idx=0;
+        var idx = 0;
         if (this.nextOrder == entryCommons.nextOrder.sequence)
           return _.sortBy(entries, function (song) {
             return parseInt(song.metainfos.trackNo + "0" + idx++);
