@@ -18,6 +18,7 @@ var PlaylistSchema = new Schema({
   visibility: String,
   tags: Array,
   imageUrl: String,
+  version: String,
   modified: {type: Date, default: Date.now},
   totalPlaytime: {type: Number, default: 0}
 });
