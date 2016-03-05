@@ -52,11 +52,16 @@ angular.module('musicBucketApp')
       var songsRegistry = {}; // song registy, key: $songId, val: songObj
       this.isPlaying = false;
       this.isWorking = false; // for graphical information that somethings happen with a player :)
+      this.debouncedTurnOfIsWorking = _.debounce(function () {
+        this.setIsWorking(false);
+      }, 3000);
+
       this.setIsWorking = function (working) {
-        // $log.debug('mbPlayerEngine: isWorking: ' + working);
-        this.isWorking = false; //working; // TEMPORARY
+        console.trace('mbPlayerEngine: isWorking: ' + working);
+        this.isWorking = working; //working; // TEMPORARY
+        if (working) this.debouncedTurnOfIsWorking();
         $rootScope.$broadcast('player:working', this.isWorking);
-      }
+      };
 
       this.playlist = _playlist;
       this.queue = _queue;
@@ -204,6 +209,8 @@ angular.module('musicBucketApp')
 
         // Pre-buffer first song:
         this.preBufferFirstSong();
+        $rootScope.$broadcast('list-scroll:update', this);
+        $rootScope.$broadcast('playlist:update', this);
       };
       this.getPlaylist = function (key) {
         if (_.isUndefined(key)) {
@@ -238,7 +245,9 @@ angular.module('musicBucketApp')
         if (this.getPlaylist().isEmpty()) return;
         $log.info('mbPlayerEngine: pushing new song to queue...');
         var _player = this;
-        this.setIsWorking(true);
+        if (!this.isPlaying)
+          this.setIsWorking(true);
+
         this.getPlaylist().getNext()
           .then(function (nextTrack) {
 
@@ -352,10 +361,9 @@ angular.module('musicBucketApp')
         } else {
           this.queue.removeBySongId(songId);
         }
-        ;
       };
       this.clearPlaylist = function () {
-        this.playlist = _playlist = new playlist();
+        _.bind(this.getPlaylist().clear, this.getPlaylist())();
       }
 
       /* private */
@@ -456,7 +464,10 @@ angular.module('musicBucketApp')
         onfinish: function () {
           // fire song "onfinish" event:
           if (!_.isUndefined(mbPlayerEngineInstance.getCurrentSong()))
-            mbPlayerEngineInstance.getCurrentSong().engine.fireEvent("onfinish", {song: mbPlayerEngineInstance.getCurrentSong(), skipped: false});
+            mbPlayerEngineInstance.getCurrentSong().engine.fireEvent("onfinish", {
+              song: mbPlayerEngineInstance.getCurrentSong(),
+              skipped: false
+            });
           mbPlayerEngineInstance.nextTrack();
         }
       },

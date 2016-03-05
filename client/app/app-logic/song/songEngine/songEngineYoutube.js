@@ -20,7 +20,7 @@
         function updateMetainfosOnBuffered(event) {
           // BUGFIX: Metainfos was sended and yt song was founded, not entered and valid metainfos was served
           if (metainfos.__overwritenByPreparedMetainfos
-            || metainfos.isResolved()) return;
+            || metainfos.isResolved()) return self.fireEvent("onsongready");
 
           var videoInfos = mbYoutubePlayer.getInfos(videoId);
           var data = metainfos.extractArtistAndTitle(videoInfos.title || videoInfos);
