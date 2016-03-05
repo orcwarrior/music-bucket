@@ -14,8 +14,9 @@ angular.module('musicBucketEngine')
 
 
     function _pickBestSong(foundedSongs, prepMetainfos) {
+      foundedSongs = _.compact(foundedSongs); // remove undefs
       var bestResult = _.chain(foundedSongs).sortBy('val').reverse().first().value();
-      var createdSong = new song(bestResult.entry,  bestResult.type);
+      var createdSong = new song(bestResult.entry, bestResult.type);
       return createdSong;
     }
 
