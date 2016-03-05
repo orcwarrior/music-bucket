@@ -28,6 +28,6 @@
 
   <!-- stations -->
   <div layout="row" layout-align="space-around center" layout-wrap ng-show="selectedConcreteSituation" layout-wrap>
-    <songza-station station="station" ng-repeat="station in concreteSituationsStationsInfos"/>
+    <songza-station station="station" ng-repeat="station in selectedConcreteSituation.stations"/>
   </div>
 </div>
