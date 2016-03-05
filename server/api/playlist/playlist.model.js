@@ -12,7 +12,7 @@ var PlaylistSchema = new Schema({
   _base: String,
   authorName: String,
   description: String,
-  entries: Array,
+  entries: Schema.Types.Mixed,
   songsCount: Number,
   sampleSongs: Array,
   visibility: String,
