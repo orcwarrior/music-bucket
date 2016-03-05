@@ -15,6 +15,7 @@
           this.genere = srcMetainfos.genere;
           this.title = srcMetainfos.title;
           this.trackNo = srcMetainfos.trackNo;
+          this.duration = srcMetainfos.duration; // in seconds(?)
         }
 
         this.getSrc = function () {
@@ -52,6 +53,7 @@
             'genere',
             'url',
             'trackNo',
+            'duration',
             'metainfosAsResponse']
         },
         cookies: {
@@ -65,6 +67,7 @@
             'genere',
             'url',
             'trackNo',
+            'duration',
             'metainfosAsResponse']
         }
       };

@@ -26,7 +26,8 @@
                 album: builderInfos.name,
                 albumArt: builderInfos.albumArt,
                 title: track.name,
-                trackNo: track.trackNo
+                trackNo: track.trackNo,
+                duration: track.duration
               })
               /*,resolveFunction (use default)*/
             ));

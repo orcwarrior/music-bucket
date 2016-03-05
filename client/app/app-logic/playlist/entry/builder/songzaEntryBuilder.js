@@ -24,7 +24,8 @@
             new songMetainfos({
               artist: song.artist,
               album: song.album,
-              title: song.title
+              title: song.title,
+              duration: song.duration //in sec
               //albumArt: song.albumArt,
               //trackNo: song.trackNo
             })
