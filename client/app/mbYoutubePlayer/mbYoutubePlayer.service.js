@@ -4,8 +4,8 @@ angular.module('musicBucketEngine')
   .factory('mbYoutubePlayer', function ($log, playbackError, playbackErrorTypes) {
 
     function mbYoutubePlayer() {
-      var playerProperty = "f";
-      var parentProperty = "m";
+      var playerProperty = "c";
+      var parentProperty = "l";
 
       var self = this;
       var mbPlayerEngine;
