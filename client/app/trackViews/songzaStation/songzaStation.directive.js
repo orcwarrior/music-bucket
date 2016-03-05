@@ -6,6 +6,7 @@ angular.module('musicBucketApp')
       templateUrl: 'app/trackViews/songzaStation/songzaStation.html',
       restrict: 'EA',
       link: function (scope, element, attrs) {
+        scope.station.cover = 'http://theecstaticpresentation.com/cover-not-found.jpg';
         scope.addToPlaylist = function (station) {
           var stationEntry = songzaEntryBuilder.build(station)
             .then(function(stationEntry) {
