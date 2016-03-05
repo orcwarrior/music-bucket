@@ -32,9 +32,9 @@
           ));
         });
         if (restoredObj)
-          _.extendOwn(songzaEntry, restoredObj);
-        // setup builder
-        songzaEntry.__builder__ = {name: 'songzaEntryBuilder', data: songzaStation};
+          _.deepExtend(songzaEntry, restoredObj);
+        // setup builder, for data store id only
+        songzaEntry.__builder__ = {name: 'songzaEntryBuilder', data: songzaStation._id};
         return songzaEntry;
       }
 

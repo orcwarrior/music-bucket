@@ -32,7 +32,7 @@
             ));
           });
           if (restoredObj)
-            _.extendOwn(albumEntry, restoredObj);
+            _.deepExtend(albumEntry, restoredObj);
           // setup builder
           albumEntry.__builder__ = {name: 'albumEntryBuilder', data: builderInfos};
           return albumEntry;
