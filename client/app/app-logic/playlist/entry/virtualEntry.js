@@ -7,7 +7,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('virtualEntry', function ($rootScope, $q, $log, $injector, entryCommons, entryBase) {
+    .factory('virtualEntry', function ($rootScope, $q, $log, $injector, entryCommons, entryBase, songCommons) {
 
 
       var virtualEntryFunc = function virtualEntry(entryName, songs, nextOrder) {
@@ -40,8 +40,11 @@
             var nonPlayed = _.omit(this.entries, this.playedIDs);
             song = _.sample(nonPlayed);
           }
+
           if (_.isUndefined(options.songId)) // play song on demand don't match it as played
             this.playedIDs.push(song.id);
+
+          if (song.isDeleted()) return this.getNext(options);
 
           if (_.isFunction(song.resolve))
             song.resolve(function (resolvedSong) {
@@ -57,10 +60,6 @@
         this.getPlayedCount = function () {
           return this.playedIDs.length;
         };
-        this.getSongsCount = function () {
-          this.songsCount = _.keys(this.entries).length;
-          return this.songsCount
-        };
       };
 
       virtualEntryFunc.prototype = new entryBase();
@@ -68,18 +67,21 @@
         if (!_.isUndefined(this.entries[song.id])) return $log.info("There is already song with same id!");
         this.entries[song.id] = song;
         song.entryId = this.id;
+        delete this.songsCount;
         // var mbPlayerEngine = $injector.get('mbPlayerEngine');
         // if (mbPlayerEngine)
         //   mbPlayerEngine.getPlaylist().alter();
       };
       virtualEntryFunc.prototype.sort = function (entries) {
         var idx = 0;
+        var filteredEntries = _.filterObject(entries, function(val) { return val.state === songCommons.songState.deleted; });
+
         if (this.nextOrder == entryCommons.nextOrder.sequence)
-          return _.sortBy(entries, function (song) {
+          return _.sortBy(filteredEntries, function (song) {
             return parseInt(song.metainfos.trackNo + "0" + idx++);
           });
         else
-          return _.sortBy(entries, function (song, idx) {
+          return _.sortBy(filteredEntries, function (song, idx) {
             return song.metainfos.getSongDescription();
           });
       };

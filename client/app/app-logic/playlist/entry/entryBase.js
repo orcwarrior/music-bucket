@@ -4,7 +4,7 @@
 
 (function () {
   angular.module('musicBucketEngine')
-    .factory('entryBase', function ($injector) {
+    .factory('entryBase', function ($injector, songCommons) {
 
       var entryBase = function entryBase() {
       };
@@ -16,6 +16,8 @@
           return this.playedCount;
         },
         getSongsCount: function () {
+          if (!this.songsCount)
+            this.songsCount = _.reduce(this.entries, function(memo, song){ return memo + (song.state === songCommons.songState.deleted ? 0 : 1); }, 0);
           return this.songsCount;
         },
         getPlaylistDescription: function () {
@@ -48,18 +50,12 @@
             return this.getPlaylistDescription();
         },
         removeSong: function(song) {
-          if (_.isUndefined(this.entries[song.id])) return $log.warn("There is no song with id: " + song.id);
-          delete this.entries[entry.id];
-
-          if (this.playedIDs) {
-            var altered = _.without(this.playedIDs, song.id);
-            if (altered.length !== this.playedIDs.length)
-              this.playedCount--;
-            this.playedIDs = altered;
-          }
+          delete this.songsCount;
+          return song.delete();
         },
         sort : function (entries) {
-          return _.sortBy(entries, function (song, idx) {
+          var filteredEntries = _.filterObject(entries, function(val) { return val.state === songCommons.songState.deleted; });
+          return _.sortBy(filteredEntries, function (song, idx) {
             return song.metainfos.getSongDescription();
           });
         }

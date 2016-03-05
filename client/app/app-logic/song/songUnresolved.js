@@ -63,6 +63,13 @@
 
         }
       });
+
+      songUnresolved.prototype.delete = function () {
+        this.state = songCommons.songState.deleted;
+      };
+      songUnresolved.prototype.isDeleted = function () {
+        return this.state == songCommons.songState.deleted;
+      }
       songUnresolved.prototype.__models__ = {
         db: {
           base: "songUnresolved",

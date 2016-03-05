@@ -32,6 +32,7 @@
         this.id = getIdByType(response, type) || hashGenerator.generateId();
         this.type = type;
         this.entryId = myEntryId; // Anti-circullar: id only
+        this.state = songCommons.songState.normal;
         // It's ugly :(
         if (response && response.metainfosAsResponse) {
           var metaProto;
@@ -107,7 +108,12 @@
          */
         return ret.result;
       });
-
+      song.prototype.delete = function () {
+        this.state = songCommons.songState.deleted;
+      };
+      song.prototype.isDeleted = function () {
+        return this.state == songCommons.songState.deleted;
+      }
       song.prototype.__models__ = {
         db: {
           base: "song",
@@ -116,7 +122,8 @@
             'id',
             'type',
             'entryId',
-            'metainfos']
+            'metainfos',
+            'state']
         },
         cookies: {
           base: "song",
@@ -125,7 +132,8 @@
             'id',
             'type',
             'entryId',
-            'metainfos']
+            'metainfos',
+            'state']
         }
       };
 

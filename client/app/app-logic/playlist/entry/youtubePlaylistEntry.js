@@ -94,7 +94,7 @@
           if (_.some(this.playedIDs, function (pID) {
               return pID == selectedEntry.metainfos.id;
             })
-            && (!options.force && this.playedIDs.length !== this.songsCount)) {
+            && !selectedEntry.isDeleted() && (!options.force && this.playedIDs.length !== this.songsCount)) {
             console.log("Video:", selectedEntry.metainfos.id, "already played!");
             if (this.playedIDs.length >= this.songsCount)
               ytPromise.reject();
