@@ -104,9 +104,18 @@
    **/
 
 
+  function filterObject(obj, predicate) {
+    var filteredObj = {};
+    _.each(obj, function (val, key) {
+      if (!predicate(val, key)) filteredObj[key] = val;
+    });
+    return filteredObj;
+  }
 
   function deepObjDiff(obj, diffObj, omitFunction) {
-    if (_.isUndefined(omitFunction)) omitFunction = function() { return false; }; // no omiting then
+    if (_.isUndefined(omitFunction)) omitFunction = function () {
+      return false;
+    }; // no omiting then
     if (_.isEqual(obj, diffObj)) {
       return undefined;
     }
@@ -118,26 +127,35 @@
         if (!_.isEqual(val, diffObj[key]) && !omitFunction(val, key))
           diff[key] = deepObjDiff(val, diffObj[key], omitFunction);
       });
-      _.each(diffObj, function (val, key) {
+
+      var diffObjExclusives = _.omit(diffObj, _.keys(obj));
+      _.each(diffObjExclusives, function (val, key) {
         if (_.isUndefined(obj[key]) && !_.isUndefined(val) && !omitFunction(val, key))
           diff[key] = _.isObject(val) ? _.deepOmit(val, omitFunction) : val;
         // inEquality recursion was done when iterating over obj
       });
-      return _.isEmpty(_.filter(diff, undefined)) ? undefined : diff;
+
+      var filtered;
+      if (_.isArray(diff))
+        filtered = _.filter(diff, function (val) { return !_.isUndefined(val); });
+      else
+        filtered = _.filterObject(diff, function (val) { return _.isUndefined(val);  });
+      return _.isEmpty(filtered) ? undefined : filtered;
     }
     else if (obj !== diffObj) {
-      return _.isObject(diffObj) ? _.deepOmit(diffObj, omitFunction) : diffObj;
+      if (_.isObject(diffObj)) return _.deepOmit(diffObj, omitFunction);
+      else if (_.isUndefined(diffObj)) return null;
+      else return diffObj;
     } else {
       console.error("we should never be here");
     }
   };
 
 
-
   function deepOmit(obj, iteratee, context) {
     var r = _.omit(obj, iteratee, context);
     //transform the children objects
-    _.each(r, function(val, key) {
+    _.each(r, function (val, key) {
       if (typeof(val) === "object")
         r[key] = deepOmit(val, iteratee, context);
     });
@@ -145,6 +163,7 @@
   }
   _.mixin({'deepExtend': deepExtend});
   _.mixin({'deepOmit': deepOmit});
+  _.mixin({'filterObject': filterObject});
 
   _.mixin({'deepObjDiff': deepObjDiff});
 })();
