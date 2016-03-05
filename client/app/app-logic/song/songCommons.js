@@ -13,6 +13,11 @@
           youtube: "typeYoutube",
           soundcloud: "typeSoundcloud",
           unresolved: "typeUnresolved"
+        },
+        songState: {
+          normal: "sNormal",
+          deleted: "sDeleted",
+          disabled: "sDisabled"
         }
       };
     });
