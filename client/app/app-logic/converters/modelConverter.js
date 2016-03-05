@@ -65,7 +65,7 @@
           var propertyPromises = [];
           _.each(convertedExt, function (val, key) {
             if (_.isArray(val)) { // TODO: Moved to main switch?
-              convertedExt[key] = []; // arrays need to be recreated
+              converted[key] = []; // arrays need to be recreated
               _.each(obj[key], function (el, idx) {
                 if (_.isObject(el)) {
                   var promise = convertFromModel(el, modelName)
@@ -128,7 +128,7 @@
           }
 
           _.each(obj, function (val, key) {
-            if (!_.isFunction(val) && _.isObject(val)) {
+            if (!_.isFunction(val) && _.isObject(val) && !_.isDate(val)) {
               var propDeffered = convertToModel(val, modelName)
                 .then(function (convertedProperty) {
                   console.log("single promise");
