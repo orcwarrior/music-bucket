@@ -8,7 +8,6 @@ var lurker = require('./index');
 
 router.get('/', lurker.test1);
 router.get('/2', lurker.test2);
-router.get('/clear', lurker.clear);
 router.get('/run', lurker.init);
 router.get('/stats', lurker.getStats);
 
