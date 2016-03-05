@@ -57,7 +57,26 @@
           if (nDescription.indexOf(metainfos.artist.toLowerCase()) > -1) score += 5;
           if (nDescription.indexOf(metainfos.title.toLowerCase()) > -1) score += 5;
           if (metainfos.album && nDescription.indexOf(metainfos.album.toLowerCase()) > -1) score += 10;
-          return Math.max(score, 0);
+
+          // cover and remix detect:
+          // TODO: Next non-letter
+          var metaTitle = mbStringUtils.normalizeString(metainfos.title);
+          if (Boolean(nDescription.indexOf(" cover") == -1) !== Boolean(metaTitle.indexOf(" cover") == -1))
+            score -= 5;
+          if (Boolean(nDescription.indexOf(" remix") == -1) !== Boolean(metaTitle.indexOf(" remix") == -1))
+            score -= 5;
+          if (Boolean(nDescription.indexOf(" live") == -1) !== Boolean(metaTitle.indexOf(" live") == -1))
+            score -= 5;
+          if (Boolean(nDescription.indexOf("vs ") == -1) !== Boolean(metaTitle.indexOf("vs ") == -1))
+            score -= 5;
+          if (Boolean(nDescription.indexOf(" edit") == -1) !== Boolean(metaTitle.indexOf(" edit") == -1))
+            score -= 5;
+          if (Boolean(nDescription.indexOf(" rework") == -1) !== Boolean(metaTitle.indexOf(" rework") == -1))
+            score -= 5;
+          if (Boolean(nDescription.indexOf(" bootleg") == -1) !== Boolean(metaTitle.indexOf(" bootleg") == -1))
+            score -= 5;
+
+          return score;
         }
       }
     });
