@@ -5,19 +5,12 @@
   angular.module('musicBucketEngine')
     .factory('playlist', function (playlistLocalStorage, playlistSequencers, $log, $rootScope) {
 
-      function rewriteBase(base) {
-        if (!_.isUndefined(base)) {
-          this.entries = base.entries;
-          this.songsCount = base.entriesCount;
-        }
-      }
-
+      var samplerSongsSize = 6;
       function putSongToSampler(playlist, song) {
-        var samplerSize = 6;
-        if (song.metainfos.albumArt && !song.metainfos.albumArtAttached && playlist.sampleSongs.length < samplerSize) {
+        if (song.metainfos.albumArt && !song.metainfos.albumArtAttached && playlist.sampleSongs.length < samplerSongsSize) {
           playlist.sampleSongs.push({src: song.metainfos.albumArt, description: song.metainfos.getSongDescription()});
-        } else if (Math.random() > 0.9 && playlist.sampleSongs.length === samplerSize) {
-          playlist.sampleSongs[Math.round(Math.random() * samplerSize)] = {
+        } else if (Math.random() > 0.9 && playlist.sampleSongs.length === samplerSongsSize) {
+          playlist.sampleSongs[Math.round(Math.random() * samplerSongsSize)] = {
             src: song.metainfos.albumArt,
             description: song.metainfos.getSongDescription()
           };
@@ -43,7 +36,7 @@
         init(this);
 
         this.clear = function () {
-          init();
+          init(this);
 
           $rootScope.$broadcast('list-scroll:update', this);
           $rootScope.$broadcast('playlist:update', this);
@@ -80,6 +73,9 @@
 
           this.entries[entry.id] = entry;
           this.alter();
+          // Get some space in sampleSongs:
+          this.sampleSongs.splice(Math.round(this.sampleSongs.length * Math.random()), 1);
+          this.sampleSongs = this.sampleSongs.slice(0, samplerSongsSize);
         };
         this.removeEntry = function (entry) {
           if (_.isUndefined(this.entries[entry.id])) return $log.warn("There is no entry with id: " + entry.id);
@@ -99,7 +95,6 @@
         this.alter = function () {
           this.isAltered = true;
           this.modified = new Date();
-          this.sampleSongs.splice(Math.round(this.sampleSongs.length * Math.random()), 1);
           this.recalculateSongsCount();
           this.storeInLocalstorage();
 

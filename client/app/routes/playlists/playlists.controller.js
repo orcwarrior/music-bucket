@@ -60,9 +60,13 @@ angular.module('musicBucketApp')
     getPlaylists();
 
     $scope.loadPlaylist = function (playlist) {
-      //var loadedPlaylist = playlistDBFactory.convertFrom(playlist);
-      loadedPlaylist.storeInLocalstorage();
-      mbPlayerEngine.setPlaylist(loadedPlaylist);
+      mbPlayerEngine.setIsWorking(true);
+      var loadedPlaylist = playlistService.load(playlist);
+      loadedPlaylist.then(function(playlist) {
+        playlist.storeInLocalstorage();
+        mbPlayerEngine.setPlaylist(playlist);
+        mbPlayerEngine.setIsWorking(false);
+      });
     };
     $scope.isPlaylistOwner = function (playlist) {
       var curId = Auth.getCurrentUser()._id;

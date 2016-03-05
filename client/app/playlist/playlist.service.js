@@ -1,55 +1,66 @@
 'use strict';
 
 angular.module('musicBucketEngine')
-  .service('playlistService', function ($http, $resource, $injector, $q, Auth) {
+  .service('playlistService', function ($http, $resource, $injector, $q, Auth, modelConverter) {
     // AngularJS will instantiate a singleton by calling "new" on this function\
 
-    function createNewPlaylist(playlist) {
+    function _createNewPlaylist(playlist) {
       var deferred = $q.defer();
-      var playlistDBFactory = $injector.get('playlistDBFactory');
-      var playlistSchema = playlistDBFactory.convertTo(playlist);
-      playlistSchema.author = Auth.getCurrentUser()._id;
-      playlistSchema.authorName = Auth.getCurrentUser().name;
-      if (_.isUndefined(playlistSchema.author)) {
-        deferred.reject("You have to be logged in to save an playlist!");
-        return deferred.promise;
-      }
-      $http.post('/api/playlist', playlistSchema)
-        .success(function (response) {
-          deferred.resolve(response);
-        })
-        .error(function (error) {
-          deferred.reject(error);
+      modelConverter.convertToModel(playlist, 'db')
+        .then(function (dbModel) {
+          console.log(dbModel);
+          dbModel.author = Auth.getCurrentUser()._id;
+          dbModel.authorName = Auth.getCurrentUser().name;
+          if (_.isUndefined(dbModel.author)) {
+            deferred.reject("You have to be logged in to save an playlist!");
+            return deferred.promise;
+          }
+          $http.post('/api/playlist', dbModel)
+            .success(function (response) {
+              deferred.resolve(response);
+            })
+            .error(function (error) {
+              deferred.reject(error);
+            });
         });
-
       return deferred.promise;
-    };
+    }
 
-    function updatePlaylist(playlist) {
+    function _updatePlaylist(playlist) {
       var deferred = $q.defer();
-      var playlistDBFactory = $injector.get('playlistDBFactory');
-      var playlistSchema = playlistDBFactory.convertTo(playlist);
-      playlistSchema.author = Auth.getCurrentUser()._id;
-      playlistSchema.authorName = Auth.getCurrentUser().name;
-      if (_.isUndefined(playlistSchema.author)) {
-        deferred.reject("You have to be logged in to save an playlist!");
-        return deferred.promise;
-      }
-      $http.put('/api/playlist/' + playlist.id, playlistSchema)
-        .success(function (response) {
-          deferred.resolve(response);
-        })
-        .error(function (error) {
-          deferred.reject(error);
+      modelConverter.convertToModel(playlist, 'db')
+        .then(function (dbPlaylist) {
+          dbPlaylist.author = Auth.getCurrentUser()._id;
+          dbPlaylist.authorName = Auth.getCurrentUser().name;
+          if (_.isUndefined(dbPlaylist.author)) {
+            deferred.reject("You have to be logged in to save an playlist!");
+            return deferred.promise;
+          }
+          $http.put('/api/playlist/' + playlist.id, dbPlaylist)
+            .success(function (response) {
+              deferred.resolve(response);
+            })
+            .error(function (error) {
+              deferred.reject(error);
+            });
         });
-
       return deferred.promise;
-    };
+    }
+
+    function _loadPlaylist(dbPlaylist) {
+      var deferred = $q.defer();
+      modelConverter.convertFromModel(dbPlaylist, 'db')
+        .then(function (playlist) {
+          deferred.resolve(playlist);
+        });
+      return deferred.promise;
+    }
+
     function savePlaylist(playlist) {
       var deferred = $q.defer();
       // Create new playlist
       if (_.isUndefined(playlist.id) || (playlist.author !== Auth.getCurrentUser()._id))
-        createNewPlaylist(playlist)
+        _createNewPlaylist(playlist)
           .then(function (response) {
             deferred.resolve(response);
           });
@@ -59,7 +70,7 @@ angular.module('musicBucketEngine')
         $http.get('/api/playlist/' + playlist.id)
           .success(function (response) {
             // there is an playlist with this id
-            updatePlaylist(playlist)
+            _updatePlaylist(playlist)
               .then(function (response) {
                 deferred.resolve(response);
               })
@@ -67,14 +78,14 @@ angular.module('musicBucketEngine')
           /* error */
           .error(
           function (error) {
-            createNewPlaylist(playlist)
+            _createNewPlaylist(playlist)
               .then(function (response) {
                 deferred.resolve(response);
               });
           })
       }
       return deferred.promise;
-    };
+    }
 
     return {
       save: function (playlist) {
@@ -91,6 +102,9 @@ angular.module('musicBucketEngine')
             playlist.id = response._id;
             playlist.isAltered = false;
           });
+      },
+      load: function (playlist) {
+        return _loadPlaylist(playlist);
       },
       remove: function (playlist) {
         var user = Auth.getCurrentUser();
