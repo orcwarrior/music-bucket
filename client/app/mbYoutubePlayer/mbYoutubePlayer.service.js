@@ -246,7 +246,7 @@ angular.module('musicBucketEngine')
         $log.info(buildLogMsg(dstPlayer, "stop"));
         // bugfix: stop only when player is actually in playing/buffering state:
         if (dstPlayer && (dstPlayer.getPlayerState() === PLAYER_STATES.PLAYING
-                          ||dstPlayer.getPlayerState() === PLAYER_STATES.BUFFERING)) {
+          || dstPlayer.getPlayerState() === PLAYER_STATES.BUFFERING)) {
           dstPlayer.pauseVideo();
           this.seek(videoId, 0);
           dstPlayer.__ytEngineUtils.stoppedByUserFix = true;
@@ -328,7 +328,18 @@ angular.module('musicBucketEngine')
         }
       };
 
+      function _pullPlayerProperties(player) {
+        _.each(player, function (val, key) {
+            if (_.isObject(val)) {
+              if (val.nodeName === "IFRAME") playerProperty = key;
+              if (val.nodeName === "DIV") parentProperty = key;
+            }
+          }
+        )
+      }
+
       this.addPlayer = function (player) {
+        _pullPlayerProperties(player); // FIX: When src ytPlayer is rebuilded, properties get different names, and stops working
         $log.info("YTPlayer: added player: " + player[playerProperty].id);
         extendPlayerByEngineUtils(player);
         players.push(player);
@@ -388,5 +399,4 @@ angular.module('musicBucketEngine')
     }
 
     return new mbYoutubePlayer();
-  })
-;
+  });
