@@ -53,22 +53,6 @@ angular.module('musicBucketApp')
       this.tmpMetainfos = {};
       this.__changesCb = changesCb;
       /* observe object */
-      this._observeCb = function (changes) {
-        if (changes[0].name == "artist") {
-          var artist = changes[0].object.artist;
-          discoverMetainfosInstance.tmpMetainfos.discography = new discographyCollector(artist.name, artist.mbid, function (discography) {
-            discoverMetainfosInstance.infos.selectedAlbum = discoverMetainfosInstance.infos.album;
-            discoverMetainfosInstance.__changesCb("discography");
-          });
-        }
-        if (changes[0].object.artist && changes[0].object.discography && changes[0].object.artistTopTracks) {
-          discoverMetainfosInstance.tmpMetainfos.allPrepared = true;
-          discoverMetainfosInstance.discoverInfos = discoverMetainfosInstance.tmpMetainfos;
-          discoverMetainfosInstance.updateUrlParams();
-        }
-        if (changes[0].name !== "discography")
-          discoverMetainfosInstance.__changesCb(changes[0].name);
-      };
 
       this.requestInfos = function (partialChangeConfig) {
         var self = this;
@@ -93,7 +77,38 @@ angular.module('musicBucketApp')
         if (!_.isUndefined(this.infos))
           this.infos.remixer = mbStringUtils.extractRemixer(conf.title);
 
-        Object.observe(this.tmpMetainfos, this._observeCb);
+
+        /* SETTERS */
+        this.tmpMetainfos.__defineSetter__("artist", function (artist) {
+          discoverMetainfosInstance.tmpMetainfos.__artist = artist;
+          discoverMetainfosInstance.tmpMetainfos.discography = new discographyCollector(artist.name, artist.mbid, function (discography) {
+            discoverMetainfosInstance.infos.selectedAlbum = discoverMetainfosInstance.infos.album;
+            discoverMetainfosInstance.__changesCb("discography");
+          });
+          discoverMetainfosInstance.__changesCb("artist");
+          __genericMetainfosSetter();
+        });
+
+        this.tmpMetainfos.__defineSetter__("artistTopTracks", function (artistTopTracks) {
+          discoverMetainfosInstance.tmpMetainfos.__artistTopTracks = artistTopTracks;
+          discoverMetainfosInstance.__changesCb("artistTopTracks");
+          __genericMetainfosSetter();
+        });
+        this.tmpMetainfos.__defineSetter__("album", function (album) {
+          discoverMetainfosInstance.tmpMetainfos.__album = album;
+          discoverMetainfosInstance.__changesCb("album");
+          __genericMetainfosSetter();
+        });
+        function __genericMetainfosSetter() {
+          discoverMetainfosInstance.tmpMetainfos.allPrepared = true;
+          discoverMetainfosInstance.discoverInfos = discoverMetainfosInstance.tmpMetainfos;
+          discoverMetainfosInstance.updateUrlParams();
+        };
+        /* GETTERS */
+        this.tmpMetainfos.__defineGetter__("artist", function () { return discoverMetainfosInstance.tmpMetainfos.__artist; });
+        this.tmpMetainfos.__defineGetter__("artistTopTracks", function () { return discoverMetainfosInstance.tmpMetainfos.__artistTopTracks; });
+        this.tmpMetainfos.__defineGetter__("album", function () { return discoverMetainfosInstance.tmpMetainfos.__album; });
+
         // Artist infos
         (function artistInfos() {
           lastFmApi.artist.getInfo(conf.artist)
@@ -176,7 +191,7 @@ angular.module('musicBucketApp')
     discoverMetainfos.prototype.getPrevious = function () {
       return _.last(discoverMetainfosHistory) || {};
     };
-    // For button to get back to playing song metainfos:
+// For button to get back to playing song metainfos:
     discoverMetainfos.prototype.hasRootMetainfos = function () {
       return (discoverMetainfosHistory.length > 1
       && discoverMetainfosHistory[1].discoverInfos.allPrepared);
@@ -194,7 +209,8 @@ angular.module('musicBucketApp')
     return discoverMetainfos;
   }
 )
-  .controller('discoverCtrl', function ($log, $window, $scope, $timeout, $location, mbPlayerEngine, discoverMetainfos, albumEntryBuilder) {
+  .
+  controller('discoverCtrl', function ($log, $window, $scope, $timeout, $location, mbPlayerEngine, discoverMetainfos, albumEntryBuilder) {
 
     var lastSong = {};
     var storedPlaysCounts = [];
