@@ -316,22 +316,6 @@ angular.module("musicBucketEngine")
     }
 
     function __attachListeners(out) {
-      /*
-      out.listeners = {
-        'songChange': function (engine, eventName, song) {
-          __lookForPlayingSong(song, out);
-        }
-      };
-      out.clearListeners = function () {
-        out.listeners = _.mapObject(out.listeners, function () {
-          return _.noop;
-        });
-      };
-
-      mbPlayerEngine.listen("songChange", out.listeners['songChange']);
-    */
-     // __lookForPlayingSong(mbPlayerEngine.getCurrentSong(), out);
-
       return out;
     }
 
@@ -355,52 +339,53 @@ angular.module("musicBucketEngine")
         // Helper functions:
         getAlbumByName: function (name) {
           var normalizedName = mbStringUtils.normalizeAlbumNameString(name);
-
           return _.find(this.albums, function (album) {
             return (album.name === name || album.normalizedName === normalizedName);
           });
         }
-
       };
+      var promises = [];
       var lastFmResponse, mbResponse;
+      var lastFmPromise, mbPromise;
       var flow = new Flow;
       mbResponse = [];
-      var apiResponsesCnt = 0;
-      lastFmApi.artist.getTopAlbums(artistName, artistMbid)
+      lastFmPromise = lastFmApi.artist.getTopAlbums(artistName, artistMbid)
         .then(function (response) {
           if (response.status == 200 && response.data.topalbums)
             lastFmResponse = __processLastFmTopAlbumsResponse(response.data.topalbums.album);
           $log.info("discographyCollector: Last.fm albums: " + lastFmResponse.length);
-          reportApiResponse();
+        }, function (errorResponse) {
+          console.warn(errorResponse);
+          discographyObject.err = errorResponse.data;
         });
+      promises.push(lastFmPromise);
+
       if (artistMbid) {
-        musicbrainzApi.search.release({getParams: {artist: artistMbid}}, 100, 0, ['recordings', 'release-groups'])
+        mbPromise = musicbrainzApi.search.release({getParams: {artist: artistMbid}}, 100, 0, ['recordings', 'release-groups'])
           .then(function (response) {
-            mbResponse = mbResponse.concat(response.data.releases);
+            mbResponse = response.data.releases;
             $log.info("discographyCollector: MB albums: " + mbResponse['release-count']);
-            reportApiResponse();
+
             // Is there more?
             if (response.data.releases.length === 100) {
-              musicbrainzApi.search.release({getParams: {artist: artistMbid}}, 100, 100, ['recordings', 'release-groups'])
+              mbPromise = musicbrainzApi.search.release({getParams: {artist: artistMbid}}, 100, 100, ['recordings', 'release-groups'])
                 .then(function (response) {
-                  reportApiResponse();
                   mbResponse = mbResponse.concat(response.data.releases);
                   $log.info("discographyCollector: MB albums: " + mbResponse['release-count']);
+                }, function (errorResponse) {
+                  console.warn(errorResponse);
+                  discographyObject.err = errorResponse.data;
                 });
+              promises.push(mbPromise);
             }
-            else { // there is no more to look for:
-              reportApiResponse();
-            }
+          }, function (errorResponse) {
+            console.warn(errorResponse);
+            discographyObject.err = errorResponse.data;
           });
+        promises.push(mbPromise);
       }
-      else { /* some artist are so hipster - they don't even have they mbid*/
-        reportApiResponse();
-      }
-
-
-      function reportApiResponse() {
-        apiResponsesCnt++;
-        if (apiResponsesCnt >= 3) {
+      $q.all(promises)
+        .then(function (promisesResponse) {
           __processData({
             out: discographyObject,
             inLastFm: lastFmResponse,
@@ -410,11 +395,9 @@ angular.module("musicBucketEngine")
           discographyObject.buildInProgress = false;
           if (!_.isUndefined(onReadyCb))
             onReadyCb(discographyObject);
-        }
-      }
-
+        }, function(promisesRejection) {
+          console.error(promisesRejection);
+        });
       return discographyObject;
-
     }
-  })
-;
+  });
