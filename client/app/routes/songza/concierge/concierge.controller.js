@@ -9,11 +9,16 @@ angular.module('musicBucketApp')
 
     $scope.selectedSituation = null;
     $scope.selectSituation = function (situation) {
-      $scope.selectedSituation = situation;
-      $scope.selectedConcreteSituation = null;
+      if (situation.stations.length) {
+        $scope.selectedSituation = null;
+        $scope.selectConcreteSituation(situation);
+      } else {
+        $scope.selectedSituation = situation;
+        $scope.selectedConcreteSituation = null;
+      }
     };
     $scope.isVisibleSituation = function (situation) {
-      return $scope.selectedSituation == null || $scope.selectedSituation == situation;
+      return $scope.selectedSituation == null || $scope.selectedSituation == situation || $scope.selectConcreteSituation == situation;
     }
 
     $scope.selectedConcreteSituation = null;
