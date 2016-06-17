@@ -1,0 +1,113 @@
+.md-dialog-borderless {
+  border-radius: 2px;
+}
+
+md-dialog {
+  max-width: 700px;
+  width: 480px;
+  background-color: white;
+  & > .media-item-loader {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  & .media-item-cover-wrapper {
+    position: relative;
+    z-index: 2;
+    height: 200px;
+    min-height: 100px;
+    & .media-item-cover {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      background-position: center center;
+    }
+    & .media-item-cover-gradient {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      .albumArtGradient(@grey-800);
+      opacity: 0.7;
+    }
+  }
+
+  .media-item-actionsbar {
+    & > .md-button {
+      color: @mainThemeColor;
+      & > div {
+        position: relative;
+        top: 4px;
+        margin-right: 2px;
+      }
+    }
+  }
+  & md-dialog-content {
+    padding: 8px;
+    & > p {
+      min-height: 2em;
+    }
+    & .md-chips {
+      font-size: @font-size-h6 !important;
+    }
+  }
+  & .md-header-metainfos {
+    color: @grey-100;
+    position: absolute;
+    bottom: 0;
+    padding: 12px;
+    padding-bottom: 6px;
+    z-index: 3;
+    width: 100%;
+
+    & .md-header-title {
+      width: 70%;
+      & input {
+        font-size: @font-size-h2;
+        color: @grey-100 !important;
+      }
+    }
+    & h2 {
+      padding-bottom: 0;
+      margin-bottom: -4px;
+      display: inline-block;
+      clear: none;
+    }
+    & h6 {
+      position: absolute;
+      right: 16px;
+      bottom: 0;
+      display: inline-block;
+      clear: none;
+      float: right;
+    }
+  }
+  & md-chips {
+    font-size: @font-size-small;
+  }
+  md-card-content > label {
+    color: @grey-400;
+  }
+  .md-header-fab {
+    position: absolute;
+    bottom: -32px;
+    right: 16px;
+    padding-top: 6px;
+  }
+  .media-item-songs-count {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 12px !important;
+    color: @grey-100;
+    & > span {
+      font-size: 12px !important;
+    }
+  }
+
+}

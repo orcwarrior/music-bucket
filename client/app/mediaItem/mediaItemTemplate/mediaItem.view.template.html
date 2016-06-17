@@ -1,0 +1,41 @@
+<md-dialog class="md-dialog-borderless">
+  <div layout="row" layout-align="center center" ng-show="item._isLoading" class="media-item-loader">
+    <div class="loader" style="top: 0">
+      <div class="loader-inner"></div>
+    </div>
+  </div>
+  <div class="media-item-cover-wrapper">
+    <div class="media-item-cover"
+         ng-style="{'background-image':'url(' + (item.cover || 'http://i.imgur.com/imF4L49.jpg') + ')' }">
+    </div>
+    <div class="media-item-cover-gradient"></div>
+    <div class="media-item-songs-count" ng-show="item.songsCount">
+      <span class="mdi-av-my-library-music"></span>
+      {{ item.songsCount }}
+    </div>
+    <div class="md-header-metainfos" ng-show="!coverEditing">
+      <h2>{{item.artist}}</h2>
+      <h6> {{ item.dateReleased }} </h6>
+    </div>
+  </div>
+  <div class="media-item-actionsbar">
+    <md-button class="md-primary" ng-click="doAction('add')"><div class="mdi-av-playlist-add"></div>Add</md-button>
+    <md-button class="md-primary" ng-click="doAction('play')"><div class="mdi-av-play-circle-fill"></div>Play now</md-button>
+    <md-button class="md-primary" ng-click="doAction('play-next')"><div class="mdi-content-redo"></div>Play next</md-button>
+    <md-button class="md-primary" ng-click="doAction('queue')"><div class="mdi-action-schedule"></div>Queue</md-button>
+  </div>
+  <md-dialog-content>
+    <h4>{{item.name}}</h4>
+    <p ng-bind-html="item.description">
+    </p>
+
+    <p class="md-body-2" ng-show="item.author">
+      by {{item.author}}
+    </p>
+    <md-chips ng-model="item.tags" readonly="true"></md-chips>
+
+  </md-dialog-content>
+  <div class="md-actions" layout="row" layout-align="end center">
+    <md-button ng-click="cancel()">Close</md-button>
+  </div>
+</md-dialog>
