@@ -1,0 +1,109 @@
+.media-tile-wrapper {
+  display: inline-block;
+}
+
+.media-tile-loader {
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  z-index: 9999;
+}
+
+.media-tile {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: table;
+
+  width: 230px;
+  height: 230px;
+  overflow: hidden;
+  & .media-tile-add-to-playlist {
+    display: table;
+    position: absolute;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 230px;
+    color: @gray-lighter;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease-out;
+    & > .media-tile-add-to-playlist-icon {
+      margin-top: -34px; // bottombar/2
+      font-size: 40px;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      display: table-cell;
+      vertical-align: middle;
+    }
+    & > .media-tile-add-to-playlist-text {
+      z-index: 99999;
+      position: absolute;
+      left: 0;
+      bottom: 20%;
+      text-transform: uppercase;
+      text-align: center;
+      font-size: @font-size-h5;
+      font-weight: 100;
+      width: 100%;
+      display: table-cell;
+      vertical-align: middle;
+      // opacity: 0.8;
+    }
+  }
+  & .media-tile-art {
+    position: absolute;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    height: 230px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+}
+
+.media-tile-metainfos {
+  position: relative;
+  background-color: @brand-primary;
+  display: block;
+  padding: 0.5em;
+  padding-bottom: 0;
+  width: 230px;
+  height: 68px;
+  z-index: 2;
+  color: @grey-100;
+  font-size: 15px;
+  & > .media-tile-name {
+    padding-top: 4px;
+    height: 2.9em;
+    overflow: hidden;
+    width: 85%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-weight: 400;
+  }
+  & > .media-tile-name-2lines {
+    white-space: normal !important;
+  }
+  & > .media-tile-subtitle {
+    position: absolute; margin-top: -14px;
+  }
+  & .media-tile-icon-more {
+    z-index: 99999;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    margin-top: -12px;
+    pointer-events: all;
+  }
+}
+
+.media-tile:hover .media-tile-add-to-playlist {
+  pointer-events: all !important;
+  opacity: 1 !important;
+  transition: opacity 0.25s ease-out !important;
+}

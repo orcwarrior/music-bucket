@@ -1,0 +1,26 @@
+<div class="media-tile-wrapper">
+  <div layout="row" layout-align="center center" ng-show="item._isLoading" class="media-tile-loader">
+    <div class="loader" style="top: 0">
+      <div class="loader-inner"></div>
+    </div>
+  </div>
+  <div class="media-tile" ng-click="addToPlaylist(playlist)" ng-show="!item.isLoading">
+    <div class="media-tile-add-to-playlist">
+      <p class="media-tile-add-to-playlist-icon mdi-av-playlist-add"></p>
+
+      <p class="media-tile-add-to-playlist-text">Add to playlist</p>
+    </div>
+    <div class="media-tile-art"
+         ng-style="{'background-image':'url('+ item.cover + ')' }"></div>
+  </div>
+  <div class="media-tile-metainfos">
+    <div class="media-tile-name" title="{{item.name}}"
+         ng-class="{'media-tile-name-2lines': !item.artist && !item.songsCount}">{{item.name}}</div>
+    <div class="media-tile-subtitle" ng-show="item.artist || !item.songsCount">{{item.artist}}</div>
+    <div class="media-tile-subtitle" ng-show="!item.artist && item.songsCount">{{item.songsCount}} songs</div>
+
+    <div class="media-tile-icon-more">
+      <ng-md-icon icon="info" style="fill: #fff" title="More infos..." ng-click="moreInfos($event)"></ng-md-icon>
+    </div>
+  </div>
+</div>
