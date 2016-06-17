@@ -19,7 +19,7 @@
         }
         else {
           return; // break from storing again in db
-        };
+        }
       }
 
       var playlistFunc = function playlist(base) {
@@ -76,11 +76,13 @@
           // Get some space in sampleSongs:
           this.sampleSongs.splice(Math.round(this.sampleSongs.length * Math.random()), 1);
           this.sampleSongs = this.sampleSongs.slice(0, samplerSongsSize);
+           $rootScope.$broadcast('playlist:update', this);
         };
         this.removeEntry = function (entry) {
           if (_.isUndefined(this.entries[entry.id])) return $log.warn("There is no entry with id: " + entry.id);
           delete this.entries[entry.id];
           this.alter();
+          $rootScope.$broadcast('playlist:update', this);
         };
         this.findEntry = function (entryMask) {
           return _.find(this.entries, _.matcher(entryMask));
@@ -98,8 +100,8 @@
           this.recalculateSongsCount();
           this.storeInLocalstorage();
 
-          $rootScope.$broadcast('list-scroll:update', this);
-          $rootScope.$broadcast('playlist:update', this);
+          // $rootScope.$broadcast('list-scroll:update', this);
+          // $rootScope.$broadcast('playlist:update', this);
         };
         this.recalculateSongsCount = function () {
           this.songsCount = 0;
