@@ -1,0 +1,13 @@
+<div class="jumbotron" style="height: 100%">
+  <div class="container">
+    <h1>Poprawna autoryzacja Spotify!</h1>
+    <p>
+      Za chwile nastąpi zamknięcie okna, a w aplikacji będzie można korzystać z możliwości połączenia z kontem
+      spotify!
+    </p>
+    <h5 style="font-style: italic" ng-show="canBeClosed">
+    (Zamknięcie okna za sekundę...)
+    </h5>
+    <p><a class="btn btn-primary btn-lg" href="#" role="button" ng-disable="!canBeClosed" ng-click="closeWindow()">Zamknij teraz!</a></p>
+  </div>
+</div>
