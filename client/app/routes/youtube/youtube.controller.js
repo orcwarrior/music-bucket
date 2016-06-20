@@ -1,10 +1,15 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .controller('YoutubeCtrl', function ($scope, $location, youtubeEntryBuilder, mbPlayerEngine, youtubeApi) {
+  .controller('YoutubeCtrl', function ($scope, $q, $location, youtubeEntryBuilder, mbPlayerEngine, youtubeApi) {
 
     $scope.addYTEntry = function (url) {
-      mbPlayerEngine.getPlaylist().addEntry(new youtubeEntryBuilder(url));
+      var ytEntry = youtubeEntryBuilder.build(url);
+      $q.when(ytEntry, function (buildedEntry) {
+        if (mbPlayerEngine.getPlaylist().findEntry(buildedEntry) !== buildedEntry)
+          mbPlayerEngine.addToPlaylist(buildedEntry);
+        mbPlayerEngine.getPlaylist().alter();
+      });
     };
     $scope.ytSearch = function (searchQuery) {
       youtubeApi.search($scope.searchQuery, 50, {})
