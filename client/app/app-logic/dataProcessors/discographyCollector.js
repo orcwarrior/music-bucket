@@ -72,8 +72,8 @@ angular.module("musicBucketEngine")
     function lastFmTrack(track, idx) {
       this.name = track.name;
       this.mbid = undefined;
-      this.duration = track.duration; // in seconds
-      this.durationView = Math.floor(this.duration / 60) + ":" + s.pad(Math.floor(this.duration % 60), 2, '0');
+      this.duration = track.duration * 1000; // in ms
+      this.durationView = Math.floor(this.duration / 60000) + ":" + s.pad(Math.floor((this.duration % 60000)/10000), 2, '0')
       this.index = idx;
     };
 
@@ -104,8 +104,8 @@ angular.module("musicBucketEngine")
     function mbTrack(track) {
       this.name = track.title;
       this.mbid = track.id;
-      this.duration = track.length / 1000; // in ms -> s
-      this.durationView = Math.floor(this.duration / 60) + ":" + s.pad(Math.floor(this.duration % 60), 2, '0')
+      this.duration = track.length; // in ms
+      this.durationView = Math.floor(this.duration / 60000) + ":" + s.pad(Math.floor((this.duration % 60000)/10000), 2, '0')
       this.index = track.number;
     };
 
