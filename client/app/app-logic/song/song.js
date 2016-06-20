@@ -23,13 +23,13 @@
           }
         }
         else
-          return undefined;
+          return response.id;
       }
 
       var song = function song(response, type, myEntryId, alternates) {
         /* initialization */
         var self = this;
-        this.id = getIdByType(response, type) || hashGenerator.generateId();
+        this.id = getIdByType(response, type);
         this.type = type;
         this.entryId = myEntryId; // Anti-circullar: id only
         this.state = songCommons.songState.normal;
