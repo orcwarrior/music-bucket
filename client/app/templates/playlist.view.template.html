@@ -1,4 +1,4 @@
-<md-dialog class="md-dialog-borderless">
+<md-dialog class="md-dialog-borderless playlist-view">
   <div class="playlist-cover-wrapper">
     <div class="playlist-cover"
          ng-style="{'background-image':'url(' + (playlist.imageUrl || 'http://i.imgur.com/imF4L49.jpg') + ')' }">
@@ -9,8 +9,10 @@
       {{ playlist.songsCount }}
     </div>
     <div class="md-header-metainfos" ng-show="!coverEditing">
-      <h2> {{ playlist.name }} </h2>
-      <h6> <span ng-if="playlist.totalPlaytime"> {{ playlist.totalPlaytime | momentDuration:'minutes' }} of playling,</span> modified {{ playlist.modified | momentFrom }} </h6>
+      <h2>{{ playlist.name }}</h2>
+      <h6><span
+        ng-if="playlist.totalPlaytime"> {{ playlist.totalPlaytime | momentDuration:'minutes' }} of playling,</span>
+        modified {{ playlist.modified | momentFrom }} </h6>
     </div>
   </div>
   <md-dialog-content>
@@ -19,14 +21,13 @@
     <md-chips ng-model="playlist.tags" readonly="true"></md-chips>
     <p ng-if="playlist.tags.length == 0">no tags</p>
     <!-- visibility -->
-    <label>Visibility</label>
-    <br/>
-    {{playlist.visibility || 'public'}} playlist
-    <hr/>
-    <!-- description -->
-    <label>Desciption</label>
-
     <p>
+    <label>Visibility</label>
+      {{playlist.visibility || 'public'}} playlist
+    </p>
+    <!-- description -->
+    <p>
+      <label>Desciption</label>
       {{ playlist.description || '(no description)' }}
     </p>
 

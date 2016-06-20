@@ -2,7 +2,7 @@
   border-radius: 0;
 }
 
-md-dialog {
+md-dialog.playlist-view {
   max-width: 850px;
   width: 600px;
   background-color: white;
@@ -30,15 +30,15 @@ md-dialog {
     }
   }
   & .md-header-metainfos {
-    color: @grey-100;
     position: absolute;
+    color: @grey-100;
     bottom: 0;
     padding: 12px;
-    padding-bottom: 6px;
     z-index: 3;
     width: 100%;
 
     & .md-header-title {
+      margin-bottom: -2em;
       padding-bottom: 0;
       width: 70%;
       & input {
@@ -58,8 +58,16 @@ md-dialog {
       float: right;
     }
   }
-  & md-chips {
-    font-size: @font-size-small;
+
+  & md-dialog-content {
+    padding: 8px;
+    & > p {
+      min-height: 2em;
+      padding-bottom: 1em;
+    }
+    & .md-chips {
+      font-size: @font-size-h6 !important;
+    }
   }
   md-card-content > label {
     color: @grey-400;
@@ -68,7 +76,9 @@ md-dialog {
     position: absolute;
     bottom: -32px;
     right: 16px;
-    padding-top: 6px;
+    & > ng-md-icon {
+      margin-top: -8px !important;
+    }
   }
   .playlist-songs-count {
     position: absolute;

@@ -1,56 +1,53 @@
-<md-dialog class="md-dialog-borderless">
-    <div class="playlist-cover-wrapper">
-      <div class="playlist-cover"
-           ng-style="{'background-image':'url(' + (playlist.imageUrl || 'http://i.imgur.com/imF4L49.jpg') + ')' }">
-      </div>
-      <div class="playlist-cover-gradient"></div>
-      <div class="playlist-songs-count">
-        <span class="mdi-av-my-library-music"></span>
-        {{ playlist.songsCount }}
-      </div>
-      <div class="md-header-metainfos" ng-show="!coverEditing">
-        <md-input-container class="md-header-title">
-          <label>Playlist name</label>
-          <input ng-model="playlist.name" required>
-        </md-input-container>
-      </div>
-      <div class="md-header-url-choose" ng-show="coverEditing" layout="row" layout-align="center center">
-        <md-input-container class="md-header-url-input">
-          <label>Image URL</label>
-          <input ng-model="playlist.imageUrl">
-        </md-input-container>
-
-      </div>
-      <md-button aria-label="menu" class="md-fab md-secondary md-header-fab"
-                 ng-click="toggleCoverEditing()">
-        <!--<md-icon class="mdi-editor-insert-photo" style="color: white"/>-->
-        <ng-md-icon icon="{{coverEditingIcon}}" style="fill: #fff" options='{"duration": 500}'></ng-md-icon>
-      </md-button>
+<md-dialog class="md-dialog-borderless playlist-view">
+  <div class="playlist-cover-wrapper">
+    <div class="playlist-cover"
+         ng-style="{'background-image':'url(' + (playlist.imageUrl || 'http://i.imgur.com/imF4L49.jpg') + ')' }">
     </div>
-    <md-dialog-content>
-      <!-- tags-->
-      <label>Tags</label>
-      <md-chips ng-model="playlist.tags" placeholder="Write tags here..."></md-chips>
-      <!-- visibility -->
-      <label>Visibility</label>
-      <md-switch ng-model="playlist.visibility" aria-label="Visibility" ng-true-value="'public'"
-                 ng-false-value="'private'">
-        {{playlist.visibility}} playlist
-      </md-switch>
-      <hr/>
-      <!-- description -->
-      <md-input-container>
-        <label>Desciption</label>
-        <textarea ng-model="playlist.description" columns="1" md-maxlength="100">
-        </textarea>
+    <div class="playlist-cover-gradient"></div>
+    <div class="playlist-songs-count">
+      <span class="mdi-av-my-library-music"></span>
+      {{ playlist.songsCount }}
+    </div>
+    <div class="md-header-metainfos" ng-show="!coverEditing">
+      <md-input-container class="md-header-title">
+        <label>Playlist name</label>
+        <input ng-model="playlist.name" required>
       </md-input-container>
-<!--      <p class="md-body-2">
-        curated by {{ playlist.authorName }}
-      </p>-->
+    </div>
+    <div class="md-header-url-choose" ng-show="coverEditing" layout="row" layout-align="center center">
+      <md-input-container class="md-header-url-input">
+        <label>Image URL</label>
+        <input ng-model="playlist.imageUrl">
+      </md-input-container>
 
-    </md-dialog-content>
-      <div class="md-actions" layout="row" layout-align="end center">
-        <md-button ng-click="cancel()">Close</md-button>
-        <md-button class="md-primary" ng-click="answer('save')">{{acceptMsg}}</md-button>
-      </div>
+    </div>
+    <md-button aria-label="menu" class="md-fab md-secondary md-header-fab"
+               ng-click="toggleCoverEditing()">
+      <!--<md-icon class="mdi-editor-insert-photo" style="color: white"/>-->
+      <ng-md-icon icon="{{coverEditingIcon}}" style="fill: #fff" options='{"duration": 500}'></ng-md-icon>
+    </md-button>
+  </div>
+  <md-dialog-content>
+    <!-- tags-->
+    <h2>Tags</h2>
+    <md-chips ng-model="playlist.tags" placeholder="write tags here..." secondary-placeholder="+tag"></md-chips>
+    <!-- visibility -->
+    <br/>
+    <md-checkbox ng-model="playlist.visibility" aria-label="Private playlist checkbox" ng-false-value="'public'"
+                 ng-true-value="'private'">
+      Playlista prywatna
+    </md-checkbox>
+
+    <!-- description -->
+    <md-input-container class="md-block">
+      <label>Desciption</label>
+      <textarea ng-model="playlist.description" columns="1" md-maxlength="127">
+        </textarea>
+    </md-input-container>
+
+  </md-dialog-content>
+  <div class="md-actions" layout="row" layout-align="end center">
+    <md-button ng-click="cancel()">Close</md-button>
+    <md-button class="md-primary" ng-click="answer('save')">{{acceptMsg}}</md-button>
+  </div>
 </md-dialog>
