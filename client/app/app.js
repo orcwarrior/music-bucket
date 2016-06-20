@@ -12,7 +12,6 @@ angular.module('musicBucketApp', [
   'musicBucketAuth',
   'ui.router',
   'cfp.hotkeys',
-  'sticky',
   'ngMaterial',
   'ngIdle',
   'badwing.autoselect',
@@ -22,20 +21,20 @@ angular.module('musicBucketApp', [
   'dcbImgFallback'
 ])
   /* ng-idle config*/
-  .config(function(IdleProvider, KeepaliveProvider) {
+  .config(function (IdleProvider, KeepaliveProvider) {
     // configure Idle settings
     IdleProvider.idle(45); // in seconds
     IdleProvider.timeout(0); // in seconds
   })
 
   .config(function ($locationProvider, $httpProvider, $urlRouterProvider, $stateProvider) {
-            $urlRouterProvider.otherwise("/");
+    $urlRouterProvider.otherwise("/");
 
-     $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
   /* Angular material design theme */
-  .config(function($mdThemingProvider) {
+  .config(function ($mdThemingProvider) {
     $mdThemingProvider.theme('default')
       .primaryPalette('deep-purple', {
         'default': '500', // by default use shade 400 from the pink palette for primary intentions
@@ -62,8 +61,8 @@ angular.module('musicBucketApp', [
       },
 
       // Intercept 401s and redirect you to login
-      responseError: function(response) {
-        if(response.status === 401) {
+      responseError: function (response) {
+        if (response.status === 401) {
           $location.path('/login');
           // remove any stale tokens
           $cookieStore.remove('token');
@@ -76,15 +75,15 @@ angular.module('musicBucketApp', [
     };
   })
 
-  .run(function ($rootScope, $location, $http, Auth, mbPlayerEngine, Idle) {
+  .run(function ($rootScope, $location, $http, $state, Auth, mbPlayerEngine, Idle) {
     // Init Bootstrap material design:
     // $.material.init();
 
-   // _.mixin(s.exports());
+    // _.mixin(s.exports());
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$routeChangeStart', function (event, next) {
-      Auth.isLoggedInAsync(function(loggedIn) {
+      Auth.isLoggedInAsync(function (loggedIn) {
         if (next.authenticate && !loggedIn) {
           $location.path('/login');
         }
@@ -97,10 +96,17 @@ angular.module('musicBucketApp', [
 
     Idle.watch();
 
+    // Add redirectTo feature in state definition:
+    $rootScope.$on('$stateChangeStart', function (evt, to, params) {
+      if (to.redirectTo) {
+        evt.preventDefault();
+        $state.go(to.redirectTo, params, {location: 'replace'})
+      }
+    });
     $rootScope.$on('$stateChangeSuccess',
-      function(event, toState, toParams, fromState, fromParams){
+      function (event, toState, toParams, fromState, fromParams) {
         // Location change -> causes exit from theatre mode.
         if (fromState.name !== "" && fromState.url !== "^") // page wasn't just refreshed
-        mbPlayerEngine.theaterMode.enabled = false;
+          mbPlayerEngine.theaterMode.enabled = false;
       });
   });
