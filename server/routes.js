@@ -19,6 +19,7 @@ module.exports = function(app) {
 
   // DK: For heroku deployment proxies moved to regular url:
 
+  app.all('/spotify-token', require('./proxy/spotify-token'));
   app.all('/songza-api/*', require('./proxy/songza-api'));
   app.all('/songza-api-proxy/*', require('./proxy/songza-api-proxy'));
   app.all('/musicbrainz-api/*', require('./proxy/musicbrainz-api'));
