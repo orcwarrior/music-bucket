@@ -42,9 +42,9 @@
           return outString;
         };
         this.extractRemixer = function (inString) {
-          var remixPattern = /(?:\(|\[)([^\(\[]+)(?:remix|re-work|extended mix|\smix)(?:\)|\])?/ig;
+          var remixPattern = /(?:\(|\[)([^\(\[]+)(?:remix|re-work|version|extended mix|\smix)(?:\)|\])?/ig;
           var match = remixPattern.exec(inString);
-          if (_.isNull(match) || match[0].toLowerCase().indexOf("orginal mix") > 0) return {
+          if (_.isNull(match) || match[0].toLowerCase().indexOf("orginal") > 0) return {
             artist: "",
             title: inString
           };
@@ -53,12 +53,35 @@
             title: inString.replace(match[0], "").trim()
           };
         };
+        this.clearFeaturingStr = function (inString) {
+          var featPattern = /(\[|\(|\s)((feat|ft)\.{0,1}(\w|\s)*?)(\]|\)|-|$)/ig;
+          var match = featPattern.exec(inString);
+          if (!_.isNull(match) && match[0])
+            return inString.replace(match[0], "").trim();
+          else return inString;
+        }
         this.extractRemixerLoose = function (inString) {
           var remixPattern = /(\w+) r?e?mix/ig;
           var match = remixPattern.exec(inString);
           if (_.isNull(match) || match[0].toLowerCase().indexOf("orginal") > 0) return null;
           return match[0].trim();
         };
+        this.getSongTypeByString = function (inString) {
+
+          var featPattern = /(\[|\(|\s)(cover|tour|remix|live|vs|edit|rework|original)/ig;
+          var match = featPattern.exec(inString);
+          if (!_.isNull(match) && match[2]) return match[2];
+          else return undefined;
+        };
+        this.getArtistAndTitleFromFullname = function (fullname) {
+          var artist = fullname.split(" - ")[0] || fullname.split(" ")[0] || "";
+          var title = fullname.split(" - ")[1] || fullname.split(" ")[1] || fullname;
+          if (artist === fullname) {
+            artist = undefined;
+            title = fullname;
+          }
+          return (artist) ? {artist: artist, title: title} : {title: title};
+        }
       };
       return new stringUtils();
     });
