@@ -17,7 +17,9 @@ mb-player-list.playlist-closed {
 }
 mb-player-list {
   position: absolute;
-  display: block;
+  .flex-display();
+  .flex-direction(column);
+  align-items: stretch;
   top: 365px;
   overflow: hidden;
   bottom: 0;
@@ -27,6 +29,10 @@ mb-player-list {
     display: block;
     width: 100%;
     height: 100%;
+
+    position: absolute;
+    top: 0;
+    bottom: 0;
   }
   & .player-list-swapper {
     @transform-prop: transform, opacity;
