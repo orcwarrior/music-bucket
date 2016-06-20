@@ -1,0 +1,22 @@
+<div layout="row" layout-align="space-around stretch">
+  <div class="col-md-9 spotify-user-library">
+    <h2 class="spotify-header">Your music</h2>
+    <md-progress-circular md-mode="indeterminate"
+                          ng-hide="myPlaylists"></md-progress-circular>
+    <div ng-if="myPlaylists">
+      <media-item-tile ng-repeat="playlist in myPlaylists.items" item="playlist"></media-item-tile>
+    </div>
+
+  </div>
+  <div class="col-md-3 spotify-user-maininfos" layout="column" layout-align="start center">
+    <img class="big-avatar-img" ng-src="{{user.images[0].url}}"/>
+    <md-button ng-show="user.images[0].url" class="md-fab md-alt spotify-disconnect-fab" aria-label="Disconect Spotiffy"
+      ng-click="disconnectSpotify()">
+      <ng-md-icon icon="power_settings_new" class="spotify-fab-icon"></ng-md-icon>
+      <md-tooltip>Disconnect from Spotify account</md-tooltip>
+    </md-button>
+
+    <h3 class="spotify-username">{{user.display_name}}</h3>
+    <h6>{{user.email}}</h6>
+  </div>
+</div>

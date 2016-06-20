@@ -1,0 +1,33 @@
+.spotify-user-maininfos {
+  //position: absolute; top: 0; bottom: 0; right: 0;
+  text-align: center;
+  & .big-avatar-img {
+    display: block;
+    margin-top: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 50%;
+    min-height: 175px;
+    max-width: 200px; max-height: 200px;
+  }
+  & .spotify-username {
+    color: @mainThemeColor;
+    font-weight: 100;
+    margin-top: 1em;
+  }
+  & .spotify-disconnect-fab {
+    position: absolute;
+    right: 50%; margin-right: -6.2em;
+    margin-top: -3em;
+  }
+  & .spotify-fab-icon {
+    position: relative;
+    top: 0px;
+    fill: #fff;
+  }
+}
+
+.spotify-user-library {
+  overflow: hidden;
+}
+
