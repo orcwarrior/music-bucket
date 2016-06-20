@@ -13,6 +13,7 @@ angular.module('musicBucketApp')
       this.container = {
         entryRef: playlist,
         entries: playlist.entries,
+        entriesVals: _.values(playlist.entries),
         actions: {
           dblclick: function ($event, listEntry) {
             self.manager.swapLists($event, new entryListProvider(listEntry));
@@ -23,14 +24,22 @@ angular.module('musicBucketApp')
           play: {description: 'Play', icon: 'av-play-circle-fill', on: mbPlayerEngine.entryPlay},
           playNext: {description: 'Play Next', icon: 'content-redo', on: mbPlayerEngine.entryPlayNext},
           queue: {description: 'Enqueue', icon: 'action-schedule', on: mbPlayerEngine.entryEnqueue},
-          remove: {description: 'Remove', icon: 'action-delete', on: _.bind(playlist.removeEntry, playlist)}
+          remove: {description: 'Remove', icon: 'action-delete', on: null}
         },
         _customDirectiveName: undefined,
         getEntryDescription: function (entry) {
-          return entry.getName();
+          if (entry.getName)
+            return entry.getName();
         },
-        isActive: function(entry) { return entry.isActive(); }
+        isActive: function (entry) {
+          if (entry.isActive)
+            return entry.isActive();
+        }
       };
+      this.container.menuActions.remove.on = function(entry) {
+        // FIX: ALWAYS RE-EVALUATE PLAYLIST
+        _.bind(self.container.entryRef.removeEntry, self.container.entryRef, entry)();
+      }
       return this;
     };
     return playlistListProviderFunc;

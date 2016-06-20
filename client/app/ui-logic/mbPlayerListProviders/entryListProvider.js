@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .service('entryListProvider', function (mbPlayerEngine) {
+  .service('entryListProvider', function (mbPlayerEngine, song) {
 
     var entryListProviderFunc = function entryListProvider(entry) {
       var self = this;
@@ -20,6 +20,7 @@ angular.module('musicBucketApp')
       this.container = {
         entryRef: entry,
         entries: entry.entries,
+        entriesVals: _.values(entry.entries),
         menuActions: {
           play: {
             description: 'Play', icon: 'av-play-circle-fill', on: function (song) {
@@ -44,8 +45,10 @@ angular.module('musicBucketApp')
           }
         },
         _customDirectiveName: undefined,
-        getEntryDescription: function (song) {
-          return song.metainfos.getSongDescription();
+        getEntryDescription: function (entrySong) {
+          //if (entrySong.__models__ && entrySong.__models__.db.base.indexOf("song") === 0) // DIIIRTY HACK :/
+          if (entrySong.metainfos && entrySong.metainfos.getSongDescription)
+            return entrySong.metainfos.getSongDescription();
         },
         resolve: function (song) {
           song.metainfos.resolve();
