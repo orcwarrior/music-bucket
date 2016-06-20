@@ -1,0 +1,34 @@
+<div layout="column" layout-align="center center" style="height: 100%">
+  <div class="songza-tabs-wrapper nopadding" style="width: 100%">
+    <md-tabs md-selected="selectedSpotifyTab" md-border-bottom>
+      <md-tab id="tab1" ui-sref=".featured">
+        <md-tab-label><ng-md-icon icon="stars" class="spotify-fab-icon"></ng-md-icon>
+          <md-tooltip>Featured</md-tooltip>
+        </md-tab-label>
+      </md-tab>
+      <md-tab id="tab2" ui-sref=".categories">
+        <md-tab-label><ng-md-icon icon="loyalty" class="spotify-fab-icon"></ng-md-icon>
+          <md-tooltip>Categories</md-tooltip>
+        </md-tab-label>
+      </md-tab>
+      <md-tab id="tab3" ui-sref=".search">
+        <md-tab-label><span class="mdi-action-search"/>
+          <md-tooltip>Search</md-tooltip>
+        </md-tab-label>
+      </md-tab>
+      <md-tab id="tab4" ng-if="!isAuthorized" ng-click="spotifyAuth()">
+        <md-tab-label><span class="mdi-action-account-circle"/>
+          <md-tooltip>Connect spotify account</md-tooltip>
+        </md-tab-label>
+      </md-tab>
+      <md-tab id="tab4b" ui-sref=".user" ng-if="isAuthorized">
+        <md-tab-label>
+          <div class="icon-avatar" ng-style="{'background-image': 'url('+me.images[0].url+')'}"></div>
+          <md-tooltip>Your profile</md-tooltip>
+        </md-tab-label>
+      </md-tab>
+    </md-tabs>
+  </div>
+  <div class="col-md-12 nopadding" flex="grow" layout-fill ui-view>
+  </div>
+</div>
