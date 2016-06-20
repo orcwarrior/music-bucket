@@ -15,14 +15,14 @@
     <div>
       <section ng-if="ytClips">
         <md-subheader class="md-accent">Videos</md-subheader>
-            <youtube-entry entry="ytEntry" ng-repeat="ytEntry in ytClips">
-            </youtube-entry>
+            <media-item-tile item="ytEntry" ng-repeat="ytEntry in ytClips">
+            </media-item-tile>
       </section>
       <!-- plalists -->
       <section ng-if="ytPlaylists">
         <md-subheader class="md-accent">Playlists</md-subheader>
-            <youtube-entry entry="ytEntry" ng-repeat="ytEntry in ytPlaylists">
-            </youtube-entry>
+            <media-item-tile item="ytEntry" ng-repeat="ytEntry in ytPlaylists">
+            </media-item-tile>
       </section>
     </div>
   </div>
