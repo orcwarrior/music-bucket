@@ -1,15 +1,14 @@
 <div ng-show="isMinePlaylist()">
   <!-- DK: When user is not logged in show tooltip -->
-  <a class="mdi-content-save disabled" ng-show="!player.playlist.isAltered && userLoggedIn()">
+  <a class="mdi-content-save disabled" ng-show="!player.getPlaylist().isAltered && userLoggedIn()">
     <md-tooltip md-direction="right">Change playlist first to save it.</md-tooltip>
   </a>
   <!-- Normal save diskiette -->
-  <a class="mdi-content-save" ng-show="player.playlist.isAltered && userLoggedIn()"
-     ng-class="{ 'disabled' : player.playlist.name == '' && player.playlist.settingPlaylistName || !userLoggedIn()}"
+  <a class="mdi-content-save" ng-show="player.getPlaylist().isAltered && userLoggedIn()"
+     ng-class="{ 'disabled' : player.getPlaylist().name == '' && player.getPlaylist().settingPlaylistName || !userLoggedIn()}"
      ng-click="savePlaylistDialog($event)"></a>
 </div>
 
   <div ng-hide="isMinePlaylist()">
     <a class="mdi-action-info" ng-click="viewPlaylistDialog($event)"></a>
-
   </div>
