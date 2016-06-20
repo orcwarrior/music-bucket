@@ -34,6 +34,7 @@ angular.module('musicBucketApp')
           self.activeList = newEntry;
           newEntry.manager = self;
           self.ui.swapper.state = 'finishing';
+          $rootScope.$broadcast("list-container:update", newEntry);
           $timeout(function () {
             self.ui.swapper.state = 'none';
           }, SWAP_MIDTIME);
