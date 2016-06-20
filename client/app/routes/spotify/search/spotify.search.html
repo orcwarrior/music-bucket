@@ -1,0 +1,18 @@
+<div class="top-search">
+  <form>
+    <div class="form-control-wrapper input-group">
+      <input class="form-control empty" id="focusedInput" ng-model="searchQuery" type="text" placeholder="Spotify search...">
+
+      <span class="material-input"></span>
+      <span class="input-group-addon "><button class="mdi-action-search clear-button" type="submit"
+                                               ng-click="search(searchQuery)"></button></span>
+    </div>
+  </form>
+</div>
+<!-- loading spinner -->
+<div class="center-block" ng-show="searchInProgress" style="width: 50px; overflow:visible; margin-top: 1em">
+  <span class="loader "><span class="loader-inner"></span></span>
+</div>
+<div class="col-lg-12 center-grid">
+  <media-item-tile ng-repeat="mediaItem in searchResults.items" item="mediaItem"></media-item-tile>
+</div>
