@@ -25,7 +25,7 @@
               artist: song.artist,
               album: song.album,
               title: song.title,
-              duration: song.duration //in sec
+              duration: song.duration * 1000 //in sec => to ms
               //albumArt: song.albumArt,
               //trackNo: song.trackNo
             })
