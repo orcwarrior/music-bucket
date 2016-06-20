@@ -3,7 +3,7 @@
  */
 
 angular.module('musicBucketEngine')
-  .factory('songSeekerSoundcloud', function ($q, soundcloudApi, mbScoreUtils, mbStringUtils, songCommons) {
+  .factory('songSeekerSoundcloud', function ($q, $log, soundcloudApi, mbScoreUtils, mbStringUtils, songCommons) {
 
 
     function _pickSoundcloudEntry(entries, metainfos) {
@@ -20,7 +20,11 @@ angular.module('musicBucketEngine')
           'entry': entry,
           type: songCommons.songType.soundcloud
         };
-        entryScore.val *= 1.15;
+        entryScore.val *= 1.075;
+        if (entry.user.username) {
+          if (mbStringUtils.normalizeString(entry.user.username) !== mbStringUtils.normalizeString(metainfos.artist))
+            entryScore.val -= 25;
+        }
         // entryScore.val += 10;
         // remix fix:
         if (nMetaTitle.indexOf("remix") == -1 && entry.track_type === "remix")
@@ -50,6 +54,8 @@ angular.module('musicBucketEngine')
         .then(function (response) {
           // TODO: No search results?
           var pickedEntry = _pickSoundcloudEntry(response.data, metainfos);
+          $log.info("SC Picked entry for " + metainfos.artist + " - " + metainfos.title);
+          $log.info(pickedEntry);
           deferred.resolve(pickedEntry);
         });
       return deferred.promise;
