@@ -182,8 +182,6 @@ angular.module('musicBucketApp')
         // TODO: Let it use play method
         bufferingNextSongAlreadyCalled = false; // for an init TODO: Refactor
         this.setCurrentSong(song);
-        // FIX: Keep all volumes synced:
-        this.setVolume(this._volume);
 
         song.play();
         this.isPlaying = true; // TODO: Refactor
@@ -192,9 +190,12 @@ angular.module('musicBucketApp')
         window.document.title = song.metainfos.getSongDescription();
         mbPlayerEngineInstance.fireEvent("songChange", song);
 
+        var self = this;
         song.engine.listen("onsongready", function (observable, eventType, data) {
           window.document.title = song.metainfos.getSongDescription();
           mbPlayerEngineInstance.fireEvent("songChange", song);
+          // FIX: Keep all volumes synced:
+          self.setVolume(self._volume);
         });
 
         return this.getCurrentSong().metainfos.id;
@@ -209,8 +210,7 @@ angular.module('musicBucketApp')
 
         // Pre-buffer first song:
         this.preBufferFirstSong();
-        $rootScope.$broadcast('list-scroll:update', this);
-        $rootScope.$broadcast('playlist:update', this);
+        $rootScope.$broadcast('playlist:update', playlist);
       };
       this.getPlaylist = function (key) {
         if (_.isUndefined(key)) {
@@ -356,7 +356,7 @@ angular.module('musicBucketApp')
         }
       };
       this.removeCorruptedSong = function (songId) {
-        if (this.getCurrentSong().metainfos.id === songId) {
+        if (this.getCurrentSong() && this.getCurrentSong().metainfos.id === songId) {
           this.nextTrack(false); // don't save corrupted song to history.
         } else {
           this.queue.removeBySongId(songId);
