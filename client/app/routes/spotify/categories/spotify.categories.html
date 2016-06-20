@@ -1,0 +1,18 @@
+<div class="center-block" ng-show="searchInProgress" style="width: 50px; overflow:visible; margin-top: 1em">
+  <span class="loader "><span class="loader-inner"></span></span>
+</div>
+<div class="col-lg-12 center-grid">
+  <h2 class="spotify-header" ng-show="!selectedCategory">
+    Spotify categories
+  </h2>
+
+  <h2 class="spotify-header" ng-show="selectedCategory">
+    <a ng-click="goBack()">Spotify categories</a>
+    <ng-md-icon icon="chevron_right"></ng-md-icon>
+    {{selectedCategory.name}}
+  </h2>
+
+  <spotify-category-tile ng-show="!selectedCategory" ng-repeat="mediaItem in categories.items" category="mediaItem"></spotify-category-tile>
+  <media-item-tile ng-repeat="playlist in categoryPlaylists.items" item="playlist"></media-item-tile>
+
+</div>
