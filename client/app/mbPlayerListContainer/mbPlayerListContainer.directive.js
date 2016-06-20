@@ -9,6 +9,7 @@ angular.module('musicBucketApp')
         container: "=container"
       },
       link: function (scope, element, attrs) {
+        scope.undrscr = window._;
         scope.actionsToggled = [];
         scope.toggleActions = function ($index) {
           var oldState = !!scope.actionsToggled[$index];
@@ -16,15 +17,9 @@ angular.module('musicBucketApp')
           scope.actionsToggled[$index] = !oldState;
         };
         scope.$watch('container', function () {
-          $rootScope.$broadcast('list-scroll:update', null);
           $timeout(function () {
             var container = angular.element(element[0].parentElement);
-            $rootScope.$broadcast('list-scroll:update', null);
           }, 1000, true);
-        });
-        scope.$on('playlist:update', function (event, playlist) {
-          scope.container.entryRef = playlist;
-          scope.container.entries = playlist.entries;
         });
       }
     };
