@@ -12,6 +12,7 @@
           spotify: "typeSpotify",
           youtube: "typeYoutube",
           soundcloud: "typeSoundcloud",
+          mediaItem: "typeMediaItem",
           unresolved: "typeUnresolved"
         },
         songState: {
