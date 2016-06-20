@@ -21,6 +21,19 @@ angular.module('musicBucketApp')
          * bg: Muted         | fg: Vibrant (circles)
          * */
         function _processPalette(palette) {
+          if (!palette.Vibrant) {
+            // fix vibrant color if not present
+            palette.Vibrant = new Swatch(palette.LightVibrant.rgb, 0);
+            palette.Vibrant.getHsl();
+            palette.Vibrant.hsl[0] = palette.LightVibrant.hsl[0];
+            palette.Vibrant.hsl[1] = palette.LightVibrant.hsl[1];
+            palette.Vibrant.hsl[2] = palette.LightVibrant.hsl[2] * 0.8;
+            palette.Vibrant.rgb = window.Vibrant.hslToRgb(
+              palette.LightVibrant.hsl[0],
+              palette.LightVibrant.hsl[1],
+              palette.LightVibrant.hsl[2] * 0.8);
+          }
+
           var avgFgLightness = (palette.Vibrant.hsl[2] + palette.Muted.hsl[2]) / 2;
           console.log("color: AVG.FG: " + avgFgLightness + ", DM: " + palette.DarkMuted.hsl[2]);
           if (palette.DarkMuted && palette.DarkMuted.hsl[2]) {
