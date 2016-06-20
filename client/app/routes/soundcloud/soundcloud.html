@@ -1,14 +1,28 @@
-<div class="top-search">
-  <form>
-    <div class="form-control-wrapper input-group">
-      <input class="form-control empty" id="focusedInput" ng-model="searchQuery" type="text" placeholder="Soundcloud track">
+<div class="row">
+  <div class="">
+    <md-toolbar class="md-transparent" style="position: absolute; height: 40px; overflow: auto">
+      <form class="md-toolbar-tools">
+        <div class="form-control-wrapper input-group">
+          <input class="form-control empty" id="focusedInput" ng-model="searchQuery" type="text"
+                 placeholder="search keywords">
 
-      <span class="material-input"></span>
+          <span class="material-input"></span>
       <span class="input-group-addon "><button class="mdi-action-search clear-button" type="submit"
                                                ng-click="search(searchQuery)"></button></span>
-    </div>
-  </form>
-</div>
-<div class="col-lg-12" style="margin-top: 55px;">
-  <soundcloud-track style="display: inline; overflow: hidden;" track="result" ng-repeat="result in searchResults"></soundcloud-track>
+        </div>
+      </form>
+    </md-toolbar>
+  </div>
+  <div>
+    <!-- plalists -->
+    <section ng-if="playlistSearchResults ">
+      <md-subheader class="md-accent">Playlists</md-subheader>
+      <media-item-tile item="playlist" ng-repeat="playlist in playlistSearchResults"></media-item-tile>
+    </section>
+    <!-- tracks -->
+    <section ng-if="songSearchResults">
+      <md-subheader class="md-accent">Tracks</md-subheader>
+      <media-item-tile item="song" ng-repeat="song in songSearchResults"></media-item-tile>
+    </section>
+  </div>
 </div>
