@@ -1,90 +1,82 @@
 <div class="col-md-12">
-  <h3>No elo, wybierz z którego serwisu chcesz dodać pliki:</h3>
-
+  <h3>Dodaj coś do swojej playlsty:</h3>
+  {{curSong()}}
   <div class="row">
     <!-- Songza -->
-    <a class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.songza.concierge">
-      <img class="img-in-col" alt="Songza" ui-sref="main.songza.concierge"
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.songza.concierge">
+      <img class="img-in-col" alt="Lurker" ui-sref="main.songza.concierge"
            src="http://www.todaysparent.com/wp-content/uploads/2012/05/Songza-logo-and-monster_660x660.jpg"/>
-    </a>
-    <!-- Local -->
-    <a class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.local">
-      <img class="img-in-col" alt="Local storage"
-           src="http://icons.iconarchive.com/icons/graphicloads/100-flat/256/folder-icon.png"/>
-    </a>
+    </div>
     <!-- YouTube -->
-    <a class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.youtube">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.youtube">
       <img class="img-in-col" alt="Youtube"
            src="http://i0.wp.com/www.mytechskool.com/wp-content/uploads/2013/08/YouTube-New-Logo.png?fit=1024%2C1024"/>
-    </a>
+    </div>
+    <!-- Spotify -->
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.spotify">
+      <img class="img-in-col" alt="Spotify"
+           src="http://www.edmnations.com/wp-content/uploads/2016/01/spotify-logo-mat-pras-660x4401.jpeg"/>
+    </div>
     <!-- SoundCloud -->
-    <a class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.soundcloud">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.soundcloud">
       <img class="img-in-col" alt="Soundcloud"
            src="http://www.youredm.com/wp-content/uploads/bfi_thumb/SoundCloud-639casjvam669u00vbqjgh6hij076y149ltqpkrnvhe.png?a33bbe"/>
-    </a>
-  </div>
-
-</div>
-<div class="col-md-12">
-  <hr>
-  <h4> Lurker (Uproszczone API backupa prawie już w przygotowaniu ;) )<br/>
-    <b>{{songzaLurkerStats.avgProgress}}% / {{songzaLurkerStats.avgAbandonedProgress}}%</b>
-  </h4>
-</div>
-<div class="row">
-  <div class="col-md-12 col-lg-8">
-    <span class="text-info" style="opacity: 0.55">(tydzien temu)</span>
-    <span class="text-info" style="opacity: 1">(przed wczoraj)</span>
-    <span class="text-primary" style="opacity: 0.55">(wczoraj)</span>
-    <span class="text-primary">(dziś)</span>
-    <span class="text-danger">(ostatnia aktualizacja)</span>
-
-  </div>
-  <div class=" col-md-12 col-lg-8 nopadding">
-    <div class="progress">
-      <div class="progress-bar progress-bar-info"
-           style="width: {{songzaLurkerStats.progressArchiveSteps.week}}%; opacity:0.35">
-        <span class="sr-only"></span>
-      </div>
-      <div class="progress-bar progress-bar-info"
-           style="width: {{songzaLurkerStats.progressArchiveSteps.daybefore}}%;">
-        <span class="sr-only"></span>
-      </div>
-      <div class="progress-bar progress-bar-default"
-           style="width: {{songzaLurkerStats.progressArchiveSteps.yesterday}}%; opacity:0.35">
-        <span class="sr-only"></span>
-      </div>
-      <div class="progress-bar progress-bar-default" style="width: {{songzaLurkerStats.progressArchiveSteps.today}}%">
-        <span class="sr-only"></span>
-      </div>
-      <div class="progress-bar progress-bar-danger" style="width: {{songzaLurkerStats.progressArchiveSteps.now}}%">
-        <span class="sr-only"></span>
-      </div>
+    </div>
+    <!-- Local -->
+    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.local">
+      <img class="img-in-col" alt="Local storage"
+           src="http://i.imgur.com/lG3nZRd.png"/>
     </div>
   </div>
-</div>
-<div class="float: right">
-  ({{songzaLurkerStats.resolvedSongs | number}} / {{songzaLurkerStats.allSongs | number}})
-</div>
-<div class="row">
-</div>
-<i>stan na: {{songzaLurkerStats.timestamp}}</i>
-<br/>
-<br/>
-Najnowsze poprawki <b>(19.02.2016)</b><br/>
 
-<b>
-  * Poprawka błędu który przy zaklikiwaniu przycisku "Nast. utwór" na śmierć, powodował odtwarzanie wielu na raz. <br/>
-  * Quickfix błędu odtwarzania wielu klipów jednoczesnie z Youtube, dodatkowo poprawione wyświetlanie tytułów odtw.
-  klipów w nazwie strony <br/>
-</b>
-  * Wyswietlanie składowych utworów dla wpisów na playliscie - dwuklik na wpisie pokazuje jego utwory. <b>(poprawienie działania akcji)</b><br/>
-  * Poprawienie zagospodarowania dla rozdzielczosci 1366 i mniejszych.<br/>
-  * Możliwość odtwarzania pojedyńczych, utworów, kolejkowania i usuwania ich.<br/>
+</div>
+Najnowsze poprawki <b>(20.06.2016)</b><br/>
+
+<strong>
+  * Poprawka zapisywania playlist. <br/>
+  * Przy wyszukiwaniu odpowiedników utworów na youtube jest teraz dodatkowo uwzględniany czas utworu który wpływa na
+  całkowitą ocene źródła. (UP Dodatkowe drobne poprawki wyszukiwania)<br/>
+</strong>
+* Poprawka soundcloud ujednolicenie do media item jak pozostałe oraz dodanie obsługi playlist soundclouda.<br/>
+
+* Poprawka dodawania klipów z youtube.<br/>
+* Spotify! (Własne playlisty, propozycje spotify (albumy/playlisty), kategorie, wyszukiwarka) <br/>
+* Optymalizacja szybkości aktualizacji listy odtwarzania<br/>
+* Ujednolicenie elementu wyświetlania "mediów" w aplikacji (mediaItem) -> adaptery do media item dla wszystkich obiektów poza soundcloud.
+<br/>
+* Czcionka Roboto <3 <br/>
+* Poprawka w discovery, przywrócenie do funkcjonalności (Błąd wynikał z usunięcia Object.observe w przeglądarkach) <br/>
+* Poprawka niewidocznych odtwarzaczy youtube'a. <br/>
+* Zmiana dyrektywy do scrolla playlist na virtualnego repeatera (lepszy performance przy dużych il. elementów) oraz stylizacja scrolla dla przegladarek webkit.
+<br/>
+* (W trakcie odtwarzania playlist od nowa) <br/>
+* Poprawka wprowadzania bezpośrednio linków do playlist, video z youtube'a.<br/>
+* Poprawka wyszukiwania utworów na YT - powinno przynosic lepsze rezultaty dla scieżek filmowych <br/>
+* Poprawki discovery - refaktoring wyszukiwania inf. o albumach; poprawka palety kolorów; poprawka menu przy utworach.
+<br/>
+* Wyszukiwanie utworu na soundcloud kładzie nacisk na czas trwania wyników, drobne zmiany w ocenianiu znalezionych pozycji.
+<br/>
+* Zapis playlist - obsługa zapisu róźnic, możliwość usuwania pojedyńczych utworów z playlist i zapisu tego. <br/>
+* Odczyt/zapis playlist w bazie danych (zakładka Playlists). <br/>
+* Testowo przywrócony wizualny loader. <br/>
+* Quickfix youtube'owego player'a. <br/>
+* Całkowita przebudowa zapisu i odczytu playlist (optymalizacja) - wczytywanie/zapisywanie playlist prawdopdoobnie tymczasowo nie działa.
+<br/>
+* Songza welcome back :)<br/>
+* Kilka drobnych poprawek (sortowanie wpisów, zachowywanie odczytanych inf. o klipach YT, albumArty z soundclouda, ...)
+<br/>
+* Poprawka błędu który przy zaklikiwaniu przycisku "Nast. utwór" na śmierć, powodował odtwarzanie wielu na raz. <br/>
+* Quickfix błędu odtwarzania wielu klipów jednoczesnie z Youtube, dodatkowo poprawione wyświetlanie tytułów odtw.
+klipów w nazwie strony <br/>
+* Wyswietlanie składowych utworów dla wpisów na playliscie - dwuklik na wpisie pokazuje jego utwory. (poprawienie działania akcji)
+<br/>
+* Poprawienie zagospodarowania dla rozdzielczosci 1366 i mniejszych.<br/>
+* Możliwość odtwarzania pojedyńczych, utworów, kolejkowania i usuwania ich.<br/>
 * Poprawka zapisywania dodanych wpisów z soundclouda - zapisuja i odczytują się teraz poprawnie.<br/>
- * Aktualizacja progressbara jest dokładniejsza, przez co "skok" przy odtwarzaniu jest obserwowalnie mniejszy.<br/>
- * Refaktoring styli CSS - podstawowych konenerów na stronie w wyniku widoki webowy i przedewszystkim mobilny powinny się dużo lepiej sprawować.<br/>
- * Poprawka UI playlisty, dodano scroll do wpisów playlisty poprawiono wyświetlanie dla wersji mobilnej<br/>
+* Aktualizacja progressbara jest dokładniejsza, przez co "skok" przy odtwarzaniu jest obserwowalnie mniejszy.<br/>
+* Refaktoring styli CSS - podstawowych kontenerów na stronie w wyniku widoki webowy i przedewszystkim mobilny powinny się dużo lepiej sprawować.
+<br/>
+* Poprawka UI playlisty, dodano scroll do wpisów playlisty poprawiono wyświetlanie dla wersji mobilnej<br/>
 * Poprawka odtwarzania tj. graj teraz, graj nastepne itd. przy wyborze utworów z YT.<br/>
 * Obecnie pojedyncze klipy video dodają się do pojedynczego wpisu na playliscie, nie jak wczesniej 1 klip - 1 wpis.<br/>
 * Poprawienie wyszukiwania utworów po podstawowych informacjach (artysta - tytuł) na youtube - nowy algorytm, do testów
