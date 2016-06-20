@@ -1,0 +1,11 @@
+<div class="col-md-12">
+  <h2 class="spotify-header">Spotify features</h2>
+  <h4>{{featuredPlaylists.message}}</h4>
+  <md-progress-circular md-mode="indeterminate"
+                        ng-hide="featuredPlaylists"></md-progress-circular>
+  <media-item-tile ng-repeat="playlist in featuredPlaylists.playlists.items" item="playlist"></media-item-tile>
+
+  <h4 class="spotify-header" ng-show="newReleases">Newest albums</h4>
+  <media-item-tile ng-repeat="album in newReleases.albums.items" item="album"></media-item-tile>
+
+</div>
