@@ -3,7 +3,7 @@
 angular.module('musicBucketEngine')
   .service('youtubeApi', function ($http, $q) {
 
-    var apiKey = "AIzaSyB4n5CxGsCe3VDLKCFQ8LRYWxGPkb_stuo"
+    var apiKey = "AIzaSyB4n5CxGsCe3VDLKCFQ8LRYWxGPkb_stuo";
     var youtubeApiRequestQueryTimestamps = [];
 
     function youtubeApiRequest(urlScheme, params, dontRunRequest) {
@@ -91,6 +91,30 @@ angular.module('musicBucketEngine')
 
     }
 
+    function _playlistItemsGrabber(playlistId, lastResponse, allPlaylistItems) {
+      var deffered = $q.defer();
+
+      if (!lastResponse.data.nextPageToken)
+        deffered.resolve(allPlaylistItems);
+      else
+        new youtubeApiRequest('/playlistItems', {
+          getParams: {
+            part: 'snippet',
+            playlistId: playlistId,
+            maxResults: 50,
+            pageToken: lastResponse.data.nextPageToken
+          }
+        }).promise
+          .then(function (response) {
+            allPlaylistItems = allPlaylistItems.concat(response.data.items);
+            _playlistItemsGrabber(playlistId, response, allPlaylistItems)
+              .then(function (followingPlaylistItems) {
+                deffered.resolve(followingPlaylistItems);
+              });
+          });
+      return deffered.promise;
+    }
+
     return {
       // https://api.youtube.com/tracks.json?consumer_key=8d84bbdf76bfc4a57c4996344cebbaf6&q=flume&filter=all&order=hotness
       search: function (query, limit, additionalFilters) {
@@ -121,6 +145,24 @@ angular.module('musicBucketEngine')
             params.getParams.videoEmbeddable = true;
 
           return new youtubeApiRequest("/videos", params).promise;
+        },
+        list: function (part, filters, limit, pageToken) {
+          if (!_.isArray(part)) part = [part];
+          var params = {
+            getParams: {
+              part: part.join(','),
+              maxResults: limit,
+              pageToken: pageToken
+            }
+          };
+          if (filters)
+            if (filters.chart)
+              params.getParams.chart = filters.chart;
+            else if (filters.id)
+              params.getParams.id = filters.id.join(',');
+            else if (filters.myRating)
+              params.getParams.myRating = filters.myRating;
+          return new youtubeApiRequest("/videos", params).promise;
         }
       },
       playlist: {
@@ -131,7 +173,7 @@ angular.module('musicBucketEngine')
           return new youtubeApiRequest('/playlistItems', {
             getParams: {
               part: 'snippet',
-              id: playlistId,
+              playlistId: playlistId,
               maxResults: limit || 50
             }
           }).promise;
@@ -140,26 +182,15 @@ angular.module('musicBucketEngine')
           var deferred = $q.defer();
           var allPlaylistItems = [];
           new youtubeApiRequest('/playlistItems', {
-            getParams: {part: 'snippet', id: playlistId, limit: 50}
+            getParams: {part: 'snippet', playlistId: playlistId, maxResults: 50}
           }).promise
             .then(function (response) {
-              var lastResponse = response;
               allPlaylistItems = allPlaylistItems.concat(response.data.items);
-              while (lastResponse.data.nextPageToken) {
-                new youtubeApiRequest('/playlistItems', {
-                  getParams: {
-                    part: 'snippet',
-                    id: playlistId,
-                    limit: 50,
-                    pageToken: lastResponse.data.nextPageToken
-                  }
-                }).promise
-                  .then(function (response) {
-                    lastResponse = response;
-                    allPlaylistItems = allPlaylistItems.concat(response.data.items);
-                  });
-              }
-              deferred.resolve(allPlaylistItems);
+              _playlistItemsGrabber(playlistId, response, allPlaylistItems)
+                .then(function (followingPlaylistItems) {
+                  // allPlaylistItems = allPlaylistItems.concat(followingPlaylistItems);
+                  deferred.resolve(followingPlaylistItems);
+                });
             });
           return deferred.promise;
         }
