@@ -1,0 +1,20 @@
+<div class="top-search">
+  <form role="form">
+    <div class="row">
+      <div class="form-control-wrapper input-group">
+        <input class="form-control empty" id="focusedInput" ng-model="searchQuery" type="text"
+               placeholder="Just write what you looking for...">
+
+        <span class="material-input"></span>
+      <span class="input-group-addon "><button class="mdi-action-search clear-button" type="submit"
+                                               ng-click="search(searchQuery)"></button></span>
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<div class="col-lg-12 center-grid">
+  <media-collection ng-repeat="collection in foundMediaCollections" collection="collection">
+  </media-collection>
+</div>
