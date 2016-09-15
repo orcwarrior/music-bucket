@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .directive('mediaItemTile', function ($q, $mdDialog, mediaItemBuilder, mediaItemEntryBuilder, mbPlayerEngine) {
+  .directive('mediaItemTile', function ($q, $mdDialog, mediaItemBuilder, mediaItemEntryBuilder, mediaItemTypes, mbPlayerEngine) {
     return {
       templateUrl: 'app/mediaItem/mediaItemTile/mediaItemTile.html',
       restrict: 'EA',
@@ -9,7 +9,13 @@ angular.module('musicBucketApp')
         item: "=item"
       },
       link: function (scope, element, attrs) {
-        scope.item = mediaItemBuilder(scope.item);
+        //scope.item = mediaItemBuilder(scope.item);
+        scope.$watch('item', function (newItem) {
+          if (newItem && !newItem.__isAnMediaItemObject) {
+            scope.item = mediaItemBuilder(newItem);
+          }
+        });
+
         scope.moreInfos = function (ev) {
           $mdDialog.show({
             controller: 'mediaItemController',
