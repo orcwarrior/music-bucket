@@ -1,23 +1,30 @@
+@mediaItemTileWidth: 195px; // 230
+@mediaItemTileHeight: @mediaItemTileWidth;
+@mediaItemTileMetainfosHeight: 60px; // 68
+
+@mediaItemTileMobileWidth: 154px; // 230
+@mediaItemTileMobileHeight: @mediaItemTileMobileWidth;
+@mediaItemTilMetainfoseMobileHeight: 50px;
 .media-tile-wrapper {
+  padding-top: 2px;
   display: inline-block;
 }
 
 .media-tile-loader {
   position: absolute;
-  width: 230px;
-  height: 230px;
-  z-index: 9999;
+  width: @mediaItemTileWidth;
+  height: @mediaItemTileHeight;
+  z-index: 5;
 }
 
 .media-tile {
   position: relative;
   padding: 0;
-  margin: 0;
   cursor: pointer;
   display: table;
 
-  width: 230px;
-  height: 230px;
+  width: @mediaItemTileWidth;
+  height: @mediaItemTileHeight;
   overflow: hidden;
   & .media-tile-add-to-playlist {
     display: table;
@@ -25,7 +32,7 @@
     z-index: 2;
     background-color: rgba(0, 0, 0, 0.3);
     width: 100%;
-    height: 230px;
+    height: @mediaItemTileHeight;
     color: @gray-lighter;
     pointer-events: none;
     opacity: 0;
@@ -59,7 +66,7 @@
     z-index: 0;
     display: block;
     width: 100%;
-    height: 230px;
+    height: @mediaItemTileHeight;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -72,11 +79,11 @@
   display: block;
   padding: 0.5em;
   padding-bottom: 0;
-  width: 230px;
-  height: 68px;
+  width: @mediaItemTileWidth;
+  height: @mediaItemTileMetainfosHeight;
   z-index: 2;
   color: @grey-100;
-  font-size: 15px;
+  font-size: 14px;
   & > .media-tile-name {
     padding-top: 4px;
     height: 2.9em;
@@ -106,4 +113,25 @@
   pointer-events: all !important;
   opacity: 1 !important;
   transition: opacity 0.25s ease-out !important;
+}
+.bugfix-hidden-tile { height: 1px; overflow: hidden; visibility: hidden; }
+.collection-layout-wrapper-fix{ width: 69%; height: 2px; background-color: red; }
+
+@media screen and (max-width: @screen-xs-max) {
+  .media-tile-wrapper {
+    margin: 0 1px;
+  }
+
+  .media-tile {
+    width: @mediaItemTileMobileWidth;
+    height: @mediaItemTileMobileHeight;
+    & .media-tile-add-to-playlist {
+      height: @mediaItemTileMobileHeight;
+    }
+  }
+  .media-tile-metainfos {
+    width: @mediaItemTileMobileWidth;
+    height: @mediaItemTilMetainfoseMobileHeight;
+    font-size: 13px;
+  }
 }
