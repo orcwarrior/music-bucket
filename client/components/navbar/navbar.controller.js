@@ -11,6 +11,10 @@ angular.module('musicBucketApp')
         'link': '/playlists'
       },
       {
+        'title': 'Search',
+        'link': '/search'
+      },
+      {
         'title': 'Discover',
         'link': '/discover'
       },
@@ -28,7 +32,9 @@ angular.module('musicBucketApp')
       Auth.logout();
       $location.path('/login');
     };
-
+    $scope.collapseMenu = function() {
+      $scope.isCollapsed = true;
+    }
     $scope.isActive = function (route) {
       return route === $location.path();
     };
