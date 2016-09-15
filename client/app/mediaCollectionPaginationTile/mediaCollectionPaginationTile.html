@@ -1,0 +1,16 @@
+<div class="media-collection-pagination" ng-if="pageObject.allItems">
+  <uib-pagination total-items="pageObject.allItems" ng-model="pageObject.page"
+                  items-per-page="pageObject.size"
+                  direction-links="false" total-items="pageObject.lastPage()"
+                  boundary-links="true" boundary-link-numbers="true"
+                  max-size="4" class="pagination-sm" boundary-link-numbers="true"></uib-pagination>
+
+  <ul class="pagination pagination-sm pagination-sizer">
+    <!--<li><a>per page:</a></li>-->
+    <li ng-if="pageObject.getSmallerSize() !== pageObject.size"><a href ng-click="pageObject.size=pageObject.size-1">{{pageObject.getSmallerSize()}}</a></li>
+    <li class="active"><a href ng-click="selectPage(page + 1, $event)">{{pageObject.size}}</a></li>
+    <li ng-if="pageObject.getBiggerSize() !== pageObject.size"><a href ng-click="pageObject.size=pageObject.size+1">{{pageObject.getBiggerSize()}}</a></li>
+  </ul>
+  <div>
+    off: {{pageObject.offset}} / {{pageObject.allItems}}; 0-{{pageObject.page}}-{{pageObject.lastPage()}}; perPage: {{pageObject.size}}</div>
+</div>
