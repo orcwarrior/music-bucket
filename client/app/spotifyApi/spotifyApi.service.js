@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketEngine')
-  .service('spotifyApi', function ($http, $q, $window, $rootScope, $interval, localStorageService) {
+  .service('spotifyApi', function ($http, $q, $window, $rootScope, $interval, localStorageService, searchApisRegistry, searchDefinition) {
 
     var spotifyApiRequestQueryTimestamps = [];
     var BASE_URL = "https://api.spotify.com/v1";
@@ -113,7 +113,7 @@ angular.module('musicBucketEngine')
       this.promise = deffered.promise;
       /* Public */
       this.run = function () {
-        var deffered = $q.defer();
+        var _deffered = $q.defer();
         if (params.authorization)
           new spotifyApiGetAuthToken()
             .then(function (authToken) {
@@ -124,9 +124,9 @@ angular.module('musicBucketEngine')
                 headers: {'Authorization': "Bearer " + authToken}
               })
                 .then(function (response) {
-                  deffered.resolve(response);
+                  _deffered.resolve(response);
                 }, function (error) {
-                  deffered.reject(error);
+                  _deffered.reject(error);
                 });
 
             });
@@ -137,11 +137,11 @@ angular.module('musicBucketEngine')
             data: params.data
           })
             .then(function (response) {
-              deffered.resolve(response);
+              _deffered.resolve(response);
             }, function (error) {
-              deffered.reject(error);
+              _deffered.reject(error);
             });
-        return deffered.promise;
+        return _deffered.promise;
       };
 
       /* Private */
@@ -188,7 +188,7 @@ angular.module('musicBucketEngine')
 
       function debounceRequest() {
         var lastTimestamp = _.last(spotifyApiRequestQueryTimestamps);
-        if (_.isUndefined(lastTimestamp)) lastTimestamp = 0;
+        if (_.isUndefined(lastTimestamp)) lastTimestamp = -DEBOUNCE_TIME;
         var waitTime = Math.max(0, -_.now() + (lastTimestamp )) + DEBOUNCE_TIME;
         var currentTimestamp = params.timestamp = _.now() + waitTime;
         console.log("[spotifyApi] Request wait time:" + waitTime);
@@ -355,6 +355,11 @@ angular.module('musicBucketEngine')
           ).promise;
         }
       },
+      playlists: {
+        search: function (query, limit, offset) {
+          return spotifyApi.search(query, 'playlist', limit, offset)
+        }
+      },
       search: function (query, type, limit, offset) {
         return new spotifyApiRequest("/search", {
           getParams: {
@@ -364,9 +369,7 @@ angular.module('musicBucketEngine')
             'offset': offset || 0
           }
         }).promise;
-      }
-
-      ,
+      },
       me: function () {
         return new spotifyApiRequest("/me", {
           authorization: true
@@ -386,8 +389,7 @@ angular.module('musicBucketEngine')
               }
             }).promise;
 
-          }
-          ,
+          },
           get: function (playlistId, userId) {
             return new spotifyApiRequest("/users/:userId/playlists/:playlistId", {
                 authorization: true,
@@ -399,6 +401,14 @@ angular.module('musicBucketEngine')
         }
       }
     }
+
+    // Register searchApi's:
+    searchApisRegistry.registerSearchService(
+      'spSP', spotifyApi.playlists.search, {
+        searchTypeMatching: 'playlist', searchSrcKey: 'query',
+        searchName: "Spotify Playlists", searchCollectionPath: 'data.playlists.items',
+        searchMaxItemsPath: 'data.playlists.total'
+      });
+    var arr = searchApisRegistry.search(new searchDefinition('playlist', {query: 'test'}));
     return spotifyApi;
-  })
-;
+  });

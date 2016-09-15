@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketEngine')
-  .service('songzaApi', function ($http, $q) {
+  .service('songzaApi', function ($http, $q, searchApisRegistry) {
 
     var songzaApiRequestQueryTimestamps = [];
 
@@ -114,7 +114,7 @@ angular.module('musicBucketEngine')
       return selPeriod;
     };
 
-    return {
+    var songzaApi = {
       song: {
         get: function (songId) {
         }
@@ -130,8 +130,8 @@ angular.module('musicBucketEngine')
             }
           }).promise;
         },
-        station: function (query, limit) {
-          return new songzaApiRequest("/station/search", {getParams: {'q': query, 'limit': limit}}).promise;
+        station: function (query, limit, offset) {
+          return new songzaApiRequest("/station/search", {getParams: {'q': query, 'limit': limit, 'offset': offset}}).promise;
         },
         song: function (query, limit) {
         }
@@ -210,6 +210,11 @@ angular.module('musicBucketEngine')
         }
       }
     }
-  }
-)
+
+    searchApisRegistry.registerSearchService("sgST", songzaApi.search.station, {
+      searchTypeMatching: 'playlist', searchSrcKey: 'query',
+      searchName: "Songza stations", searchCollectionPath: 'data'
+    });
+    return songzaApi;
+  })
 ;

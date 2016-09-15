@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('musicBucketEngine')
-  .service('youtubeApi', function ($http, $q) {
+  .service('youtubeApi', function ($http, $q, searchApisRegistry) {
 
     var apiKey = "AIzaSyB4n5CxGsCe3VDLKCFQ8LRYWxGPkb_stuo";
     var youtubeApiRequestQueryTimestamps = [];
@@ -115,9 +115,9 @@ angular.module('musicBucketEngine')
       return deffered.promise;
     }
 
-    return {
+    var youtubeApi = {
       // https://api.youtube.com/tracks.json?consumer_key=8d84bbdf76bfc4a57c4996344cebbaf6&q=flume&filter=all&order=hotness
-      search: function (query, limit, additionalFilters) {
+      search: function (query, limit, additionalFilters, pageToken) {
         var params = {};
         // if (!_.isUndefined(additionalFilters)) params.getParams = additionalFilters;
         params.getParams = _.extend(
@@ -126,7 +126,8 @@ angular.module('musicBucketEngine')
             type: 'video',
             order: 'relevance',
             part: 'snippet',
-            maxResults: limit
+            maxResults: limit,
+            pageToken: pageToken
           }, additionalFilters);
         if (params.getParams.type === 'video')
           params.getParams.videoEmbeddable = true;
@@ -163,6 +164,9 @@ angular.module('musicBucketEngine')
             else if (filters.myRating)
               params.getParams.myRating = filters.myRating;
           return new youtubeApiRequest("/videos", params).promise;
+        },
+        search: function (query, limit, pageToken) {
+          return youtubeApi.search(query, limit, {type: 'video'}, pageToken);
         }
       },
       playlist: {
@@ -193,7 +197,16 @@ angular.module('musicBucketEngine')
                 });
             });
           return deferred.promise;
+        },
+        search: function (query, limit, pageToken) {
+          return youtubeApi.search(query, limit, {type: 'playlist'}, pageToken);
         }
       }
     }
+    searchApisRegistry.registerSearchService("ytPL", youtubeApi.playlist.search, {
+      searchTypeMatching: 'playlist', searchSrcKey: 'query',
+      searchName: "Youtube Playlists", searchCollectionPath: 'data.items',
+      searchPageToken: true, searchPageTokenPath: 'data.nextPageToken',
+    });
+    return youtubeApi;
   });
