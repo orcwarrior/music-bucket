@@ -3,7 +3,7 @@
  */
 
 angular.module('musicBucketEngine')
-  .factory('mediaItem', function () {
+  .factory('mediaItem', function (mediaCollection) {
 
     var sectionsNames = {
       metainfos: "METAINFOS",
@@ -26,6 +26,7 @@ angular.module('musicBucketEngine')
       this._getBuilderObj = resolveProto;
       this.__resolvedSections = []; // "metainfos, playlist..."
       this.__sectionNames = sectionsNames;
+      this.__isAnMediaItemObject = true;
     }
     return item;
   });
