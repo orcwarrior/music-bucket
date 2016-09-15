@@ -1,0 +1,15 @@
+<div class="row">
+  <h4>{{collection.title}}</h4>
+  <ng-md-icon class="header-icon" ng-click="toggleCollection()"  options='{"duration": 375}'
+              icon="{{ collection._ui.collapsed == true ? 'expand_more' : 'expand_less' }}"></ng-md-icon>
+</div>
+
+<div class="media-collection-wrapper" ng-if="!collection._ui.collapsed">
+  <h6>{{collection.subtitle}}</h6>
+
+  <div class="media-collection-items-wrapper" layout="row" layout-align="center" layout-wrap>
+    <media-item-tile ng-repeat="mediaItem in collection.pageObject.data" item="mediaItem"></media-item-tile>
+    <media-item-tile class="bugfix-hidden-tile" item="collection.pageObject.data[0]"></media-item-tile>
+  </div>
+  <media-collection-pagination-tile page-object="collection.pageObject"></media-collection-pagination-tile>
+</div>
