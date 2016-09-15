@@ -110,3 +110,12 @@ md-dialog.media-item {
   }
 
 }
+@media screen and (max-width: @screen-xs-max) {
+  .media-item-actionsbar > .md-button {
+    float: left;
+    min-width: 64px;
+    & > span {
+      display: none;
+    }
+  }
+}
