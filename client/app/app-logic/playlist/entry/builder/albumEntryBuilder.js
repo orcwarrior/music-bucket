@@ -18,7 +18,7 @@
         this.build = function (albumInfos, restoredObj) {
           albumInfos.artist = (albumInfos.artist || albumInfos.__artistName);
           var builderInfos = pickNeededAlbumInfos(albumInfos);
-          var albumEntry = new virtualEntry(builderInfos.artist + "-" + builderInfos.name, undefined, entryCommons.nextOrder.sequence);
+          var albumEntry = new virtualEntry(builderInfos.name + "-" + builderInfos.artist, undefined, entryCommons.nextOrder.sequence);
           _.each(builderInfos.tracks, function (track) {
             albumEntry.addSong(new songUnresolved(
               new songMetainfos({
