@@ -22,10 +22,10 @@ angular.module('musicBucketApp')
           function () {
             return element[0].offsetWidth;
           },
-          function (value) {
+          function (newOffsetWidth) {
             if (!scope.collection || (scope.collection._ui && scope.collection._ui.collapsed)) return;
 
-            var tilesPerLine = Math.floor((value - CONTAINER_PADDINGS) / getMediaItemTileWidth());
+            var tilesPerLine = Math.floor((newOffsetWidth - CONTAINER_PADDINGS) / getMediaItemTileWidth());
             scope.collection.pageObject.setOneLineSize(tilesPerLine);
           });
         scope.toggleCollection = function () {

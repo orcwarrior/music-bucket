@@ -11,15 +11,15 @@
         constructor: function () {
 
           this.entries = [];
-          this.hasNext = function () {
+          this.hasItems = function () {
             return this.entries.length > 0;
           }
           this.peekNextSong = function () {
-            if (!this.hasNext()) return null;
+            if (!this.hasItems()) return null;
             return _.first(this.entries).song;
           }
           this.dequeue = this.getNext = function () {
-            if (this.hasNext()) {
+            if (this.hasItems()) {
               var next = _.first(this.entries);
               this.entries = _.rest(this.entries);
               return next;
@@ -33,12 +33,12 @@
           }
           this.enqueueNext = function (song) {
             var head = new queueEntry(song);
-            if (this.hasNext() && this.entries[0].buffered)
+            if (this.hasItems() && this.entries[0].buffered)
               head.song.buffer();
             this.entries.unshift(head);
           }
           this.bufferNext = function () {
-            if (this.hasNext()) {
+            if (this.hasItems()) {
               var next = _.first(this.entries);
               if (next.song.buffer()) console.log("Next song in queue buffered!", next.song.shared);
             }

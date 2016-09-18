@@ -5,8 +5,6 @@
 angular.module('musicBucketEngine')
   .service('searchService', function ($q, $injector, searchDefinitionTypes, pageObject) {
     /* private */
-    var mediaItemBuilder;
-
     function _validateSearchService(searchService) {
       if (!searchService.id || searchService.id.length !== 4)
         return console.error("Search service has not valid id!");
@@ -17,7 +15,7 @@ angular.module('musicBucketEngine')
       return true;
     }
 
-    function __extractFromPath(obj, path) {
+    function __extractValueFromObjPath(obj, path) {
       var extracted = obj;
       if (path)
         _.each(path.split('.'), function (fieldname) {
@@ -29,7 +27,7 @@ angular.module('musicBucketEngine')
     }
 
     /* public */
-    var searchServiceFunc = function searchService(id, searchMethod, serviceConfig) {
+    function searchService(id, searchMethod, serviceConfig) {
       var srchService = {id: id};
 
       srchService = _.extend(srchService, _.pick(serviceConfig,
@@ -50,11 +48,11 @@ angular.module('musicBucketEngine')
           searchMethod(searchData[srchService.searchSrcKey], pageObj.getSizeOfFetch(), offset)
             .then(function (searchResponse) {
               if (srchService.searchMaxItemsPath)
-                pageObj.setMaxItems(__extractFromPath(searchResponse, srchService.searchMaxItemsPath));
+                pageObj.setMaxItems(__extractValueFromObjPath(searchResponse, srchService.searchMaxItemsPath));
               if (srchService.searchPageTokenPath)
-                srchService.searchPageToken = __extractFromPath(searchResponse, srchService.searchPageTokenPath);
+                srchService.searchPageToken = __extractValueFromObjPath(searchResponse, srchService.searchPageTokenPath);
 
-              deffered.resolve(__extractFromPath(searchResponse, srchService.searchCollectionPath));
+              deffered.resolve(__extractValueFromObjPath(searchResponse, srchService.searchCollectionPath));
               // deffered.resolve(_buildMediaItemCollection(searchResponse));
             });
         }
@@ -64,5 +62,5 @@ angular.module('musicBucketEngine')
       if (_validateSearchService(srchService)) return srchService;
     };
 
-    return searchServiceFunc;
+    return searchService;
   });

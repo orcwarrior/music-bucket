@@ -86,7 +86,7 @@ angular.module('musicBucketApp')
           // player not played anything, get a track
           // There is no any in queue? Create sth..
           $log.info('mbPlayerEngine: Play: there is no currentTrack');
-          if (!this.queue.hasNext()) {
+          if (!this.queue.hasItems()) {
             $log.info('mbPlayerEngine: Play: there is no song in Queue, pushing some...');
             this.pushNextSongToQueue(function (nextTrack) {
               var queueEntry = _player.queue.dequeue();
@@ -144,7 +144,7 @@ angular.module('musicBucketApp')
         this.getPlaylist().playlistSequencer.songChange();
 
         // Get next song from queue:
-        if (!this.queue.hasNext()) {
+        if (!this.queue.hasItems()) {
           $log.info('mbPlayerEngine: Next track: ...still not in queue, queueing');
           this.pushNextSongToQueue(function (nextTrack) {
             var queueEntry = _player.queue.dequeue();
@@ -346,7 +346,7 @@ angular.module('musicBucketApp')
           && bufferingNextSongAlreadyCalled == false) {
           $log.info('mbPlayerEngine: loaded 50% of song, going to push new song in queue!');
           bufferingNextSongAlreadyCalled = true;
-          if (!_queue.hasNext()) {
+          if (!_queue.hasItems()) {
             mbPlayerEngineInstance.pushNextSongToQueue(function (song) {
               _queue.bufferNext();
             });
