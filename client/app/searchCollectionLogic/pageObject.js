@@ -9,7 +9,7 @@ angular.module('musicBucketEngine')
       var self = this;
       var MIN_PAGE = 1;
       var pOffset = (config && config.offset) || 0;
-      var pSize = (config && config.size) || 8;
+      var pSize = (config && config.pageSize) || 8;
       var pSizeAlters = 1;
       var lineSize = 1;
       var _storedMediaCollection = {};
@@ -22,7 +22,7 @@ angular.module('musicBucketEngine')
         _isLoading: false,
         data: undefined,
         getSizeOfFetch: function () {
-          return this.fetchSize || this.size;
+          return this.fetchSize || this.pageSize;
         },
         getSmallerSize: function () {
           return _getSizeBasedOnAltersAndLineSize(pSizeAlters - 1);
@@ -49,10 +49,10 @@ angular.module('musicBucketEngine')
           return pOffset;
         },
         curPage: function () {
-          return Math.ceil(this.offset / this.size) + 1;
+          return Math.ceil(this.offset / this.pageSize) + 1;
         },
         lastPage: function () {
-          return Math.ceil(this.allItems / this.size);
+          return Math.ceil(this.allItems / this.pageSize);
         },
         setMaxItems: function (max) {
           if (_.isNumber(max))
@@ -76,10 +76,10 @@ angular.module('musicBucketEngine')
         },
         set: function (value) {
           pPage = value;
-          this.offset = (pPage - MIN_PAGE) * this.size; // page starts by 1, not 0
+          this.offset = (pPage - MIN_PAGE) * this.pageSize; // page starts by 1, not 0
         }
       });
-      Object.defineProperty(this, 'size', {
+      Object.defineProperty(this, 'pageSize', {
         get: function () {
           return pSize;
         },
@@ -108,7 +108,7 @@ angular.module('musicBucketEngine')
         return Math.max(lineSize * Math.pow(2, altersValue), lineSize);
       }
 
-      var pPage = ((config && config.offset) / this.size + 1) || 1;
+      var pPage = ((config && config.offset) / this.pageSize + 1) || 1;
 
 
       this.fetchData = function fetchData(mediaCollection) {
@@ -119,8 +119,8 @@ angular.module('musicBucketEngine')
         _storedMediaCollection = mediaCollection;
 
         var startOffset = this.offset;
-        var endOffset = this.offset + this.size;
-        /* fix */ if (this.allItems>this.size && this.offset+this.size > this.allItems)
+        var endOffset = this.offset + this.pageSize;
+        /* fix */ if (this.allItems>this.pageSize && this.offset+this.pageSize > this.allItems)
           endOffset = this.allItems;
 
         var lookupInFetchedData = this._lookupInFetchedData(this.offset, endOffset);

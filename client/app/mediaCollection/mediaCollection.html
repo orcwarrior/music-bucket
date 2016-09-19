@@ -9,7 +9,7 @@
 
   <div class="media-collection-items-wrapper" layout="row" layout-align="center" layout-wrap>
     <media-item-tile ng-repeat="mediaItem in collection.pageObject.data" item="mediaItem"></media-item-tile>
-    <media-item-tile class="bugfix-hidden-tile" item="collection.pageObject.data[0]"></media-item-tile>
+    <media-item-tile ng-if="collection.length == collection.pageObject.size"class="bugfix-hidden-tile" item="collection.pageObject.data[0]"></media-item-tile>
   </div>
   <media-collection-pagination-tile page-object="collection.pageObject"></media-collection-pagination-tile>
 </div>
