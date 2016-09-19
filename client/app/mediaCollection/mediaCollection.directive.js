@@ -9,7 +9,7 @@ angular.module('musicBucketApp')
         collection: "=collection"
       },
       link: function (scope, element, attrs) {
-        var CONTAINER_PADDINGS = 30;
+        var CONTAINER_PADDINGS = 0;//30;
 
         function getMediaItemTileWidth() {
           if ($window.innerWidth < 768) // $screen-xs-max
