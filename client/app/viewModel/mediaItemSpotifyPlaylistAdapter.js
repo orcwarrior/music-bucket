@@ -101,7 +101,7 @@ angular.module('musicBucketEngine')
         _.extendOwn(this, new mediaItem(
           spotifyPlaylist.id,
           spotifyPlaylist.name,
-          spotifyPlaylist.images[0].url,
+          spotifyPlaylist.images[0] && spotifyPlaylist.images[0].url,
           spotifyPlaylist.tracks.total,
           spotifyPlaylist.external_urls.spotify
         ));

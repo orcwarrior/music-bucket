@@ -75,7 +75,7 @@ angular.module('musicBucketEngine')
         _.extendOwn(this, new mediaItem(
           SpotifyAlbum.id,
           SpotifyAlbum.name,
-          SpotifyAlbum.images[0].url,
+          SpotifyAlbum.images[0] && SpotifyAlbum.images[0].url,
           undefined,
           SpotifyAlbum.external_urls.spotify
         ));
