@@ -6,6 +6,7 @@
     .factory('playlist', function (playlistLocalStorage, playlistSequencers, $log, $rootScope) {
 
       var samplerSongsSize = 6;
+
       function putSongToSampler(playlist, song) {
         if (song.metainfos.albumArt && !song.metainfos.albumArtAttached && playlist.sampleSongs.length < samplerSongsSize) {
           playlist.sampleSongs.push({src: song.metainfos.albumArt, description: song.metainfos.getSongDescription()});
@@ -31,20 +32,19 @@
           self.description = '';
           self.sampleSongs = [];
           self.isAltered = false;
+          self.playlistSequencer = playlistSequencers['random'];
         }
 
         init(this);
 
         this.clear = function () {
           init(this);
-
           $rootScope.$broadcast('list-scroll:update', this);
           $rootScope.$broadcast('playlist:update', this);
           this.recalculateSongsCount();
           this.storeInLocalstorage();
         }
 
-        this.playlistSequencer = playlistSequencers['random'];
         this.nextPlaylistSequencer = function () {
           this.playlistSequencer.unset();
           var playlistSequencersArr = playlistSequencers.toArray();
@@ -76,7 +76,7 @@
           // Get some space in sampleSongs:
           this.sampleSongs.splice(Math.round(this.sampleSongs.length * Math.random()), 1);
           this.sampleSongs = this.sampleSongs.slice(0, samplerSongsSize);
-           $rootScope.$broadcast('playlist:update', this);
+          $rootScope.$broadcast('playlist:update', this);
         };
         this.removeEntry = function (entry) {
           if (_.isUndefined(this.entries[entry.id])) return $log.warn("There is no entry with id: " + entry.id);
@@ -88,7 +88,7 @@
           return _.find(this.entries, _.matcher(entryMask));
         };
         this.resetPlayedSongs = function () {
-          _.each(this.entries, function(entry) {
+          _.each(this.entries, function (entry) {
             entry.resetPlayedSongs();
           });
           this.alter();
@@ -99,19 +99,15 @@
           this.modified = new Date();
           this.recalculateSongsCount();
           this.storeInLocalstorage();
-
-          // $rootScope.$broadcast('list-scroll:update', this);
-          // $rootScope.$broadcast('playlist:update', this);
         };
         this.recalculateSongsCount = function () {
-          this.songsCount = 0;
-          _.each(this.entries, function (entry) {
+          this.songsCount = _.reduce(this.entries, function (memo, entry) {
             if (!_.isUndefined(entry.songsCount))
-              self.songsCount += entry.songsCount;
-            else
-              self.songsCount++;
-          });
+              return memo + entry.songsCount;
+            else return ++memo;
+          }, 0);
         };
+
         return this;
       };
 
