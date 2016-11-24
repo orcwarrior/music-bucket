@@ -202,6 +202,7 @@ var exports = module.exports = {
   },
   init: function () {
     var self = this;
+``    return; // no longer!!!
     this.getSongzaLurker().
       then(function (lurker) {
         // TODO: Passing new processing if there's none.
