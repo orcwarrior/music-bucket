@@ -34,7 +34,8 @@ angular.module('musicBucketApp')
         isActive: function (entry) {
           if (entry.isActive)
             return entry.isActive();
-        }
+        },
+        isBanned: function () { return false; }
       };
       this.container.menuActions.remove.on = function(entry) {
         // FIX: ALWAYS RE-EVALUATE PLAYLIST

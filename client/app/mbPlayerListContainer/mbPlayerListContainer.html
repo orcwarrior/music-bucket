@@ -4,7 +4,8 @@
        ng-click="container.actions.click && container.actions.click($event, listEntry)"
        ng-dblclick="container.actions.dblclick && container.actions.dblclick($event, listEntry)">
     <div class="list-entry">
-      <div class="entry-description" ng-class="{ 'active-list-entry' : container.isActive(listEntry)}"
+      <div class="entry-description" ng-class="{ 'active-list-entry' : container.isActive(listEntry),
+      'banned-list-entry' : container.isBanned(listEntry) }"
            ng-mouseover="container.resolve(listEntry)">
         {{container.getEntryDescription(listEntry)}}
       </div>

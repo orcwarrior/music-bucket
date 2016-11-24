@@ -56,7 +56,9 @@ angular.module('musicBucketApp')
         isActive: function (song) {
           var curSong = mbPlayerEngine.getCurrentSong();
           return !_.isUndefined(curSong) && curSong.id == song.id;
-        }
+        },
+        isBanned: function (song) {
+          return song && song.isBanned(); }
       };
       return this;
     };
