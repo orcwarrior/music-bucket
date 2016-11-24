@@ -31,6 +31,7 @@
           self.entries = {};
           self.description = '';
           self.sampleSongs = [];
+          self.bannedSongs = [];
           self.isAltered = false;
           self.playlistSequencer = playlistSequencers['random'];
         }
@@ -106,6 +107,15 @@
               return memo + entry.songsCount;
             else return ++memo;
           }, 0);
+        };
+
+        // Validate song: (banned)
+        this.validateSong = function (song) {
+          // Banned songs are not valid, but pick them by id only
+          return !_.find(this.bannedSongs, _.matcher(_.pick(song, 'id')));
+        };
+        this.banSong = function(song) {
+           this.bannedSongs.push(song);
         };
 
         return this;
