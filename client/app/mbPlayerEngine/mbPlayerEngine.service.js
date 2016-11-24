@@ -1,15 +1,12 @@
 'use strict';
 
 angular.module('musicBucketApp')
-  .service('mbPlayerEngine', function ($rootScope, $log, $interval, playlist, queue, tracksHistory, angularPlayer, mbYoutubePlayer, playlistService) {
+  .service('mbPlayerEngine', function ($rootScope, $log, $interval, playlist, queue, tracksHistory, angularPlayer, mbYoutubePlayer, playlistService, mbNotifications) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     var injector = angular.injector(['musicBucketEngine']);
     var _playlist;
     var _queue = new injector.get('queue').constructor();
     var currentSong = undefined;
-
-    /* privates */
-    // Theatre mode
 
     /* engines */
     var engines = null;
@@ -20,7 +17,6 @@ angular.module('musicBucketApp')
           sm2: angularPlayer,
           youtube: mbYoutubePlayer
         };
-
     }
 
     function songEngine2playerEngine(song) {
@@ -52,14 +48,14 @@ angular.module('musicBucketApp')
       var songsRegistry = {}; // song registy, key: $songId, val: songObj
       this.isPlaying = false;
       this.isWorking = false; // for graphical information that somethings happen with a player :)
-      this.debouncedTurnOfIsWorking = _.debounce(function () {
+      this.debouncedTurnOffIsWorking = _.debounce(function () {
         this.setIsWorking(false);
       }, 3000);
 
       this.setIsWorking = function (working) {
         console.trace('mbPlayerEngine: isWorking: ' + working);
         this.isWorking = working; //working; // TEMPORARY
-        if (working) this.debouncedTurnOfIsWorking();
+        if (working) this.debouncedTurnOffIsWorking();
         $rootScope.$broadcast('player:working', this.isWorking);
       };
 
@@ -249,15 +245,20 @@ angular.module('musicBucketApp')
           this.setIsWorking(true);
 
         this.getPlaylist().getNext()
-          .then(function (nextTrack) {
+          .then(function (nextSong) {
+            if (!this.getPlaylist().validateSong(nextSong)) {
+              // notify warn: skipping banned song: song
+              mbNotifications.notify('Skipped song: '+ (nextSong.metainfos && nextSong.metainfos.getSongDescription()));
+              return this.pushNextSongToQueue(onLoadCallback);
+            }
 
-            _player.queueSong(nextTrack);
-            onLoadCallback(nextTrack);
+            _player.queueSong(nextSong);
+            onLoadCallback(nextSong);
 
-            if (nextTrack.isBuffered()) _player.setIsWorking(false);
+            if (nextSong.isBuffered()) _player.setIsWorking(false);
             else {
-              nextTrack.engine.listen("onsongready", function (observable, eventType, data) {
-                $log.info('mbPlayerEngine: onsongready handler called on: ' + nextTrack.id);
+              nextSong.engine.listen("onsongready", function (observable, eventType, data) {
+                $log.info('mbPlayerEngine: onsongready handler called on: ' + nextSong.id);
                 _player.setIsWorking(false);
               });
             }
