@@ -114,6 +114,14 @@
       song.prototype.isDeleted = function () {
         return this.state == songCommons.songState.deleted;
       }
+      song.prototype.ban = function () {
+        this.state = songCommons.songState.banned;
+        if (this.__unresolvedSong) // TODO: Do IT Properly!!! let resolve method swap song instances in entry!!!
+          this.__unresolvedSong.state = songCommons.songState.banned;
+      }
+      song.prototype.isBanned = function () {
+        return this.state == songCommons.songState.banned;
+      }
       song.prototype.__models__ = {
         db: {
           base: "song",

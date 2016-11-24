@@ -18,7 +18,7 @@
         songState: {
           normal: "sNormal",
           deleted: "sDeleted",
-          disabled: "sDisabled"
+          banned: "sBanned"
         }
       };
     });

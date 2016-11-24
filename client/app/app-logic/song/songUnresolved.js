@@ -31,6 +31,7 @@
             song.entryId = self.entryId; // rewrite old entryId;
             self.resolve = undefined;
             processFoundedSong(song, self.metainfos);
+            song.__unresolvedSong = self;
             self = song;
             if (!_.isUndefined(resolveCb))
               resolveCb(self);
@@ -48,6 +49,7 @@
         this.resolve = _.bind(this.resolveFunction || defaultResolveFunction, this, initData || this.initData);
         this.entryId = entryId;
         this.type = songCommons.songType.unresolved;
+        this.state = songCommons.songState.normal;
 
         if (initData instanceof songMetainfos)
           this.metainfos = initData;
@@ -69,7 +71,13 @@
       };
       songUnresolved.prototype.isDeleted = function () {
         return this.state == songCommons.songState.deleted;
-      }
+      };
+      songUnresolved.prototype.ban = function () {
+        this.state = songCommons.songState.banned;
+      };
+      songUnresolved.prototype.isBanned = function () {
+        return this.state == songCommons.songState.banned;
+      };
       songUnresolved.prototype.__models__ = {
         db: {
           base: "songUnresolved",
@@ -79,7 +87,8 @@
             'resolveFunction',
             'entryId',
             'type',
-            'initData']
+            'initData',
+            'state']
         },
         cookies: {
           base: "songUnresolved",
@@ -89,7 +98,8 @@
             'resolveFunction',
             'entryId',
             'type',
-            'initData']
+            'initData',
+            'state']
         }
       };
 
