@@ -38,7 +38,7 @@
             }
           } else { // random
             var nonPlayed = _.omit(this.entries, this.playedIDs);
-            song = _.sample(nonPlayed);
+            song = _.sample(_.isEmpty(nonPlayed) ? this.entries : nonPlayed);
           }
 
           if (_.isUndefined(options.songId)) // play song on demand don't match it as played
