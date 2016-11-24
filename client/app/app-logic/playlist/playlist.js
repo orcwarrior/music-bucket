@@ -15,6 +15,7 @@
             src: song.metainfos.albumArt,
             description: song.metainfos.getSongDescription()
           };
+          playlist.sampleSongs = _.uniq(playlist.sampleSongs);
           // if (playlistService.isPlaylistOwner(playlist))
           //   playlistService.save(playlist);
         }
@@ -112,10 +113,11 @@
         // Validate song: (banned)
         this.validateSong = function (song) {
           // Banned songs are not valid, but pick them by id only
-          return !_.find(this.bannedSongs, _.matcher(_.pick(song, 'id')));
+          return !song.isBanned(); //!_.find(this.bannedSongs, _.matcher(_.pick(song, 'id')));
         };
-        this.banSong = function(song) {
-           this.bannedSongs.push(song);
+        this.banSong = function (song) {
+          song.ban();
+          // this.bannedSongs.push(_.pick(song, 'id'));
         };
 
         return this;
