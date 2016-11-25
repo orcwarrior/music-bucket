@@ -70,24 +70,25 @@ var exports = module.exports = {
       console.log("/situation/targeted");
       mongoose.model('songzaMetaDaytimeTarget').create(config, function (err, situation) {
       });
-    } /*
-    else if (url.indexOf("/gallery/tag/") >= 0) {
-      var regex = new RegExp('/gallery/tag/(.+)');
-      console.log(url);
-      var type = url.match(regex)[1];
-      console.log(type);
-      _.each(resBody, function (gallery) {
-        songzaGalleryContainer.create(type, gallery, function (err, activity) {
-        });
-      });
     }
-    else if (url.indexOf('/search/station')) {
-      _.each(resBody, function (station) {
-        songzaStation.create(station, function (err, stationDb) {
+    /*
+     else if (url.indexOf("/gallery/tag/") >= 0) {
+     var regex = new RegExp('/gallery/tag/(.+)');
+     console.log(url);
+     var type = url.match(regex)[1];
+     console.log(type);
+     _.each(resBody, function (gallery) {
+     songzaGalleryContainer.create(type, gallery, function (err, activity) {
+     });
+     });
+     }
+     else if (url.indexOf('/search/station')) {
+     _.each(resBody, function (station) {
+     songzaStation.create(station, function (err, stationDb) {
 
-        });
-      });
-    } */
+     });
+     });
+     } */
   },
   statsProgressArchive: [],
   archiveStats: function (stats) {
@@ -179,7 +180,7 @@ var exports = module.exports = {
               // somehow there could be station saved as string
               // but there is still no object (
               if (!_.isString(stat)) // could never be here, but yno
-              stats.resolvedSongs += stat.songs.length;
+                stats.resolvedSongs += stat.songs.length;
             });
             lurkerSelf.archiveStats(stats);
 
@@ -202,12 +203,11 @@ var exports = module.exports = {
   },
   init: function () {
     var self = this;
-``    return; // no longer!!!
-    this.getSongzaLurker().
-      then(function (lurker) {
-        // TODO: Passing new processing if there's none.
-        //   songsFetcher.run(lurker);
-      });
+    return; // no longer!!!
+    this.getSongzaLurker().then(function (lurker) {
+      // TODO: Passing new processing if there's none.
+      //   songsFetcher.run(lurker);
+    });
     archiveStats.findOne({}, function (err, stats) {
       if (stats) {
         self.statsProgressArchive = stats.archiveProgresses;
