@@ -44,6 +44,7 @@ angular.module('musicBucketApp')
 
     /* mbPlayerEngine */
     function mbPlayerEngine() {
+      var self = this;
       var bufferingNextSongAlreadyCalled = false;
       var songsRegistry = {}; // song registy, key: $songId, val: songObj
       this.isPlaying = false;
@@ -175,6 +176,12 @@ angular.module('musicBucketApp')
 
         this.moveCurrentSongToHistory(song, saveToHistory);
 
+        if (!this.getPlaylist().validateSong(song)) {
+          // TODO: Extract
+          mbNotifications.notify('Skipped song: ' + (song.metainfos && song.metainfos.getSongDescription()));
+          return this.nextTrack(false); // skip to next
+        }
+
         // TODO: Let it use play method
         bufferingNextSongAlreadyCalled = false; // for an init TODO: Refactor
         this.setCurrentSong(song);
@@ -190,7 +197,7 @@ angular.module('musicBucketApp')
         song.engine.listen("onsongready", function (observable, eventType, data) {
           window.document.title = song.metainfos.getSongDescription();
           mbPlayerEngineInstance.fireEvent("songChange", song);
-          // FIX: Keep all volumes synced:
+          // FIX: Keep all volumes synced: (DOESNT WORK ANYWAYS)
           self.setVolume(self._volume);
         });
 
@@ -246,10 +253,10 @@ angular.module('musicBucketApp')
 
         this.getPlaylist().getNext()
           .then(function (nextSong) {
-            if (!this.getPlaylist().validateSong(nextSong)) {
+            if (!_player.getPlaylist().validateSong(nextSong)) {
               // notify warn: skipping banned song: song
-              mbNotifications.notify('Skipped song: '+ (nextSong.metainfos && nextSong.metainfos.getSongDescription()));
-              return this.pushNextSongToQueue(onLoadCallback);
+              mbNotifications.notify('Skipped song: ' + (nextSong.metainfos && nextSong.metainfos.getSongDescription()));
+              return _player.pushNextSongToQueue(onLoadCallback);
             }
 
             _player.queueSong(nextSong);
