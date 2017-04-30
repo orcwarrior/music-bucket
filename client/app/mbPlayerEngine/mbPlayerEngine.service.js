@@ -214,6 +214,7 @@ angular.module('musicBucketApp')
         // Pre-buffer first song:
         this.preBufferFirstSong();
         $rootScope.$broadcast('playlist:update', playlist);
+        mbNotifications.notify('Playlist "'+playlist.name+'" is ready to play!');
       };
       this.getPlaylist = function (key) {
         if (_.isUndefined(key)) {
