@@ -6,7 +6,7 @@
         <!--<md-list-item class="md-3-line">-->
 
         <div class="playlist-tile col-lg-3 col-md-4 col-sm-6 col-xs-6 col-centered" ng-repeat="playlistPriv in playlists.private">
-          <div class="playlist-wrapper">
+          <div class="playlist-wrapper" ng-style="{'background-image': 'url('+playlistPriv.imageUrl+')'}"
             <!-- Context menu -->
             <div dropdown is-open="playlistDropdown" class="playlist-context-icon">
               <a class="mdi-navigation-menu dropdown-toggle" dropdown-toggle></a>
@@ -20,7 +20,6 @@
                 </li>
               </ul>
             </div>
-            <mb-picture-mosaic src="playlistPriv.sampleSongs" speed="5000"></mb-picture-mosaic>
             <!-- Play overlay -->
             <div class="playlist-play-wrapper" ng-click="loadPlaylist(playlistPriv)">
               <span class="icon-music" aria-hidden="true"></span> Play!
@@ -46,7 +45,7 @@
       <label class="md-accent">Public playlists</label>
       <md-list layout="row" layout-align="center center" layout-wrap>
         <div class="playlist-tile col-lg-3 col-md-4 col-sm-6 col-xs-6 col-centered" ng-repeat="playlistPub in playlists.public">
-          <div class="playlist-wrapper">
+          <div class="playlist-wrapper" ng-style="{'background-image': 'url('+playlistPub.imageUrl+')'}">
             <!-- Context menu -->
             <div dropdown is-open="playlistDropdown" class="playlist-context-icon">
               <a class="mdi-navigation-menu dropdown-toggle" dropdown-toggle></a>
@@ -60,7 +59,6 @@
                 </li>
               </ul>
             </div>
-            <mb-picture-mosaic src="playlistPub.sampleSongs" speed="5000"></mb-picture-mosaic>
             <!-- Play overlay -->
             <div class="playlist-play-wrapper" ng-click="loadPlaylist(playlistPub)">
               <span class="icon-music" aria-hidden="true"></span> Play!
