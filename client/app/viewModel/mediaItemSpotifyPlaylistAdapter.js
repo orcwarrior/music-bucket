@@ -176,7 +176,7 @@ angular.module('musicBucketEngine')
           this.__spotifyUserId = spotifyPlaylist.owner.id;
       }
       this._resolveMetainfos = resolveMetainfosProto;
-      this._resolvePlaylist = resolveTracksProto;
+      this._resolveTracks = resolveTracksProto;
       this._getBuilderObj = getBuilderObj;
       return this;
     }

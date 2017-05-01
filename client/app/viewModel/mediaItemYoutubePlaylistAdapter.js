@@ -82,7 +82,7 @@ angular.module('musicBucketEngine')
           this.__youtubePlaylistId = youtubePlaylist.id.playlistId;
       }
       this._resolveMetainfos = resolveMetainfosProto;
-      this._resolvePlaylist = resolveMetainfosProto;
+      this._resolveTracks = resolveMetainfosProto;
       this._getBuilderObj = getBuilderObj;
       this.__playlistEntryCreatorMethod = createEntry;
       return this;

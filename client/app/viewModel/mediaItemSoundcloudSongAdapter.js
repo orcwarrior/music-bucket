@@ -85,7 +85,7 @@ angular.module('musicBucketEngine')
         _.bind(_prepareMediaItemInfos, this, soundcloudSong)();
       }
       this._resolveMetainfos = resolveMetainfos;
-      this._resolvePlaylist = resolveMetainfos;
+      this._resolveTracks = resolveMetainfos;
       this._getBuilderObj = getBuilderObj;
       this.__playlistEntryCreatorMethod = createEntry;
       return this;

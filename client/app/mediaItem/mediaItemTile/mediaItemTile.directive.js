@@ -28,7 +28,7 @@ angular.module('musicBucketApp')
           });
         };
         scope.addToPlaylist = function () {
-          scope.item._resolvePlaylist()
+          scope.item._resolveTracks()
             .then(function (itemWithTracks) {
               var mediaItemEntry = mediaItemEntryBuilder.build(scope.item);
               $q.when(mediaItemEntry, function (buildedEntry) {

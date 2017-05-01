@@ -75,7 +75,7 @@ angular.module('musicBucketEngine')
       this.author = SongzaPlaylist.creator;
       this.description = SongzaPlaylist.description;
       this._resolveMetainfos = noopResolve;
-      this._resolvePlaylist = resolveTracks;
+      this._resolveTracks = resolveTracks;
       this._getBuilderObj = getBuilderObj;
       return this;
     }

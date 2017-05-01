@@ -21,7 +21,7 @@ angular.module('musicBucketEngine')
       this.songsCount = songsCount;
       this.url = url;
       this._resolveMetainfos = resolveProto;
-      this._resolvePlaylist = resolveProto;
+      this._resolveTracks = resolveProto;
       this._resolveSimilars = resolveProto;
       this._getBuilderObj = resolveProto;
       this.__resolvedSections = []; // "metainfos, playlist..."

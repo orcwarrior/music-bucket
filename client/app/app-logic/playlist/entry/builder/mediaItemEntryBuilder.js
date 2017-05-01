@@ -31,7 +31,8 @@
           // #1 Getting metainfos (needed to load playlist)
           // #2 Getting tracks (async, shown progress)
           if (mediaItem._isBuilderObj) mediaItem = mediaItemBuilder(mediaItem);
-          mediaItem._resolvePlaylist()
+         // mediaItem._resolveMetainfos()
+          mediaItem._resolveTracks()
             .then(function (fullMediaItem) {
               var mediaItemEntry = (fullMediaItem.__playlistEntryCreatorMethod) ?
                 fullMediaItem.__playlistEntryCreatorMethod() : defaultMediaItemEntryBuild(fullMediaItem);

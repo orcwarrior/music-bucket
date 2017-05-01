@@ -65,7 +65,7 @@ angular.module('musicBucketEngine')
       this.__resolvedSections.push(this.__sectionNames.metainfos);
 
       this._resolveMetainfos = resolveTracks;
-      this._resolvePlaylist = resolveTracks;
+      this._resolveTracks = resolveTracks;
       this._getBuilderObj = getBuilderObj;
       this.__playlistEntryCreatorMethod = createEntry;
     }
@@ -82,7 +82,7 @@ angular.module('musicBucketEngine')
         _.extendOwn(this, soundcloudPlaylist);
         this._isBuilderObj = false;
         this._resolveMetainfos = resolveTracks;
-        this._resolvePlaylist = resolveTracks;
+        this._resolveTracks = resolveTracks;
         this._getBuilderObj = getBuilderObj;
         this.__playlistEntryCreatorMethod = createEntry;
       }

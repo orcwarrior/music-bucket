@@ -86,7 +86,7 @@ angular.module('musicBucketEngine')
           this.__SpotifyAlbumId = SpotifyAlbum.id;
       }
       this._resolveMetainfos = resolveMetainfosProto;
-      this._resolvePlaylist = resolveMetainfosProto;
+      this._resolveTracks = resolveMetainfosProto;
       this._getBuilderObj = getBuilderObj;
       return this;
     }
