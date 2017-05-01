@@ -14,8 +14,8 @@ exports.get = function (req, res) {
 };
 
 exports.search = function (req, res) {
-  var limit = req.query.limit || 50;
-  var offset = req.query.offset || 0;
+  var limit = parseInt(req.query.limit) || 50;
+  var offset = parseInt(req.query.offset) || 0;
   delete req.query.limit;
   delete req.query.offset;
   if (_.isEmpty(req.query))
@@ -26,7 +26,10 @@ exports.search = function (req, res) {
     .skip(offset)
     .limit(limit)
     .exec(function(err, stations) {
-      if (err) return res.json(500, err);
+      if (err) {
+        console.error(err);
+        return res.json(500, err);
+      }
       return res.json(200, stations);
     });
 }
