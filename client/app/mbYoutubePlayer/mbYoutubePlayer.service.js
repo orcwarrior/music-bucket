@@ -12,6 +12,7 @@ angular.module('musicBucketEngine')
       var inFullscreenMode = false;
       var players = [];
       var playersReady = {};
+      var playersState = {};
       var PLAYER_STATES = {
         "UNSTARTED": -1,
         "ENDED": 0,
@@ -344,6 +345,7 @@ angular.module('musicBucketEngine')
         extendPlayerByEngineUtils(player);
         players.push(player);
         playersReady[player[playerProperty].id] = false; // change when onready called
+        playersState[player[playerProperty].id] = PLAYER_STATES.UNSTARTED; // set state
       };
       this.isReady = function () {
         return _.some(playersReady); // all vals truthy?
@@ -383,6 +385,9 @@ angular.module('musicBucketEngine')
       }
       this.onstatechange = function (player, event) {
         $log.info(buildLogMsg(player, "state changed: " + stateIdToName(event.data)));
+        playersState[player[playerProperty].id] = event.data;
+
+        _fixDoublePlayersPlaying(player, event);
         if (event.data === PLAYER_STATES.UNSTARTED) {
           this.onplayerinit(player, event);
         }
@@ -395,6 +400,19 @@ angular.module('musicBucketEngine')
           mbPlayerEngine.events.onfinish();
         }
         player.__ytEngineUtils.additionalOnStateChangeCallback(event);
+      }
+
+      // TODO: Threat it's as an temporary fix
+      function _fixDoublePlayersPlaying(player, event) {
+        var playersPlaying = 0;
+        _.each(players, function (player) {
+          if (playersState[player[playerProperty].id] == PLAYER_STATES.PLAYING)
+            playersPlaying++;
+        });
+        if (playersPlaying > 1) {
+          $log.warn(buildLogMsg(player, "get forcefully stopped preventing double playing!"));
+          self.pause(getPlayerVideoId(player));
+        }
       }
     }
 
