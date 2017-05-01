@@ -5,38 +5,44 @@
     <!-- Songza -->
     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.songza.concierge">
       <img class="img-in-col" alt="Lurker" ui-sref="main.songza.concierge"
-           src="http://www.todaysparent.com/wp-content/uploads/2012/05/Songza-logo-and-monster_660x660.jpg"/>
+           src="/assets/images/logos/songza.jpg"/>
     </div>
     <!-- YouTube -->
     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.youtube">
       <img class="img-in-col" alt="Youtube"
-           src="http://www.underconsideration.com/brandnew/archives/youtube_logo_detail.png"/>
+           src="/assets/images/logos/youtube.png"/>
     </div>
     <!-- Spotify -->
     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.spotify">
       <img class="img-in-col" alt="Spotify"
-           src="http://www.edmnations.com/wp-content/uploads/2016/01/spotify-logo-mat-pras-660x4401.jpeg"/>
+           src="/assets/images/logos/spotify.png"/>
     </div>
     <!-- SoundCloud -->
     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.soundcloud">
       <img class="img-in-col" alt="Soundcloud"
-           src="http://www.youredm.com/wp-content/uploads/bfi_thumb/SoundCloud-639casjvam669u00vbqjgh6hij076y149ltqpkrnvhe.png?a33bbe"/>
+           src="/assets/images/logos/soundcloud.png"/>
     </div>
     <!-- Local -->
-    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.local">
-      <img class="img-in-col" alt="Local storage"
-           src="http://i.imgur.com/lG3nZRd.png"/>
-    </div>
+    <!--<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2" ui-sref="main.local">-->
+      <!--<img class="img-in-col" alt="Local storage"-->
+           <!--src=""/assets/images/logos/local.png""/>-->
+    <!--</div>-->
   </div>
 
 </div>
-Najnowsze poprawki <b>(24.11.2016)</b><br/>
-<i>Prace częsciowo zawieszone w zw. z pracą dyplomową.</i><br/>
-<i>(a jednak czasem cośtam ruszę :) )</i><br/>
+Najnowsze poprawki <b>(01.05.2016)</b><br/>
 <strong>
+  * Poprawienie błędu wyszukiwania playlist Songza.<br/>
+
+</strong>
+  * Poprawka odczytu zapisu zbanowanych playlist.<br/>
+  * Kolejne drobne poprawki zwiazane z playlistami i ogólnym UI.<br/>
+  * Poprawka ładowania playlist.<br/>
+  * Poprawka zapisywania playlist (playlisty nie zapisywały sie w wypadku wystapienia znaków '.' lub '$' gdziekolwiek w nazwach wpisów lub utworów).<br/>
+
+  * Hotfix odtwarzania wielu utworów z youtube po zbuforowaniu kolejnego. <br/>
   * Banowanie utworów (przycisk obok zmiany typu losowania (eksperymentalne) <br/>
   * Drobne poprawki <br/>
-</strong>
   * Poprawka ładowania niektórych playlist (311 extended) <br/>
 * Globalne <a ui-sref="main.search">wyszukiwanie</a> w serwisach, z paginacja i możlwościa zmiany rozmiaru na stronę
 <br/>
@@ -147,11 +153,11 @@ typy wpisów na playliscie obsługiwane. <br/>
 * Poprawa pobierania informacji o lokalnych plikach muzycznych (ich tagach) <br/>
 * Pobieranie danych katalogowych z musicbrainz.org <br/>
 * Skróty klawiaturowe do aplikacji <br/>
+* Koniec ** <a href="/api/utils/dbDump">listy</a> **
 <hr/>
 Nastepne poprawki: <br/>
 * "LoveBox"/Biblioteka ulubionych - możliwość zbierania ulubionych utworów z playlist - zapis do playlisty, podglad
 itd. <br/>
-* Obsługa spotify.<br/>
 * Bardziej zaawansowane zapisywanie obecnego stanu odtwarzacza w sesji lokalnej: zapamietywanie obecnego stanu
 kolejki, historii odtwarzanych, obecnego utworu i obecnie odtwarzanej sekundy(?) <br/>
 <hr/>
