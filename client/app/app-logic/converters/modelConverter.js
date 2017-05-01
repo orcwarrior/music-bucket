@@ -88,7 +88,7 @@
 
           $q.all(propertyPromises)
             .then(function (resolvedPromises) {
-              console.log("all promises");
+              //console.log("all promises");
               deffered.resolve(converted);
             });
           if (propertyPromises.length == 0)
@@ -131,7 +131,7 @@
             if (!_.isFunction(val) && _.isObject(val) && !_.isDate(val)) {
               var propDeffered = convertToModel(val, modelName)
                 .then(function (convertedProperty) {
-                  console.log("single promise");
+                  //console.log("single promise");
                   converted[key] = convertedProperty;
                 });
               propertyPromises.push(propDeffered);
@@ -140,12 +140,12 @@
               converted[key] = val;
             }
             else {
-              console.trace("it's sth else: " + typeof val);
+              //console.trace("it's sth else: " + typeof val);
             }
           });
           $q.all(propertyPromises)
             .then(function (resolvedPromises) {
-              console.log("all promises");
+              //console.log("all promises");
               deffered.resolve(converted);
             });
         }
