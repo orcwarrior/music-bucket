@@ -117,6 +117,7 @@
         };
         this.banSong = function (song) {
           song.ban();
+          self.alter();
           // this.bannedSongs.push(_.pick(song, 'id'));
         };
 
