@@ -27,6 +27,9 @@
           // new mediaItemRestorer(mediaItem); ???
           //  then (...)
           // Generate builderInfos on first build ???
+          // TODO: Make up two step async:
+          // #1 Getting metainfos (needed to load playlist)
+          // #2 Getting tracks (async, shown progress)
           if (mediaItem._isBuilderObj) mediaItem = mediaItemBuilder(mediaItem);
           mediaItem._resolvePlaylist()
             .then(function (fullMediaItem) {
@@ -38,7 +41,9 @@
               // TODO: setup builder (lookat songza, fix mediaitem - add needed methods)
               mediaItemEntry.__builder__ = fullMediaItem._getBuilderObj();
               defferedEntry.resolve(mediaItemEntry);
-        });
+        }).catch(function (err) {
+              defferedEntry.resolve(virtualEntry(err.statusText))
+            });
           return defferedEntry.promise;
         };
       };
