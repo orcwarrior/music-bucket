@@ -397,6 +397,20 @@ angular.module('musicBucketEngine')
                 userId: userId
               }
             ).promise;
+          },
+          tracks: function (playlistId, userId, offset, limit) {
+            offset = offset || 0;
+            limit = limit || 100;
+            return new spotifyApiRequest("/users/:userId/playlists/:playlistId/tracks", {
+                authorization: true,
+                playlistId: playlistId,
+                userId: userId,
+                getParams: {
+                  offset: offset,
+                  limit: limit
+                }
+              }
+            ).promise;
           }
         }
       }
