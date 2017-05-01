@@ -74,7 +74,7 @@ station.statics.findByQueryString = function (queryString) {
     delete queryString.id;
   }
   if (queryString.q) {
-    var query = queryString.q;
+    query = queryString.q;
     delete queryString.q;
     queryString.$text = {$search: query};
     query = this.find(queryString, { score: { $meta: "textScore" }}).sort({score: {$meta: "textScore"}});
