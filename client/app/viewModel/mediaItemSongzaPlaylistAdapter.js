@@ -64,7 +64,7 @@ angular.module('musicBucketEngine')
         _.extendOwn(this, new mediaItem(
           SongzaPlaylist._id,
           SongzaPlaylist.name,
-          SongzaPlaylist.cover,
+          'http://theecstaticpresentation.com/cover-not-found.jpg', //SongzaPlaylist.cover,
           SongzaPlaylist.songsCount,
           undefined
         ));
