@@ -367,7 +367,8 @@ angular.module('musicBucketEngine')
             'type': type || "playlist",
             'limit': limit || 20,
             'offset': offset || 0
-          }
+          },
+          authorization: true
         }).promise;
       },
       me: function () {
