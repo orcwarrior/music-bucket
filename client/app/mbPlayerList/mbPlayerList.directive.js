@@ -15,6 +15,9 @@ angular.module('musicBucketApp')
           scope.manager.activeList.container.entryRef = playlist;
           scope.manager.activeList.container.entries = playlist.entries;
           scope.manager.activeList.container.entriesVals = _.values(playlist.entries);
+          scope.manager.activeList.container.entriesVals = _.reject(scope.manager.activeList.container.entriesVals, function(e){
+            return e.id.startsWith('INVAILD-');
+          });
         });
       }
     };
