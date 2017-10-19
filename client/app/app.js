@@ -48,7 +48,13 @@ angular.module('musicBucketApp', [
         'default': 'A700' // use shade 200 for default, and keep all other shades the same
       })
   })
-  .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
+
+function _isUnathorizedRequestUrlLocal(plainUrl) {
+  var url = new URL(plainUrl);
+  return url.host == window.location.host;
+}
+
+angular.module('musicBucketApp').factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
     return {
       // Add authorization token to headers
       request: function (config) {
@@ -62,7 +68,7 @@ angular.module('musicBucketApp', [
 
       // Intercept 401s and redirect you to login
       responseError: function (response) {
-        if (response.status === 401) {
+        if (response.status === 401 && _isUnathorizedRequestUrlLocal(response.config.url)) {
           $location.path('/login');
           // remove any stale tokens
           $cookieStore.remove('token');
