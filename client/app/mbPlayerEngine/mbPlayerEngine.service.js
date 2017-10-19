@@ -54,7 +54,6 @@ angular.module('musicBucketApp')
       }, 3000);
 
       this.setIsWorking = function (working) {
-        console.trace('mbPlayerEngine: isWorking: ' + working);
         this.isWorking = working; //working; // TEMPORARY
         if (working) this.debouncedTurnOffIsWorking();
         $rootScope.$broadcast('player:working', this.isWorking);
