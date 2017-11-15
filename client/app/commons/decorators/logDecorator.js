@@ -16,11 +16,13 @@ angular.module('musicBucketApp')
 
       return new Error().stack.split("\n")[4];
     }
-    function buildOutputMsg(msg) {
-      if (_.isObject(msg[0]))
-        return msg;
-      else
-        return [getCurrentTime() + ' ' + msg[0] + getSrcFileAndLine()];
+    function buildOutputMsg(logArgs) {
+      if (_.isObject(logArgs[0]))
+        return logArgs;
+      else {
+        if (logArgs[0]) logArgs[0] = getCurrentTime() + ' ' + logArgs[0] + getSrcFileAndLine()
+        return logArgs;
+      }
     }
 
     $provide.decorator('$log', function ($delegate) {
